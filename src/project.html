@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project — Naruephon Yotmao</title>
+  <meta name="description" content="Project details — Naruephon Yotmao's portfolio.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="tailwind.config.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="max-w-2xl mx-auto px-6 py-12">
+
+    <!-- Back link -->
+    <a href="index.html" id="back-link"
+      class="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors mb-10 group">
+      <span class="transition-transform group-hover:-translate-x-0.5">&larr;</span>
+      Back to Home
+    </a>
+
+    <!-- Project content (populated by JS) -->
+    <article id="project-content" class="hidden">
+
+      <!-- Title -->
+      <h1 id="project-title" class="text-2xl sm:text-3xl font-bold tracking-tight"></h1>
+
+      <!-- Role & Context -->
+      <p id="project-context" class="text-sm text-muted mt-2"></p>
+
+      <!-- Tech stack badges -->
+      <div id="project-tech" class="flex flex-wrap gap-2 mt-4"></div>
+
+      <!-- Project image (shown if available) -->
+      <div id="project-image-wrapper" class="hidden mt-8">
+        <img id="project-image" src="" alt="" class="w-full rounded-xl border border-border shadow-sm">
+      </div>
+
+      <hr class="border-border my-8">
+
+      <!-- Full description -->
+      <div id="project-description" class="prose-custom space-y-4"></div>
+
+      <hr class="border-border my-8">
+
+      <!-- Links -->
+      <div id="project-links" class="flex gap-4"></div>
+
+    </article>
+
+    <!-- Not found state -->
+    <div id="not-found" class="hidden text-center py-20">
+      <p class="text-lg text-stone-500">Project not found.</p>
+      <a href="index.html" class="text-accent underline underline-offset-2 text-sm mt-2 inline-block">Go back
+        home</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-border py-6 text-center">
+    <p class="text-xs text-muted">&copy; 2026 Naruephon Yotmao</p>
+  </footer>
+
+  <!-- Data & Rendering -->
+  <script src="data/projects.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("slug");
+
+      const project = projectsData.find((p) => p.slug === slug);
+
+      if (!project) {
+        document.getElementById("not-found").classList.remove("hidden");
+        return;
+      }
+
+      // Update page title
+      document.title = `${project.title} — Naruephon Yotmao`;
+
+      // Title
+      document.getElementById("project-title").textContent = project.title;
+
+      // Context & role
+      const contextEl = document.getElementById("project-context");
+      contextEl.textContent = `${project.role} · ${project.context}`;
+
+      // Tech stack
+      const techEl = document.getElementById("project-tech");
+      project.techStack.forEach((tech) => {
+        const span = document.createElement("span");
+        span.className =
+          "skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border";
+        span.textContent = tech;
+        techEl.appendChild(span);
+      });
+
+      // Description paragraphs
+      const descEl = document.getElementById("project-description");
+      project.fullDescription.split("\n\n").forEach((para) => {
+        const p = document.createElement("p");
+        p.className = "text-base leading-relaxed text-stone-700";
+        p.textContent = para.trim();
+        descEl.appendChild(p);
+      });
+
+      // Links
+      const linksEl = document.getElementById("project-links");
+      if (project.githubUrl) {
+        const a = document.createElement("a");
+        a.href = project.githubUrl;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.className =
+          "text-sm text-accent hover:opacity-70 underline underline-offset-2";
+        a.textContent = "Source Code →";
+        linksEl.appendChild(a);
+      }
+      if (project.liveUrl) {
+        const a = document.createElement("a");
+        a.href = project.liveUrl;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.className =
+          "text-sm text-accent hover:opacity-70 underline underline-offset-2";
+        a.textContent = "Live Site →";
+        linksEl.appendChild(a);
+      }
+      if (project.canvaUrl) {
+        const a = document.createElement("a");
+        a.href = project.canvaUrl;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.className =
+          "text-sm text-accent hover:opacity-70 underline underline-offset-2";
+        a.textContent = "Presentation →";
+        linksEl.appendChild(a);
+      }
+
+      // If no links at all, hide the links section
+      if (!project.githubUrl && !project.liveUrl && !project.canvaUrl) {
+        linksEl.previousElementSibling.remove(); // remove the <hr>
+        linksEl.remove();
+      }
+
+      // Show content
+      document.getElementById("project-content").classList.remove("hidden");
+    })();
+  </script>
+</body>
+
+</html>

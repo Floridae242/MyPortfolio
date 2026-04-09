@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naruephon Yotmao — Developer Portfolio</title>
+  <meta name="description"
+    content="Portfolio of Naruephon Yotmao, a software engineering student at Chiang Mai University specializing in C, C++, Java, and JavaScript.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="tailwind.config.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Banner -->
+  <header class="relative">
+    <img src="../pic/IMG_3880 3.jpg" alt="Banner" class="h-44 sm:h-52 w-full object-cover object-center">
+
+    <!-- Avatar -->
+    <div class="max-w-3xl mx-auto px-6 relative">
+      <div class="absolute -top-14 sm:-top-16">
+        <div
+          class="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-accent flex items-center justify-center text-white text-4xl sm:text-5xl font-bold ring-4 ring-surface shadow-lg select-none">
+          <img src="../pic/IMG_4219.JPG" alt="Naruephon Yotmao" class="w-full h-full rounded-full object-cover">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6">
+
+    <!-- Profile Info -->
+    <section class="pt-20 sm:pt-22 pb-8" id="about">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Naruephon Yotmao</h1>
+      <p class="text-muted text-sm mt-1 font-medium">@tle</p>
+      <p class="mt-4 text-base leading-relaxed text-stone-700 max-w-2xl">
+        Hello! I'm Tle — I am currently a student in the Digital Industry Integration program at the College of Arts,
+        Media and Technology, Chiang Mai University. I have skills in programming, problem solving, and teamwork. I have
+        direct experience from hackathon competitions, working as a teaching assistant with lecturers, and doing
+        personal projects or team projects. I am eager to learn new knowledge and look for new challenges to improve
+        myself.
+      </p>
+    </section>
+
+    <hr class="border-border">
+
+    <!-- Skills -->
+    <section class="py-8" id="skills">
+      <h2 class="text-lg font-semibold mb-4">Skill & Technologies</h2>
+      <div class="flex flex-wrap gap-2">
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">C</span>
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">C++</span>
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">Java</span>
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">JavaScript</span>
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">HTML
+          / CSS</span>
+
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">Tailwind
+          CSS</span>
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">Git/GitHub</span>
+
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">Arduino
+          / PlatformIO</span>
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">ESP32</span>
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">IoT</span>
+        <span
+          class="skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-subtle text-stone-600 border border-border cursor-default">React</span>
+      </div>
+    </section>
+
+    <hr class="border-border">
+
+    <!-- Projects -->
+    <section class="py-8" id="projects">
+      <h2 class="text-lg font-semibold mb-5">Projects</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+
+        <!-- Smart Flema -->
+        <a href="project.html?slug=smart-flema" class="project-card block rounded-xl border border-border bg-white p-5 shadow-sm focus:outline-2 focus:outline-accent" aria-label="View Smart Flema project details">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block flex-shrink-0"></span>
+            <h3 class="font-semibold text-base">Smart Flema</h3>
+          </div>
+          <p class="text-sm text-stone-500 leading-relaxed">
+            A camera-based system for street markets that creates heatmaps of foot traffic.
+            Helps market managers figure out the best spots and set fair rental prices.
+            Currently in the idea-pitching stage for the ICT Startup Competition 2026.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">AI</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">Computer Vision</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">Analytics</span>
+          </div>
+        </a>
+
+        <!-- Smart City Lampang -->
+        <a href="project.html?slug=smart-city-lampang" class="project-card block rounded-xl border border-border bg-white p-5 shadow-sm focus:outline-2 focus:outline-accent" aria-label="View Smart City Management Platform project details">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-violet-400 inline-block flex-shrink-0"></span>
+            <h3 class="font-semibold text-base">Smart City Management Platform</h3>
+          </div>
+          <p class="text-sm text-stone-500 leading-relaxed">
+            A system that uses real data to help manage public areas and support better decisions.
+            Built with CCTV, AI people counting, weather, and air quality data.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">IoT</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">AI</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">Smart City</span>
+          </div>
+        </a>
+
+        <!-- AgriLink -->
+        <a href="project.html?slug=agrilink" class="project-card block rounded-xl border border-border bg-white p-5 shadow-sm focus:outline-2 focus:outline-accent" aria-label="View AgriLink project details">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block flex-shrink-0"></span>
+            <h3 class="font-semibold text-base">AgriLink Agriculture Platform</h3>
+          </div>
+          <p class="text-sm text-stone-500 leading-relaxed">
+            A platform that connects farmers and buyers and improves transparency in agriculture.
+            Uses AI, IoT, and QR Code to track product source.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">AI</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">IoT</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">QR Code</span>
+          </div>
+        </a>
+
+        <!-- WEB3 Mesh -->
+        <a href="project.html?slug=web3-mesh-network" class="project-card block rounded-xl border border-border bg-white p-5 shadow-sm focus:outline-2 focus:outline-accent" aria-label="View Decentralized IoT Communication System project details">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-sky-400 inline-block flex-shrink-0"></span>
+            <h3 class="font-semibold text-base">Decentralized IoT Communication</h3>
+          </div>
+          <p class="text-sm text-stone-500 leading-relaxed">
+            Local communication system that works without internet using ESP32 devices.
+            Works peer-to-peer — designed for disaster scenarios when centralized networks go down.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">IoT</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">ESP32</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">P2P</span>
+          </div>
+        </a>
+
+        <!-- Library System -->
+        <a href="project.html?slug=library-management-system" class="project-card block rounded-xl border border-border bg-white p-5 shadow-sm sm:col-span-2 focus:outline-2 focus:outline-accent" aria-label="View Library Management System project details">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block flex-shrink-0"></span>
+            <h3 class="font-semibold text-base">Library Management System</h3>
+          </div>
+          <p class="text-sm text-stone-500 leading-relaxed">
+            A Java project covering the full OOP toolkit — encapsulation, inheritance, polymorphism, and abstraction.
+            Manages members, books, digital media, and handles borrow/return with late fee calculations.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">Java</span>
+            <span class="text-xs px-2 py-0.5 rounded bg-subtle text-stone-500">OOP</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <hr class="border-border">
+
+    <!-- Experience -->
+    <section class="py-8" id="experience">
+      <h2 class="text-lg font-semibold mb-5">Experience</h2>
+      <div class="space-y-6 relative">
+        <!-- Timeline line -->
+        <div class="absolute left-[5px] top-2 bottom-2 w-px bg-border hidden sm:block"></div>
+
+        <div class="flex gap-4">
+          <div class="timeline-dot w-3 h-3 rounded-full bg-accent mt-1.5 flex-shrink-0 hidden sm:block"></div>
+          <div>
+            <p class="text-sm font-semibold">ICT Startup Competition 2026 — Smart Flema</p>
+            <p class="text-xs text-muted mt-0.5">International College of Technology, Kanazawa</p>
+            <p class="text-sm text-stone-500 mt-1.5">Idea initiator. Evolved this from my previous Smart City Lampang
+              work into a standalone startup concept for street market analytics.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="timeline-dot w-3 h-3 rounded-full bg-accent mt-1.5 flex-shrink-0 hidden sm:block"></div>
+          <div>
+            <p class="text-sm font-semibold">Project Manager — Smart City Lampang</p>
+            <p class="text-xs text-muted mt-0.5">CAMT CMU · with Pyramid Solution · 2025</p>
+            <p class="text-sm text-stone-500 mt-1.5">Gathered and analyzed requirements from Lampang Municipality. My
+              first real PM role — learned a lot about talking to clients and translating needs into specs.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="timeline-dot w-3 h-3 rounded-full bg-accent mt-1.5 flex-shrink-0 hidden sm:block"></div>
+          <div>
+            <p class="text-sm font-semibold">Hylife Hackathon 2025 — AgriLink</p>
+            <p class="text-xs text-muted mt-0.5">CAMT CMU · 2025</p>
+            <p class="text-sm text-stone-500 mt-1.5">Prototype developer. Proposed the idea and built the working demo
+              for an agriculture transparency platform.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="timeline-dot w-3 h-3 rounded-full bg-accent mt-1.5 flex-shrink-0 hidden sm:block"></div>
+          <div>
+            <p class="text-sm font-semibold">WEB3 Student Club — Developer</p>
+            <p class="text-xs text-muted mt-0.5">CAMT CMU · 2025</p>
+            <p class="text-sm text-stone-500 mt-1.5">Part of the dev team for the CAMT FEST exhibition. Built a
+              decentralized mesh communication demo with ESP32 boards.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="timeline-dot w-3 h-3 rounded-full bg-accent mt-1.5 flex-shrink-0 hidden sm:block"></div>
+          <div>
+            <p class="text-sm font-semibold">AMI Hackathon KMITL</p>
+            <p class="text-xs text-muted mt-0.5">Nov 2023 · Ranked 38th / 191 teams</p>
+            <p class="text-sm text-stone-500 mt-1.5">Worked with AI models and CIRA-CORE. Learned a lot about building
+              under pressure and trusting your teammates.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="timeline-dot w-3 h-3 rounded-full bg-accent mt-1.5 flex-shrink-0 hidden sm:block"></div>
+          <div>
+            <p class="text-sm font-semibold">Drone-Swarm Flight Planning — TAKTC</p>
+            <p class="text-xs text-muted mt-0.5">Mar 2023 · Top 10 / 37 teams</p>
+            <p class="text-sm text-stone-500 mt-1.5">Designed flight paths for a fleet of 200 drones. The coordination
+              logic was tricky but fun to figure out.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="timeline-dot w-3 h-3 rounded-full bg-accent mt-1.5 flex-shrink-0 hidden sm:block"></div>
+          <div>
+            <p class="text-sm font-semibold">Gold Medalist — C Programming</p>
+            <p class="text-xs text-muted mt-0.5">Student Arts & Crafts Competition · 2022 & 2023</p>
+            <p class="text-sm text-stone-500 mt-1.5">Won gold two years in a row (Rounds 70 & 71). Competitive
+              programming taught me to think fast and debug faster.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="border-border">
+
+    <!-- Education -->
+    <section class="py-8" id="education">
+      <h2 class="text-lg font-semibold mb-4">Education</h2>
+      <div class="space-y-4">
+        <div>
+          <p class="text-sm font-semibold">Chiang Mai University</p>
+          <p class="text-sm text-stone-500">B.Sc. in Digital Industry Integration — College of Arts, Media and
+            Technology</p>
+          <p class="text-xs text-muted mt-0.5">Present (started 2025)</p>
+        </div>
+        <div>
+          <p class="text-sm font-semibold">Thung Saliam Chanupatham School</p>
+          <p class="text-sm text-stone-500">Engineering Preparation Program — Sukhothai, Thailand</p>
+          <p class="text-xs text-muted mt-0.5">Graduated 2025</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="border-border">
+
+    <!-- Contact -->
+    <section class="py-8 pb-16" id="contact">
+      <h2 class="text-lg font-semibold mb-4">Contact</h2>
+      <div class="space-y-2">
+        <p class="text-sm text-stone-600">
+          <span class="text-muted mr-2">Email</span>
+          <a href="mailto:naruephonyotmao@gmail.com"
+            class="text-accent hover:opacity-70 underline underline-offset-2">naruephonyotmao@gmail.com</a>
+        </p>
+        <p class="text-sm text-stone-600">
+          <span class="text-muted mr-2">GitHub</span>
+          <a href="https://github.com/Floridae242" target="_blank" rel="noopener noreferrer"
+            class="text-accent hover:opacity-70 underline underline-offset-2">github.com/Floridae242</a>
+        </p>
+        <p class="text-sm text-stone-600">
+          <span class="text-muted mr-2">Phone</span>
+          <a href="tel:+660801066891" class="text-accent hover:opacity-70 underline underline-offset-2">+66
+            080-106-6891</a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-border py-6 text-center">
+    <p class="text-xs text-muted">&copy; 2026 Naruephon Yotmao</p>
+  </footer>
+
+</body>
+
+</html>
