@@ -3,7 +3,7 @@ const projectsData = [
     slug: "smart-flema",
     title: "Smart Flema",
     color: "emerald",
-    imageUrl: "../pic/1.png",
+    imageUrl: "pic/1.png",
     shortDescription:
       "A camera-based system for street markets that creates heatmaps of foot traffic. Helps market managers figure out the best spots and set fair rental prices. Currently in the idea-pitching stage for the ICT Startup Competition 2026.",
     fullDescription: `Smart Flema is a smart system designed for street markets and events. It uses cameras to track how people walk and move around, then creates a "heatmap" to show busy areas and quiet areas. It also checks how long people stay in one place.
