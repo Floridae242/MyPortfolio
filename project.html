@@ -98,13 +98,45 @@
   </footer>
 
   <!-- Data & Rendering -->
-  <script src="data/projects.js"></script>
   <script>
-    (function () {
+    document.addEventListener("DOMContentLoaded", async () => {
       const params = new URLSearchParams(window.location.search);
       const slug = params.get("slug");
 
-      const project = projectsData.find((p) => p.slug === slug);
+      if (!slug) {
+        document.getElementById("not-found").classList.remove("hidden");
+        return;
+      }
+
+      const SUPABASE_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
+      const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
+      const headers = { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}`, 'Accept': 'application/json' };
+
+      let project = null;
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/projects?slug=eq.${slug}&select=*`, { headers });
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.length > 0) {
+            const p = data[0];
+            project = {
+              ...p,
+              imageUrl: p.image_url,
+              shortDescription: p.short_description,
+              fullDescription: p.full_description,
+              problemSolved: p.problem_solved,
+              keyLearnings: p.key_learnings,
+              techStack: p.tech_stack,
+              githubUrl: p.github_url,
+              liveUrl: p.live_url,
+              canvaUrl: p.canva_url
+            };
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching project from Supabase:", error);
+      }
 
       if (!project) {
         document.getElementById("not-found").classList.remove("hidden");
@@ -123,10 +155,9 @@
 
       // Tech stack
       const techEl = document.getElementById("project-tech");
-      project.techStack.forEach((tech) => {
+      (project.techStack || []).forEach((tech) => {
         const span = document.createElement("span");
-        span.className =
-          "skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200";
+        span.className = "skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200";
         span.textContent = tech;
         techEl.appendChild(span);
       });
@@ -149,12 +180,14 @@
 
       // Description paragraphs (What I Built)
       const descEl = document.getElementById("project-description");
-      project.fullDescription.split("\n\n").forEach((para) => {
-        const p = document.createElement("p");
-        p.className = "text-base leading-relaxed text-zinc-700 max-w-prose";
-        p.textContent = para.trim();
-        descEl.appendChild(p);
-      });
+      if (project.fullDescription) {
+        project.fullDescription.split("\n\n").forEach((para) => {
+          const p = document.createElement("p");
+          p.className = "text-base leading-relaxed text-zinc-700 max-w-prose";
+          p.textContent = para.trim();
+          descEl.appendChild(p);
+        });
+      }
 
       // Key Learnings
       if (project.keyLearnings && project.keyLearnings.length > 0) {
@@ -183,9 +216,8 @@
         a.href = project.githubUrl;
         a.target = "_blank";
         a.rel = "noopener noreferrer";
-        a.className =
-          "text-sm text-accent hover:opacity-70 underline underline-offset-2";
-        a.textContent = "Source Code →";
+        a.className = "text-sm text-accent hover:opacity-70 underline underline-offset-2 flex items-center gap-1";
+        a.innerHTML = "Source Code &nearr;";
         linksEl.appendChild(a);
       }
       if (project.liveUrl) {
@@ -193,9 +225,8 @@
         a.href = project.liveUrl;
         a.target = "_blank";
         a.rel = "noopener noreferrer";
-        a.className =
-          "text-sm text-accent hover:opacity-70 underline underline-offset-2";
-        a.textContent = "Live Site →";
+        a.className = "text-sm text-accent hover:opacity-70 underline underline-offset-2 flex items-center gap-1";
+        a.innerHTML = "Live Site &nearr;";
         linksEl.appendChild(a);
       }
       if (project.canvaUrl) {
@@ -203,21 +234,20 @@
         a.href = project.canvaUrl;
         a.target = "_blank";
         a.rel = "noopener noreferrer";
-        a.className =
-          "text-sm text-accent hover:opacity-70 underline underline-offset-2";
-        a.textContent = "Presentation →";
+        a.className = "text-sm text-accent hover:opacity-70 underline underline-offset-2 flex items-center gap-1";
+        a.innerHTML = "Presentation &nearr;";
         linksEl.appendChild(a);
       }
 
       // If no links at all, hide the links section
-      if (!project.githubUrl && !project.liveUrl && !project.canvaUrl) {
+      if (!project.githubUrl && !project.liveUrl && !project.canvaUrl && linksEl.previousElementSibling) {
         linksEl.previousElementSibling.remove();
         linksEl.remove();
       }
 
       // Show content
       document.getElementById("project-content").classList.remove("hidden");
-    })();
+    });
   </script>
 </body>
 
