@@ -7,8 +7,13 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #fafaf9;
-  color: #1c1917;
+}
+
+/* Tailwind Base Application */
+@layer base {
+  body {
+    @apply bg-zinc-50 text-zinc-900 transition-colors duration-300;
+  }
 }
 
 /* === Smooth Scroll === */
@@ -18,40 +23,20 @@ html {
 
 /* === Links === */
 a {
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition: color 0.15s ease, opacity 0.15s ease;
 }
 
-/* === Project Cards === */
-.project-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* === Grounded Transitions === */
+/* Avoid 3D tilt, shadow-hopping, and bounce. Aim for subtle professional coloring. */
+.hover-shift {
+  transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
 }
 
-.project-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.08);
-}
-
-/* Project card links */
-a.project-card {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* === Skill Tags === */
-.skill-tag {
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.skill-tag:hover {
-  background-color: #4f6d7a;
-  color: #ffffff;
-}
-
-/* === Timeline === */
 .timeline-dot {
-  transition: transform 0.2s ease;
+  /* Removed scale bounce */
+  transition: opacity 0.15s ease;
 }
 
 .timeline-dot:hover {
-  transform: scale(1.3);
+  opacity: 0.8;
 }

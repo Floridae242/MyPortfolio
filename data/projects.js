@@ -1,115 +1,140 @@
 const projectsData = [
   {
     slug: "smart-flema",
+    categories: ["Competition", "Production"],
     title: "Smart Flema",
     color: "emerald",
     imageUrl: "pic/1.png",
-    shortDescription:
-      "A camera-based system for street markets that creates heatmaps of foot traffic. Helps market managers figure out the best spots and set fair rental prices. Currently in the idea-pitching stage for the ICT Startup Competition 2026.",
-    fullDescription: `Smart Flema is a smart system designed for street markets and events. It uses cameras to track how people walk and move around, then creates a "heatmap" to show busy areas and quiet areas. It also checks how long people stay in one place.
+    shortDescription: "Camera-based foot traffic heatmap system for street markets and walking street events.",
+    fullDescription: `Smart Flema started as a spin-off from the Smart City Lampang project. While working on that city-wide platform, I noticed that the foot traffic tracking concept had a sharper, more focused use case — Thailand's booming walking street markets and outdoor events.
 
-The idea came from my earlier work on the Smart City Lampang project, where we used CCTV and AI people counting for a city municipality. I took the good parts from that experience and scaled them up into something specifically built for market operators and event organizers.
+The idea was simple: if we could show market operators exactly where crowds gather and how long they stay, those operators could price rental spots more fairly, rearrange layouts for better flow, and ultimately increase the market's value for both vendors and visitors.
 
-Why is it useful? It helps market managers know the best spots. They can change rental prices based on actual foot traffic data, make more money, and prevent areas from getting too crowded. Instead of guessing which spots are popular, they get real numbers.
-
-Right now, Smart Flema is in the idea-pitching stage for the 3rd ICT Startup Competition 2026 at the International College of Technology, Kanazawa. I'm one of the people who started and proposed this idea.`,
+I took the camera-based heatmap approach from the Smart City work and refined it specifically for market environments — smaller scale, more actionable data for non-technical operators.`,
+    problemSolved: "Market and event operators rely on guesswork to price vendor spots and manage crowd flow. There's no data to back decisions, leading to unfair pricing and poor layout planning.",
+    keyLearnings: [
+      "Scaling a proven concept from one domain (city management) into a focused niche (street markets).",
+      "Pitching in English under time pressure at an international competition.",
+      "Research depth matters — some jury questions exposed gaps in our preparation, and that taught me to dig deeper before presenting."
+    ],
     techStack: ["AI", "Computer Vision", "Analytics", "Python"],
-    role: "Idea Initiator",
+    role: "Idea Initiator · Research & Prototype Design",
     context: "3rd ICT Startup Competition 2026 — International College of Technology, Kanazawa",
+    result: "Won the Popular Vote award. Learned that while the idea resonated with the audience, deeper research would have strengthened answers to technical jury questions.",
     githubUrl: "",
     liveUrl: "",
     canvaUrl: "https://canva.link/u9lpz7fzu9wihek",
   },
   {
     slug: "smart-city-lampang",
+    categories: ["Production", "Academic"],
     title: "Smart City Management Platform",
     color: "violet",
-    shortDescription:
-      "A system that uses real data to help manage public areas and support better decisions. Built with CCTV, AI people counting, weather, and air quality data.",
-    fullDescription: `This project is a platform to manage public areas using real data, built for Lampang Municipality in collaboration with Pyramid Solution.
+    imageUrl: "",
+    shortDescription: "Real-world city management platform built for Lampang Municipality using CCTV, AI, and environmental data.",
+    fullDescription: `This is a production platform built for Lampang Municipality in collaboration with Pyramid Solution — not a classroom simulation, but a real system with real stakeholders.
 
-City staff needed real data to manage public areas. The old method used guessing and was not accurate. We worked with the team and clients to collect requirements and helped develop a platform using CCTV, people counting AI, weather data, and air quality data. The system sends notifications through LINE OA and shows real-time information.
+My role was dual: as Project Manager, I coordinated between our university team, the municipal staff, and the company partner. I sat in requirement meetings, compiled specifications, and kept the communication flowing between people who speak very different professional languages. As a developer, I personally built the frontend dashboard and integrated the LINE OA notification API so city staff could receive real-time alerts.
 
-The main goal is to help the municipality make better decisions by using real information instead of guessing. Instead of estimating how busy a park is, they can check actual numbers. Instead of reacting to bad air quality after complaints, they can see it in real-time and act early.
-
-I took on the role of Project Manager and Developer for this project. My responsibility was to gather and analyze requirements from the clients — Lampang Municipality and Pyramid Solution — in order to develop the solution further. It was my first real PM role, and I learned a lot about talking to clients and translating their needs into technical specifications.
-
-This project later evolved into Smart Flema, where I took the concepts of camera-based analytics and applied them specifically to street markets and events.`,
-    techStack: ["IoT", "AI", "Smart City", "Data System"],
-    role: "Project Manager, Developer",
+This was my first time managing a project of this scale, and honestly, I struggled with it. Delegating tasks effectively, keeping teammates on schedule, and making architectural decisions without prior experience were all new challenges. I had to teach myself project management on the fly while simultaneously writing code.`,
+    problemSolved: "City staff at Lampang Municipality relied on visual estimation to assess public area usage. They needed quantifiable data from CCTV, weather sensors, and air quality monitors to make faster, evidence-based decisions.",
+    keyLearnings: [
+      "First real experience as a Project Manager — learned that managing people is harder than managing code.",
+      "Gathering requirements from non-technical municipal stakeholders and translating them into software specs.",
+      "Self-teaching project management methodology while executing the project simultaneously.",
+      "The People Counting module remained incomplete — a lesson in scoping realistic deliverables."
+    ],
+    techStack: ["IoT", "AI", "Smart City", "LINE API", "JavaScript"],
+    role: "Project Manager · Frontend Developer",
     context: "CAMT CMU · with Pyramid Solution · Academic Year 2025",
+    result: "Delivered a functional web dashboard with LINE OA integration. The municipality gave positive feedback on the concept, though the People Counting AI module was not fully operational by deadline.",
     githubUrl: "https://github.com/Floridae242/FORLP.git",
     liveUrl: "https://forlp-bams.vercel.app/",
     canvaUrl: "https://canva.link/454emqxa8jc1alh",
   },
   {
     slug: "agrilink",
+    categories: ["Competition", "Academic"],
     title: "AgriLink Agriculture Platform",
     color: "amber",
-    shortDescription:
-      "A platform that connects farmers and buyers and improves transparency in agriculture. Uses AI, IoT, and QR Code to track product source.",
-    fullDescription: `AgriLink is an agriculture platform that helps solve the problem of low transparency in the Thai agricultural market. Farmers had low transparency and lost products after harvest. Buyers could not check product source.
+    imageUrl: "",
+    shortDescription: "Hackathon prototype connecting farmers directly with buyers via AI, IoT, and QR Code traceability.",
+    fullDescription: `AgriLink was born during the Hylife Hackathon 2025 at CAMT. In a team of five, I proposed the core idea and then built the entire working prototype myself — frontend, backend integration, and the QR code tracing flow.
 
-We helped design and build a prototype using AI, IoT, and QR Code. The platform tracks product source and supports smart logistics and cold chain system so users can check where their food comes from. You scan a QR code on the produce and see where it was grown, when it was harvested, and how it was transported.
+The platform tackles a real problem in Thai agriculture: buyers have no reliable way to verify where their food comes from, and farmers lose significant produce due to poor logistics after harvest. AgriLink gives each product a QR code identity that traces its journey from farm to buyer, supported by IoT sensors and AI-driven logistics suggestions.
 
-The cold chain tracking makes sure temperature-sensitive products stay fresh from farm to table, reducing post-harvest loss by more than 30%.
-
-The goal is simple: create fairness for farmers who often get underpaid by middlemen, build trust for buyers who want to know what they're getting, and allow consumers to get fresh, clean, and safe food in a sustainable way.
-
-I worked as a prototype developer and was one of the people who proposed the idea and solution for this project during the Hylife Hackathon 2025.`,
-    techStack: ["AI", "IoT", "QR Code", "Platform"],
-    role: "Prototype Developer",
+This was my first time building a complete prototype from scratch on my own, and my first experience with "vibe coding" — moving fast, making decisions on instinct, and shipping something that works within hours rather than days.`,
+    problemSolved: "Thai agricultural supply chains lack transparency. Buyers cannot verify crop origin, and farmers face significant post-harvest losses from poor cold-chain logistics.",
+    keyLearnings: [
+      "Building a complete working prototype solo for the first time under hackathon pressure.",
+      "First experience with rapid 'vibe coding' — prioritizing shipping over perfection.",
+      "Learned to be honest about projected numbers — our '30% reduction' figure was an aspirational estimate, not measured data."
+    ],
+    techStack: ["AI", "IoT", "QR Code", "Firebase", "JavaScript"],
+    role: "Idea Proposer · Sole Prototype Developer",
     context: "Hylife Hackathon 2025 — Code For Change, CAMT CMU",
+    result: "Delivered a fully functional prototype deployed on Firebase within the hackathon timeframe. First solo prototype and first vibe-coded project.",
     githubUrl: "https://github.com/Floridae242/agrilink.git",
     liveUrl: "https://agrilink-7a2f4.web.app",
     canvaUrl: "https://canva.link/uumc0gdd6lnff77",
   },
   {
     slug: "web3-mesh-network",
+    categories: ["Open Source", "Academic"],
     title: "Decentralized IoT Communication System",
     color: "sky",
-    shortDescription:
-      "Local communication system that works without internet using ESP32 devices. Works peer-to-peer — designed for disaster scenarios when centralized networks go down.",
-    fullDescription: `This project comes from a real problem: normal communication systems fail when the internet is down during disasters. When centralized networks go down, people lose the ability to communicate right when they need it most.
+    imageUrl: "",
+    shortDescription: "Local peer-to-peer communication system for disaster scenarios using ESP32 mesh networking.",
+    fullDescription: `Built as part of the WEB3 Student Club at CAMT, this project creates a communication system that works without internet — designed for scenarios like natural disasters where centralized infrastructure collapses.
 
-Our solution is a local-first communication system using ESP32 microcontroller devices. The devices communicate in a peer-to-peer way and use keys for secure identity. The system can continue even if some nodes stop working.
+The system uses ESP32 microcontrollers communicating in a peer-to-peer mesh network. Each device has its own cryptographic identity using public/private key pairs, so messages can be verified and trusted even without a central authority.
 
-Each device has its own cryptographic identity using private and public keys, so messages can be verified and trusted. The network can expand by itself as more nodes join, forming a self-healing mesh.
-
-It's suitable for emergency situations like natural disasters, but it can also be used for IoT activities that need checking, such as rescue coordination or community social activities in remote areas.
-
-I built this as part of the WEB3 Student Club at CAMT CMU. During November to December, I was on the Developer team creating this project for the CAMT FEST exhibition. We used C++ together with PlatformIO and Arduino IDE.`,
-    techStack: ["IoT", "ESP32", "Embedded", "P2P"],
-    role: "Developer",
-    context: "WEB3 Student Club — CAMT CMU, Academic Year 2025",
+I worked with both Arduino IDE and PlatformIO, and was responsible for building Station 1 (the primary communication node) and the Reset Station (the recovery/reinitialization node). At CAMT FEST, I served as the team's demo presenter — explaining the system architecture and walking visitors through the live demonstration.`,
+    problemSolved: "Centralized communication infrastructure (cell towers, internet) fails during natural disasters, leaving affected communities completely isolated.",
+    keyLearnings: [
+      "Programming ESP32 devices in C++ across two different IDEs (Arduino IDE and PlatformIO).",
+      "Understanding basic cryptography for device identity and message verification.",
+      "Presenting technical concepts to non-technical CAMT FEST visitors clearly."
+    ],
+    techStack: ["IoT", "ESP32", "C++", "PlatformIO", "Arduino"],
+    role: "Developer · Demo Presenter",
+    context: "WEB3 Student Club — CAMT CMU · CAMT FEST Exhibition · Academic Year 2025",
+    result: "Delivered a working mesh communication system demonstrated live at CAMT FEST. Successfully sent verified messages between ESP32 nodes without internet connectivity.",
     githubUrl: "https://github.com/Floridae242/Web3-Student-Club-Showcase.git",
     liveUrl: "https://heyzine.com/flip-book/6c7e35871a.html",
     canvaUrl: "https://canva.link/bqrbrg4pstikokp",
   },
   {
     slug: "library-management-system",
+    categories: ["Academic", "Personal"],
     title: "Library Management System",
     color: "rose",
-    shortDescription:
-      "A Java project covering the full OOP toolkit — encapsulation, inheritance, polymorphism, and abstraction. Manages members, books, digital media, and handles borrow/return with late fee calculations.",
-    fullDescription: `This is a library management system built with Java as a coursework project. It demonstrates all four pillars of Object-Oriented Programming in a practical, working system.
+    imageUrl: "",
+    shortDescription: "Java OOP system with full CRUD, CSV persistence, and polymorphic late-fee calculation.",
+    fullDescription: `A library management system built in Java as a post-midterm coursework project. While it was a team assignment, I personally wrote approximately 80% of the codebase.
 
-The system can manage members and different types of media — both physical books and digital media. It has a full borrow and return system that checks if media is available and calculates late fees when items are returned past their due date.
+The system manages members, physical books, and digital media with a comprehensive feature set: CRUD operations for members and media, borrowing/returning workflows, overdue reports, and most-borrowed analytics. Data persists across sessions using CSV file I/O for members, media, and loan records.
 
-Encapsulation: All variables are private. Users can't change data directly — they have to go through public getters and setters. The Member class stores member information safely this way.
+The design received specific praise from the instructor: the method overloading was described as "well-designed with meaningful distinctions" — Book's calculateLateFee handles both standard and premium-member cases, while DigitalMedia's version factors in download counts. The LibraryService interface enforces 14 methods across all CRUD and reporting functions, and InputValidator was recognized as a cleanly separated utility class.
 
-Inheritance: The Book and DigitalMedia classes extend the Media class. They share common properties like id, title, and quantity, but each has their own special properties — Book has ISBN and pages, DigitalMedia has format and file size.
-
-Polymorphism: Book and DigitalMedia override the calculateLateFee() method, so each type has a different way to calculate fees. There's also method overloading — the same method name can take different parameters.
-
-Abstraction: Media is an abstract class (you can't create objects from it directly — it's a template). LibraryService is an interface that defines what the system should do, and LibraryManager implements it with the real code.
-
-It's a coursework project, but the architecture turned out clean and I learned a lot about designing class hierarchies that actually make sense.`,
-    techStack: ["Java", "OOP"],
-    role: "Developer",
-    context: "OOP Post-Midterm Project — CAMT CMU, Academic Year 2026",
+The instructor also identified clear areas for improvement: the inheritance hierarchy is shallow (only two levels), the loan persistence doesn't correctly restore dates from CSV, and the code lacks Javadoc documentation — making Stream API usage in LibraryManager harder to follow.`,
+    problemSolved: "Coursework challenge: design a complex class hierarchy that accurately mirrors a real-world lending library while demonstrating all four OOP pillars.",
+    keyLearnings: [
+      "Designing meaningful method overloading — not just different parameter counts, but genuinely different business logic per overload.",
+      "Building a 14-method interface (LibraryService) taught me how contracts enforce completeness.",
+      "Instructor feedback showed that shallow inheritance and missing documentation are professional-level concerns, not just academic ones.",
+      "Taking on 80% of a team project taught me about workload balance and the importance of delegation."
+    ],
+    techStack: ["Java", "OOP", "Maven", "CSV I/O"],
+    role: "Lead Developer (80% of codebase)",
+    context: "OOP Post-Midterm Project — CAMT CMU · Academic Year 2026",
+    result: "Received instructor recognition for overloading design, interface comprehensiveness, and input validation architecture. Key improvement areas: deeper inheritance, accurate date persistence, and Javadoc coverage.",
     githubUrl: "https://github.com/Floridae242/OOP-Post-Midterm-Project.git",
     liveUrl: "",
     canvaUrl: "",
   },
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = projectsData;
+}
