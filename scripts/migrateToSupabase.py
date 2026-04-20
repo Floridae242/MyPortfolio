@@ -40,7 +40,7 @@ projects = [
         "context": "3rd ICT Startup Competition 2026 — International College of Technology, Kanazawa",
         "github_url": "",
         "live_url": "",
-        "canva_url": "https://canva.link/u9lpz7fzu9wihek"
+        "canva_url": "https://www.canva.com/design/DAHAwjtI2js/pLeUkjHuZftOEKlaI9b-cg/view"
     },
     {
         "slug": "smart-city-lampang",
@@ -63,7 +63,7 @@ projects = [
         "context": "CAMT CMU · with Pyramid Solution · Academic Year 2025",
         "github_url": "https://github.com/Floridae242/FORLP.git",
         "live_url": "https://forlp-bams.vercel.app/",
-        "canva_url": "https://canva.link/454emqxa8jc1alh"
+        "canva_url": "https://www.canva.com/design/DAHA_8bVZGI/6TzZAjO0C0O5ay2vCKerSw/view"
     },
     {
         "slug": "agrilink",
@@ -85,7 +85,7 @@ projects = [
         "context": "Hylife Hackathon 2025 — Code For Change, CAMT CMU",
         "github_url": "https://github.com/Floridae242/agrilink.git",
         "live_url": "https://agrilink-7a2f4.web.app",
-        "canva_url": "https://canva.link/uumc0gdd6lnff77"
+        "canva_url": "https://www.canva.com/design/DAGzJyHOtcM/qG6Y__Utl5yiouxGFGBZJQ/view"
     },
     {
         "slug": "web3-mesh-network",
@@ -107,7 +107,7 @@ projects = [
         "context": "WEB3 Student Club — CAMT CMU · CAMT FEST Exhibition · Academic Year 2025",
         "github_url": "https://github.com/Floridae242/Web3-Student-Club-Showcase.git",
         "live_url": "https://heyzine.com/flip-book/6c7e35871a.html",
-        "canva_url": "https://canva.link/bqrbrg4pstikokp"
+        "canva_url": "https://www.canva.com/design/DAG65HyKCrs/2HtsEpHytLT__9CyyQgRwA/view"
     },
     {
         "slug": "library-management-system",
