@@ -1,65 +1,83 @@
 const selfDevelopmentData = [
   {
     id: 1,
-    type: "Certification",
-    title: "AWS Certified Cloud Practitioner",
-    institution: "Amazon Web Services",
-    date: "2025-03-15",
-    credentialUrl: "https://aws.amazon.com/verification",
-    imageUrl: null  // Add path like "pic/certs/aws-cert.jpg" when you have the image
+    type: "Hackathon",
+    title: "AMI HACKATHON",
+    institution: "วิทยาลัยนวัตกรรมการผลิตขั้นสูง สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง",
+    date: "2023-11-11", // 11/11/2566
+    credentialUrl: null,
+    imageUrl: "pic/certs/ami-hackathon.jpg" // วางไฟล์รูปในโฟลเดอร์ pic/certs/
   },
   {
     id: 2,
-    type: "Certification",
-    title: "Google Cloud Associate Cloud Engineer",
-    institution: "Google Cloud",
-    date: "2025-02-20",
-    credentialUrl: "https://cloud.google.com/certification",
-    imageUrl: null
+    type: "Competition",
+    title: "โครงการแข่งขันแก้ไขปัญหาด้วยการเขียนโปรแกรมคอมพิวเตอร์",
+    institution: "ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี",
+    date: "2024-01-29", // 29/01/2567
+    credentialUrl: null,
+    imageUrl: "pic/certs/kmutt-programming.jpg"
   },
   {
     id: 3,
-    type: "Workshop",
-    title: "Agile Project Management Seminar",
-    institution: "Chiang Mai Technology Hub",
-    date: "2024-09-05",
+    type: "Competition/Workshop",
+    title: "การแข่งขันอบรมการเขียนโปรแกรมออกแบบแผนการบินโดรนแปรอักษร",
+    institution: "สมาคมกีฬาเครื่องบินจำลองและวิทยุบังคับ ร่วมกับ สำนักงานการวิจัยแห่งชาติ (วช.)",
+    date: "2023-03-06", // 06/03/2566
     credentialUrl: null,
-    imageUrl: null
+    imageUrl: "pic/certs/drone-programming.jpg"
   },
   {
     id: 4,
-    type: "Certification",
-    title: "Advanced JavaScript Development",
-    institution: "Codecademy",
-    date: "2024-11-10",
+    type: "Camp",
+    title: "โครงการค่าย CLICKCAMP ครั้งที่ 14",
+    institution: "ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหิดล",
+    date: "2024-01-04", // 04/01/2567
     credentialUrl: null,
-    imageUrl: null
+    imageUrl: "pic/certs/clickcamp-14.jpg"
+  },
+  {
+    id: 5,
+    type: "Workshop",
+    title: "การอบรมเชิงปฏิบัติการ \"Generative Al for Web Application\"",
+    institution: "วิทยาลัยศิลปะสื่อ และเทคโนโลยี มหาวิทยาลัยเชียงใหม่",
+    date: "2024-08-17", // 17/08/2567
+    credentialUrl: null,
+    imageUrl: "pic/certs/gen-ai-web.jpg"
+  },
+  {
+    id: 6,
+    type: "Competition",
+    title: "งานศิลปหัตถกรรมนักเรียน ระดับเขตพื้นที่การศึกษา ครั้งที่ 70 ประจำปีการศึกษา 2565",
+    institution: "สำนักงานเขตพื้นที่การศึกษามัธยมศึกษาสุโขทัย",
+    date: "2022-09-12", // 12/09/2565
+    credentialUrl: null,
+    imageUrl: "pic/certs/art-craft-70.jpg"
+  },
+  {
+    id: 7,
+    type: "Competition",
+    title: "งานศิลปหัตถกรรมนักเรียน ระดับเขตพื้นที่การศึกษา ครั้งที่ 71 ประจำปีการศึกษา 2566",
+    institution: "สำนักงานเขตพื้นที่การศึกษามัธยมศึกษาสุโขทัย",
+    date: "2023-09-14", // 14/09/2566
+    credentialUrl: null,
+    imageUrl: "pic/certs/art-craft-71.jpg"
+  },
+  {
+    id: 8,
+    type: "Workshop",
+    title: "การอบรม \"การพัฒนาทักษะทางเทคโนโลยี\"",
+    institution: "โรงเรียนทุ่งเสลี่ยมชนูปถัมภ์",
+    date: "2023-01-07", // 07/01/2566
+    credentialUrl: null,
+    imageUrl: "pic/certs/tech-skills-school.jpg"
   },
   // ──────────────────────────────────────────────
-  // 📌 HOW TO ADD A NEW CERTIFICATE OR WORKSHOP:
+  // 📌 วิธีการใส่รูปลงไปให้แสดงผล:
   //
-  // 1. Put your certificate image inside the "pic/certs/" folder
-  //    (create the folder if it doesn't exist)
-  //
-  // 2. Copy the template below, fill in your details, and paste it
-  //    above this comment block:
-  //
-  // {
-  //   id: 5,
-  //   type: "Certification",          // or "Workshop" or "Seminar"
-  //   title: "Your Certificate Title",
-  //   institution: "Issuing Organization",
-  //   date: "2026-01-15",             // YYYY-MM-DD format
-  //   credentialUrl: "https://...",    // or null if no online verification link
-  //   imageUrl: "pic/certs/your-cert-image.jpg"  // or null if no image
-  // },
-  //
-  // 3. Supported imageUrl formats:
-  //    - Local file:  "pic/certs/my-cert.jpg"
-  //    - Online URL:  "https://example.com/cert.png"
-  //    - No image:    null
-  //
-  // 4. That's it — refresh the page and your new entry will appear!
+  // 1. นำไฟล์รูป Certificate ของคุณ ไปใส่ไว้ในโฟลเดอร์ `pic/certs/`
+  // 2. ตั้งชื่อไฟล์รูปให้ตรงกับตรงคำว่า "imageUrl" ด้านบน (เช่น ami-hackathon.jpg)
+  //    หรือจะใช้วิธีแก้ชื่อ imageUrl ในไฟล์นี้ให้ตรงกับชื่อไฟล์รูปที่คุณมีก็ได้
+  // 3. ระบบจะแสดงปุ่ม "View Image" และรูปขนาดย่อให้คลิกได้อัตโนมัติ!
   // ──────────────────────────────────────────────
 ];
 
