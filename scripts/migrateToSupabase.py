@@ -25,7 +25,7 @@ projects = [
         "title": "Smart Flema",
         "categories": ["Competition", "Production"],
         "color": "emerald",
-        "image_url": "./pic/1.png",
+        "image_url": "/Users/floridae/Portfolio(Tle)/MyPortfolio/pic/1.png",
         "short_description": "Camera-based foot traffic heatmap system for street markets and walking street events.",
         "full_description": "Smart Flema started as a spin-off from the Smart City Lampang project. While working on that city-wide platform, I noticed that the foot traffic tracking concept had a sharper, more focused use case — Thailand's booming walking street markets and outdoor events.\n\nThe idea was simple: if we could show market operators exactly where crowds gather and how long they stay, those operators could price rental spots more fairly, rearrange layouts for better flow, and ultimately increase the market's value for both vendors and visitors.\n\nI took the camera-based heatmap approach from the Smart City work and refined it specifically for market environments — smaller scale, more actionable data for non-technical operators.",
         "problem_solved": "Market and event operators rely on guesswork to price vendor spots and manage crowd flow. There's no data to back decisions, leading to unfair pricing and poor layout planning.",
