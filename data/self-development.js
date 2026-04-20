@@ -3,71 +3,71 @@ const selfDevelopmentData = [
     id: 1,
     type: "Hackathon",
     title: "AMI HACKATHON",
-    institution: "วิทยาลัยนวัตกรรมการผลิตขั้นสูง สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง",
-    date: "2023-11-11", // 11/11/2566
+    institution: "College of Advanced Manufacturing Innovation (AMI), King Mongkut's Institute of Technology Ladkrabang (KMITL)",
+    date: "2023-11-11", // Nov 2023
     credentialUrl: null,
-    imageUrl: "pic/certs/ami-hackathon.jpg" // วางไฟล์รูปในโฟลเดอร์ pic/certs/
+    imageUrl: "pic/certs/ami-hackathon.jpg"
   },
   {
     id: 2,
     type: "Competition",
-    title: "โครงการแข่งขันแก้ไขปัญหาด้วยการเขียนโปรแกรมคอมพิวเตอร์",
-    institution: "ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี",
-    date: "2024-01-29", // 29/01/2567
+    title: "Computer Programming and Problem Solving Competition",
+    institution: "Department of Computer Engineering, Faculty of Engineering, King Mongkut's University of Technology Thonburi (KMUTT)",
+    date: "2024-01-29", // Jan 2024
     credentialUrl: null,
     imageUrl: "pic/certs/kmutt-programming.jpg"
   },
   {
     id: 3,
     type: "Competition/Workshop",
-    title: "การแข่งขันอบรมการเขียนโปรแกรมออกแบบแผนการบินโดรนแปรอักษร",
-    institution: "สมาคมกีฬาเครื่องบินจำลองและวิทยุบังคับ ร่วมกับ สำนักงานการวิจัยแห่งชาติ (วช.)",
-    date: "2023-03-06", // 06/03/2566
+    title: "Drone Swarm Programming and Light Show Design Workshop & Competition",
+    institution: "Radio Control Airplane Modellers Association (RCA) in collaboration with the National Research Council of Thailand (NRCT)",
+    date: "2023-03-06", // Mar 2023
     credentialUrl: null,
     imageUrl: "pic/certs/drone-programming.jpg"
   },
   {
     id: 4,
     type: "Camp",
-    title: "โครงการค่าย CLICKCAMP ครั้งที่ 14",
-    institution: "ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยมหิดล",
-    date: "2024-01-04", // 04/01/2567
+    title: "The 14th CLICKCAMP (Computer Engineering Camp)",
+    institution: "Department of Computer Engineering, Faculty of Engineering, Mahidol University",
+    date: "2024-01-04", // Jan 2024
     credentialUrl: null,
     imageUrl: "pic/certs/clickcamp-14.jpg"
   },
   {
     id: 5,
     type: "Workshop",
-    title: "การอบรมเชิงปฏิบัติการ \"Generative Al for Web Application\"",
-    institution: "วิทยาลัยศิลปะสื่อ และเทคโนโลยี มหาวิทยาลัยเชียงใหม่",
-    date: "2024-08-17", // 17/08/2567
+    title: "Workshop on \"Generative AI for Web Application\"",
+    institution: "College of Arts, Media and Technology (CAMT), Chiang Mai University",
+    date: "2024-08-17", // Aug 2024
     credentialUrl: null,
     imageUrl: "pic/certs/gen-ai-web.jpg"
   },
   {
     id: 6,
     type: "Competition",
-    title: "งานศิลปหัตถกรรมนักเรียน ระดับเขตพื้นที่การศึกษา ครั้งที่ 70 ประจำปีการศึกษา 2565",
-    institution: "สำนักงานเขตพื้นที่การศึกษามัธยมศึกษาสุโขทัย",
-    date: "2022-09-12", // 12/09/2565
+    title: "The 70th Student Arts and Crafts Festival (Academic Year 2022), Educational Service Area Level",
+    institution: "Secondary Educational Service Area Office Sukhothai",
+    date: "2022-09-12", // Sep 2022
     credentialUrl: null,
     imageUrl: "pic/certs/art-craft-70.jpg"
   },
   {
     id: 7,
     type: "Competition",
-    title: "งานศิลปหัตถกรรมนักเรียน ระดับเขตพื้นที่การศึกษา ครั้งที่ 71 ประจำปีการศึกษา 2566",
-    institution: "สำนักงานเขตพื้นที่การศึกษามัธยมศึกษาสุโขทัย",
-    date: "2023-09-14", // 14/09/2566
+    title: "The 71st Student Arts and Crafts Festival (Academic Year 2023), Educational Service Area Level",
+    institution: "Secondary Educational Service Area Office Sukhothai",
+    date: "2023-09-14", // Sep 2023
     credentialUrl: null,
     imageUrl: "pic/certs/art-craft-71.jpg"
   },
   {
     id: 8,
     type: "Workshop",
-    title: "การอบรม \"การพัฒนาทักษะทางเทคโนโลยี\"",
-    institution: "โรงเรียนทุ่งเสลี่ยมชนูปถัมภ์",
-    date: "2023-01-07", // 07/01/2566
+    title: "Workshop on \"Technology Skills Development\"",
+    institution: "Thung Saliam Chanupatham School",
+    date: "2023-01-07", // Jan 2023
     credentialUrl: null,
     imageUrl: "pic/certs/tech-skills-school.jpg"
   },
