@@ -50,13 +50,13 @@ new_awards = [
     "date": "2023-11-10",
     "description": "Developed AI integrations using CIRA-CORE models under pressure in a fast-paced hackathon setting."
   },
-    {
-        "category": "Popular Vote",
-        "title": "Popular Vote - Smart Flema",
-        "organization": "3rd ICT Startup Competition - International College of Technology, Kanazawa",
-        "date": "2026-02-20",
-        "description": "Smart street market foot-traffic analytics platform."
-    }
+  {
+      "category": "Popular Vote",
+      "title": "Popular Vote - Smart Flema",
+      "organization": "3rd ICT Startup Competition - International College of Technology, Kanazawa",
+      "date": "2026-02-20",
+      "description": "Smart street market foot-traffic analytics platform."
+  }
 ]
 
 print("Inserting new awards...")
