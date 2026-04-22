@@ -1,274 +1,610 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio Admin — Content Manager</title>
+  <title>Portfolio CMS — Naruephon</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="tailwind.config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .tab-btn.active { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.08); color: #18181b; }
+    input, textarea, select {
+      width: 100%; padding: 10px 12px; border: 1px solid #e4e4e7; border-radius: 10px;
+      font-size: 14px; background: white; color: #18181b; outline: none; transition: box-shadow .15s;
+      font-family: inherit;
+    }
+    input:focus, textarea:focus, select:focus { box-shadow: 0 0 0 2px #d4d4d8; }
+    textarea { resize: vertical; font-family: 'JetBrains Mono', monospace; }
+    label { display: block; font-size: 11px; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+    .field { margin-bottom: 0; }
+    .modal-scroll { max-height: calc(90vh - 140px); overflow-y: auto; }
+  </style>
 </head>
+<body class="bg-zinc-50 text-zinc-900 min-h-screen">
 
-<body class="bg-stone-50">
-  <div class="min-h-screen max-w-4xl mx-auto px-6 py-8">
-    <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-2">Portfolio Admin</h1>
-      <p class="text-stone-600">Manage your certificates and projects content</p>
-    </div>
-
-    <!-- Tabs -->
-    <div class="flex gap-4 mb-8 border-b border-stone-200">
-      <button class="tab-btn active px-4 py-2 font-medium text-stone-700 border-b-2 border-stone-800 cursor-pointer"
-        data-tab="certificates">
-        Certificates
-      </button>
-      <button
-        class="tab-btn px-4 py-2 font-medium text-stone-500 border-b-2 border-transparent cursor-pointer hover:text-stone-700"
-        data-tab="projects">
-        Projects
-      </button>
-    </div>
-
-    <!-- Certificates Tab -->
-    <div class="tab-content active" id="certificates-tab">
-      <div class="mb-6">
-        <button id="add-cert-btn" class="px-4 py-2 bg-stone-800 text-white rounded-lg hover:bg-stone-700 transition">
-          + Add Certificate
-        </button>
+  <!-- Top Bar -->
+  <nav class="sticky top-0 z-40 bg-white border-b border-zinc-200">
+    <div class="max-w-5xl mx-auto px-5 h-13 flex items-center justify-between" style="height:52px">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-1 text-zinc-400 hover:text-zinc-700 transition-colors px-2 py-1 rounded-lg hover:bg-zinc-100 text-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+          Portfolio
+        </a>
+        <span class="text-zinc-200">|</span>
+        <span class="font-semibold text-sm">Portfolio CMS</span>
+        <span class="text-[11px] font-mono bg-zinc-100 text-zinc-400 px-2 py-0.5 rounded-md">admin</span>
       </div>
-
-      <div id="certificates-container" class="space-y-4">
-        <!-- Certificates will be loaded here -->
+      <div id="sync-wrap" class="flex items-center gap-2 text-xs font-mono text-zinc-400">
+        <span id="sync-dot" class="w-1.5 h-1.5 rounded-full bg-zinc-300 inline-block"></span>
+        <span id="sync-text">Idle</span>
       </div>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-5 py-7">
+
+    <!-- Tab Nav -->
+    <div class="flex gap-1 bg-zinc-100 p-1 rounded-xl w-fit mb-7">
+      <button class="tab-btn active text-sm font-medium px-4 py-2 rounded-lg transition-all text-zinc-900" data-tab="projects">Projects</button>
+      <button class="tab-btn text-sm font-medium px-4 py-2 rounded-lg transition-all text-zinc-500 hover:text-zinc-700" data-tab="activities">Activities</button>
+      <button class="tab-btn text-sm font-medium px-4 py-2 rounded-lg transition-all text-zinc-500 hover:text-zinc-700" data-tab="certificates">Certificates</button>
+      <button class="tab-btn text-sm font-medium px-4 py-2 rounded-lg transition-all text-zinc-500 hover:text-zinc-700" data-tab="awards">Awards</button>
     </div>
 
     <!-- Projects Tab -->
-    <div class="tab-content hidden" id="projects-tab">
-      <div class="mb-6">
-        <p class="text-sm text-stone-600">Projects are currently read-only. Edit <code
-            class="bg-stone-100 px-2 py-1 rounded">data/projects.js</code> directly.</p>
+    <div class="tab-content" id="tab-projects">
+      <div class="flex items-start justify-between mb-5">
+        <div><h1 class="text-lg font-bold">Projects</h1><p class="text-sm text-zinc-500 mt-0.5">Portfolio projects with full case-study details</p></div>
+        <button onclick="openModal('project')" class="inline-flex items-center gap-1.5 text-sm font-semibold px-3.5 py-2 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Add Project
+        </button>
       </div>
-      <div id="projects-container" class="space-y-4">
-        <!-- Projects will be loaded here -->
-      </div>
+      <div id="list-projects" class="grid gap-3 sm:grid-cols-2"><div class="col-span-2 h-20 bg-zinc-100 rounded-xl animate-pulse"></div></div>
     </div>
 
-    <!-- Certificate Form Modal -->
-    <div id="cert-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
-        <h2 class="text-xl font-bold mb-4">Add / Edit Certificate</h2>
+    <!-- Activities Tab -->
+    <div class="tab-content hidden" id="tab-activities">
+      <div class="flex items-start justify-between mb-5">
+        <div><h1 class="text-lg font-bold">Activities</h1><p class="text-sm text-zinc-500 mt-0.5">Leadership, clubs, and extracurriculars</p></div>
+        <button onclick="openModal('activity')" class="inline-flex items-center gap-1.5 text-sm font-semibold px-3.5 py-2 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Add Activity
+        </button>
+      </div>
+      <div id="list-activities" class="space-y-3"><div class="h-16 bg-zinc-100 rounded-xl animate-pulse"></div></div>
+    </div>
 
-        <form id="cert-form" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Title *</label>
-            <input type="text" id="cert-title"
-              class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-800"
-              required>
-          </div>
+    <!-- Certificates Tab -->
+    <div class="tab-content hidden" id="tab-certificates">
+      <div class="flex items-start justify-between mb-5">
+        <div><h1 class="text-lg font-bold">Certificates</h1><p class="text-sm text-zinc-500 mt-0.5">Courses, workshops, hackathons, and competitions</p></div>
+        <button onclick="openModal('certificate')" class="inline-flex items-center gap-1.5 text-sm font-semibold px-3.5 py-2 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Add Certificate
+        </button>
+      </div>
+      <div id="list-certificates" class="space-y-3"><div class="h-16 bg-zinc-100 rounded-xl animate-pulse"></div></div>
+    </div>
 
-          <div>
-            <label class="block text-sm font-medium mb-1">Issuer *</label>
-            <input type="text" id="cert-issuer"
-              class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-800"
-              required>
-          </div>
+    <!-- Awards Tab -->
+    <div class="tab-content hidden" id="tab-awards">
+      <div class="flex items-start justify-between mb-5">
+        <div><h1 class="text-lg font-bold">Awards & Achievements</h1><p class="text-sm text-zinc-500 mt-0.5">Competitions, honors, and recognitions</p></div>
+        <button onclick="openModal('award')" class="inline-flex items-center gap-1.5 text-sm font-semibold px-3.5 py-2 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Add Award
+        </button>
+      </div>
+      <div id="list-awards" class="space-y-3"><div class="h-16 bg-zinc-100 rounded-xl animate-pulse"></div></div>
+    </div>
 
-          <div>
-            <label class="block text-sm font-medium mb-1">Date Issued *</label>
-            <input type="date" id="cert-date"
-              class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-800"
-              required>
-          </div>
+  </main>
 
-          <div>
-            <label class="block text-sm font-medium mb-1">Credential URL (optional)</label>
-            <input type="url" id="cert-url"
-              class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-800"
-              placeholder="https://...">
-          </div>
-
-          <div class="flex gap-3 pt-4">
-            <button type="button" id="close-modal-btn"
-              class="flex-1 px-4 py-2 border border-stone-300 rounded-lg hover:bg-stone-50">
-              Cancel
-            </button>
-            <button type="submit" class="flex-1 px-4 py-2 bg-stone-800 text-white rounded-lg hover:bg-stone-700">
-              Save
-            </button>
-          </div>
-        </form>
+  <!-- Edit/Add Modal -->
+  <div id="modal" class="hidden fixed inset-0 z-50 flex items-start justify-center pt-6 px-4 pb-4">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col" style="max-height:92vh">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-zinc-100 flex-shrink-0">
+        <h2 id="modal-title" class="text-base font-bold"></h2>
+        <button onclick="closeModal()" class="text-zinc-400 hover:text-zinc-700 transition-colors p-1.5 rounded-lg hover:bg-zinc-100">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="modal-body" class="modal-scroll px-6 py-5 space-y-4 flex-1"></div>
+      <div class="flex gap-3 px-6 py-4 border-t border-zinc-100 flex-shrink-0">
+        <button onclick="closeModal()" class="flex-1 text-sm font-medium px-4 py-2.5 border border-zinc-200 rounded-xl hover:bg-zinc-50 transition-colors">Cancel</button>
+        <button id="modal-save-btn" class="flex-1 text-sm font-semibold px-4 py-2.5 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">Save</button>
       </div>
     </div>
   </div>
 
-  <script src="data/certificates.js"></script>
-  <script>
-    let editingId = null;
-    let localCerts = JSON.parse(JSON.stringify(certificatesData));
+  <!-- Delete Confirm -->
+  <div id="del-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 text-center">
+      <div class="w-11 h-11 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2"/></svg>
+      </div>
+      <h3 class="font-bold text-zinc-900 mb-1.5">Delete this item?</h3>
+      <p class="text-sm text-zinc-500 mb-5">This cannot be undone.</p>
+      <div class="flex gap-3">
+        <button onclick="document.getElementById('del-modal').classList.add('hidden')" class="flex-1 text-sm font-medium px-4 py-2.5 border border-zinc-200 rounded-xl hover:bg-zinc-50">Cancel</button>
+        <button id="del-confirm-btn" class="flex-1 text-sm font-semibold px-4 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700">Delete</button>
+      </div>
+    </div>
+  </div>
 
-    // Tab switching
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const tabName = e.target.dataset.tab;
-        document.querySelectorAll('.tab-btn').forEach(b => {
-          b.classList.toggle('active', b === e.target);
-          b.classList.toggle('border-stone-800', b === e.target);
-          b.classList.toggle('border-transparent', b !== e.target);
-          b.classList.toggle('text-stone-700', b === e.target);
-          b.classList.toggle('text-stone-500', b !== e.target);
-        });
-        document.querySelectorAll('.tab-content').forEach(tab => {
-          tab.classList.toggle('hidden', !tab.id.includes(tabName));
-          tab.classList.toggle('active', tab.id.includes(tabName));
-        });
+  <!-- Toast -->
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-[100]">
+    <div class="bg-zinc-900 text-white text-sm px-4 py-3 rounded-xl shadow-xl flex items-center gap-2.5 min-w-[220px]">
+      <span id="toast-icon" class="flex-shrink-0"></span>
+      <span id="toast-text"></span>
+    </div>
+  </div>
+
+  <script>
+  const SB_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
+  const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
+  const RH = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Accept: 'application/json' };
+  const WH = { ...RH, 'Content-Type': 'application/json', Prefer: 'return=representation' };
+
+  let currentTab = 'projects';
+  let currentType = null;
+  let editingId = null;
+  const allData = { projects: [], activities: [], certificates: [], awards: [] };
+  const TABLE = { project: 'projects', activity: 'activities', certificate: 'certificates', award: 'awards' };
+  const TABKEY = { projects: 'project', activities: 'activity', certificates: 'certificate', awards: 'award' };
+
+  // ── Tabs ──
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentTab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('active', b === btn);
+        b.classList.toggle('text-zinc-900', b === btn);
+        b.classList.toggle('text-zinc-500', b !== btn);
+      });
+      document.querySelectorAll('.tab-content').forEach(c => {
+        c.classList.toggle('hidden', !c.id.endsWith(currentTab));
+      });
+      loadTab(currentTab);
+    });
+  });
+
+  // ── Supabase helpers ──
+  async function sbGet(path) {
+    const r = await fetch(`${SB_URL}/${path}`, { headers: RH });
+    if (!r.ok) throw new Error(`GET ${r.status}`);
+    return r.json();
+  }
+  async function sbPost(table, body) {
+    const r = await fetch(`${SB_URL}/${table}`, { method: 'POST', headers: WH, body: JSON.stringify(body) });
+    if (!r.ok) { const t = await r.text(); throw new Error(`POST ${r.status}: ${t}`); }
+    return r.json();
+  }
+  async function sbPatch(table, id, body) {
+    const r = await fetch(`${SB_URL}/${table}?id=eq.${id}`, { method: 'PATCH', headers: WH, body: JSON.stringify(body) });
+    if (!r.ok) { const t = await r.text(); throw new Error(`PATCH ${r.status}: ${t}`); }
+    return r.json();
+  }
+  async function sbDelete(table, id) {
+    const r = await fetch(`${SB_URL}/${table}?id=eq.${id}`, { method: 'DELETE', headers: WH });
+    if (!r.ok) { const t = await r.text(); throw new Error(`DELETE ${r.status}: ${t}`); }
+  }
+
+  function sync(s) {
+    const dot = document.getElementById('sync-dot');
+    const txt = document.getElementById('sync-text');
+    const m = { idle:['bg-zinc-300','Idle'], loading:['bg-yellow-400','Loading…'], saving:['bg-blue-400','Saving…'], ready:['bg-emerald-400','Synced'], error:['bg-red-400','Error'] };
+    dot.className = `w-1.5 h-1.5 rounded-full ${m[s][0]} inline-block`;
+    txt.textContent = m[s][1];
+  }
+
+  // ── Load Tab ──
+  async function loadTab(tab) {
+    sync('loading');
+    const queries = {
+      projects: 'projects?select=*&order=created_at.asc',
+      activities: 'activities?select=*&order=created_at.asc',
+      certificates: 'certificates?select=*&order=date_issued.desc',
+      awards: 'awards?select=*&order=date.desc'
+    };
+    try {
+      const data = await sbGet(queries[tab]);
+      allData[tab] = data;
+      renderList(tab, data);
+      sync('ready');
+    } catch(e) {
+      sync('error');
+      document.getElementById(`list-${tab}`).innerHTML = `<div class="text-center py-10 text-red-400 text-sm">Failed to load. ${e.message}</div>`;
+      showToast('Could not connect to Supabase.', 'error');
+    }
+  }
+
+  // ── Render Lists ──
+  function renderList(tab, items) {
+    const el = document.getElementById(`list-${tab}`);
+    if (!items.length) {
+      el.innerHTML = `<div class="text-center py-12 text-zinc-400 text-sm">No items yet. Click "Add" to get started.</div>`;
+      return;
+    }
+    el.className = tab === 'projects' ? 'grid gap-3 sm:grid-cols-2' : 'space-y-3';
+    el.innerHTML = items.map(item => {
+      switch(tab) {
+        case 'projects': return tplProject(item);
+        case 'activities': return tplActivity(item);
+        case 'certificates': return tplCert(item);
+        case 'awards': return tplAward(item);
+      }
+    }).join('');
+    el.querySelectorAll('[data-edit]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = allData[tab].find(i => String(i.id) === btn.dataset.edit);
+        openModal(TABKEY[tab], item);
       });
     });
-
-    // Modal controls
-    const modal = document.getElementById('cert-modal');
-    const addBtn = document.getElementById('add-cert-btn');
-    const closeBtn = document.getElementById('close-modal-btn');
-    const form = document.getElementById('cert-form');
-
-    addBtn.addEventListener('click', () => {
-      editingId = null;
-      form.reset();
-      modal.classList.remove('hidden');
+    el.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', () => confirmDelete(tab, btn.dataset.del));
     });
+  }
 
-    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.classList.add('hidden');
+  const COLORS = { emerald:'bg-emerald-400', violet:'bg-violet-400', amber:'bg-amber-400', sky:'bg-sky-400', rose:'bg-rose-400', orange:'bg-orange-400', teal:'bg-teal-400', blue:'bg-blue-400' };
+
+  function tplProject(p) {
+    return `<div class="bg-white border border-zinc-200 rounded-xl p-4 hover:border-zinc-300 transition-colors flex flex-col gap-2">
+      <div class="flex items-start justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 ${COLORS[p.color]||'bg-zinc-400'}"></span>
+          <span class="font-semibold text-sm truncate">${h(p.title)}</span>
+        </div>
+        <div class="flex gap-1.5 flex-shrink-0">
+          <button data-edit="${p.id}" class="text-xs px-2.5 py-1 border border-zinc-200 rounded-lg hover:bg-zinc-50 text-zinc-600">Edit</button>
+          <button data-del="${p.id}" class="text-xs px-2.5 py-1 border border-red-100 rounded-lg hover:bg-red-50 text-red-500">Delete</button>
+        </div>
+      </div>
+      <p class="text-xs text-zinc-500 line-clamp-2">${h(p.short_description||'')}</p>
+      <div class="flex flex-wrap gap-1.5">
+        ${(p.categories||[]).map(c=>`<span class="text-[11px] px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-500">${h(c)}</span>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  function tplActivity(a) {
+    const thumb = a.image_url
+      ? `<img src="${h(a.image_url)}" class="w-10 h-10 rounded-lg object-cover border border-zinc-200 flex-shrink-0" onerror="this.style.display='none'">`
+      : `<div class="w-10 h-10 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center flex-shrink-0 text-sm font-bold text-zinc-300">${h((a.activity_name||'?').charAt(0))}</div>`;
+    return `<div class="bg-white border border-zinc-200 rounded-xl p-4 flex items-center gap-3 hover:border-zinc-300 transition-colors">
+      ${thumb}
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-semibold truncate">${h(a.activity_name||'')}</p>
+        <p class="text-xs text-zinc-500 font-mono truncate">${h(a.role||'')} · ${h(a.period||'')}</p>
+      </div>
+      <div class="flex gap-1.5 flex-shrink-0">
+        <button data-edit="${a.id}" class="text-xs px-2.5 py-1 border border-zinc-200 rounded-lg hover:bg-zinc-50 text-zinc-600">Edit</button>
+        <button data-del="${a.id}" class="text-xs px-2.5 py-1 border border-red-100 rounded-lg hover:bg-red-50 text-red-500">Delete</button>
+      </div>
+    </div>`;
+  }
+
+  function tplCert(c) {
+    const date = fmtDate(c.date_issued);
+    const thumb = c.image_url
+      ? `<img src="${h(c.image_url)}" class="w-12 h-12 rounded-lg object-cover border border-zinc-200 flex-shrink-0" onerror="this.style.display='none'">`
+      : `<div class="w-12 h-12 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center flex-shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></div>`;
+    return `<div class="bg-white border border-zinc-200 rounded-xl p-4 flex items-center gap-3 hover:border-zinc-300 transition-colors">
+      ${thumb}
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-semibold truncate">${h(c.title||'')}</p>
+        <p class="text-xs text-zinc-500 truncate">${h(c.institution||'')}</p>
+        <p class="text-xs font-mono text-zinc-400">${h(c.type||'')} · ${date}</p>
+      </div>
+      <div class="flex gap-1.5 flex-shrink-0">
+        <button data-edit="${c.id}" class="text-xs px-2.5 py-1 border border-zinc-200 rounded-lg hover:bg-zinc-50 text-zinc-600">Edit</button>
+        <button data-del="${c.id}" class="text-xs px-2.5 py-1 border border-red-100 rounded-lg hover:bg-red-50 text-red-500">Delete</button>
+      </div>
+    </div>`;
+  }
+
+  function tplAward(a) {
+    const date = fmtDate(a.date);
+    return `<div class="bg-white border border-zinc-200 rounded-xl p-4 flex items-center gap-3 hover:border-zinc-300 transition-colors">
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-semibold truncate">${h(a.title||'')}</p>
+        <p class="text-xs text-zinc-500">${h(a.organization||'')}</p>
+        <p class="text-xs font-mono text-zinc-400">${h(a.category||'')} · ${date}</p>
+      </div>
+      <div class="flex gap-1.5 flex-shrink-0">
+        <button data-edit="${a.id}" class="text-xs px-2.5 py-1 border border-zinc-200 rounded-lg hover:bg-zinc-50 text-zinc-600">Edit</button>
+        <button data-del="${a.id}" class="text-xs px-2.5 py-1 border border-red-100 rounded-lg hover:bg-red-50 text-red-500">Delete</button>
+      </div>
+    </div>`;
+  }
+
+  // ── Modal ──
+  function openModal(type, item = null) {
+    currentType = type;
+    editingId = item ? item.id : null;
+    document.getElementById('modal-title').textContent = `${item ? 'Edit' : 'Add'} ${cap(type)}`;
+    document.getElementById('modal-body').innerHTML = buildForm(type, item);
+    document.getElementById('modal-save-btn').onclick = () => saveItem();
+    setupImgPreview();
+    if (type === 'project' && !item) setupSlug();
+    document.getElementById('modal').classList.remove('hidden');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+    currentType = null; editingId = null;
+  }
+
+  function setupImgPreview() {
+    const inp = document.getElementById('f-imageUrl');
+    const pre = document.getElementById('img-preview');
+    if (!inp || !pre) return;
+    function update() {
+      const v = inp.value.trim();
+      if (v) { pre.src = v; pre.style.display = 'block'; } else { pre.style.display = 'none'; }
+    }
+    inp.addEventListener('input', update);
+    update();
+  }
+
+  function setupSlug() {
+    const t = document.getElementById('f-title');
+    const s = document.getElementById('f-slug');
+    if (!t || !s) return;
+    t.addEventListener('input', () => {
+      if (s.dataset.manual) return;
+      s.value = t.value.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
     });
+    s.addEventListener('input', () => { s.dataset.manual = '1'; });
+  }
 
-    // Form submission
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
+  // ── Form builders ──
+  function fi(id, label, val='', opts={}) {
+    const { type='text', placeholder='', required=false, hint='' } = opts;
+    const req = required ? '<span style="color:#f87171">*</span>' : '';
+    const ra = required ? 'required' : '';
+    return `<div class="field">
+      <label for="${id}">${label} ${req}</label>
+      ${hint ? `<p style="font-size:11px;color:#a1a1aa;margin-bottom:6px">${hint}</p>` : ''}
+      <input type="${type}" id="${id}" value="${h(val)}" placeholder="${placeholder}" ${ra}>
+    </div>`;
+  }
 
-      const cert = {
-        id: editingId || Math.max(...localCerts.map(c => c.id || 0), 0) + 1,
-        title: document.getElementById('cert-title').value,
-        issuer: document.getElementById('cert-issuer').value,
-        dateIssued: document.getElementById('cert-date').value,
-        credentialUrl: document.getElementById('cert-url').value || null,
-        image: null
-      };
+  function ft(id, label, val='', opts={}) {
+    const { rows=3, placeholder='', required=false, hint='', mono=false } = opts;
+    const req = required ? '<span style="color:#f87171">*</span>' : '';
+    const ra = required ? 'required' : '';
+    const style = mono ? '' : 'style="font-family:inherit"';
+    return `<div class="field">
+      <label for="${id}">${label} ${req}</label>
+      ${hint ? `<p style="font-size:11px;color:#a1a1aa;margin-bottom:6px">${hint}</p>` : ''}
+      <textarea id="${id}" rows="${rows}" placeholder="${placeholder}" ${ra} ${style}>${h(val)}</textarea>
+    </div>`;
+  }
+
+  function fs(id, label, val='', options=[]) {
+    return `<div class="field">
+      <label for="${id}">${label}</label>
+      <select id="${id}">${options.map(o=>`<option value="${h(o)}" ${val===o?'selected':''}>${h(o)}</option>`).join('')}</select>
+    </div>`;
+  }
+
+  function fImg(val='') {
+    return `<div class="field">
+      <label>Image</label>
+      <p style="font-size:11px;color:#a1a1aa;margin-bottom:6px">Paste an external URL or a local path like <code style="background:#f4f4f5;padding:1px 4px;border-radius:4px">pic/filename.jpg</code></p>
+      <input type="text" id="f-imageUrl" value="${h(val)}" placeholder="https://... or pic/filename.jpg">
+      <img id="img-preview" src="${h(val)}" alt="Preview" style="margin-top:10px;width:120px;height:90px;object-fit:cover;border-radius:10px;border:1px solid #e4e4e7;display:${val?'block':'none'}">
+    </div>`;
+  }
+
+  function buildForm(type, item) {
+    switch(type) {
+      case 'project': return buildProjectForm(item);
+      case 'activity': return buildActivityForm(item);
+      case 'certificate': return buildCertForm(item);
+      case 'award': return buildAwardForm(item);
+    }
+  }
+
+  function buildProjectForm(p) {
+    const cats = ['Production','Competition','Academic','Personal','Open Source'];
+    const colors = ['emerald','violet','amber','sky','rose','orange','teal','blue'];
+    const sel = p ? (p.categories||[]) : [];
+    return `
+      ${fi('f-title','Title',p?.title||'',{required:true,placeholder:'e.g. Smart Flema'})}
+      <div class="field">
+        <label for="f-slug">Slug <span style="color:#f87171">*</span></label>
+        <p style="font-size:11px;color:#a1a1aa;margin-bottom:6px">Auto-generated from title. Must be unique and URL-safe.</p>
+        <input type="text" id="f-slug" value="${h(p?.slug||'')}" placeholder="my-project-name" style="font-family:monospace">
+      </div>
+      <div class="field">
+        <label>Categories</label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
+          ${cats.map(c=>`<label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;text-transform:none;letter-spacing:0;color:#3f3f46;font-weight:500;cursor:pointer">
+            <input type="checkbox" class="cat-chk" value="${c}" ${sel.includes(c)?'checked':''} style="width:auto;padding:0;border:0;box-shadow:none"> ${c}
+          </label>`).join('')}
+        </div>
+      </div>
+      ${fs('f-color','Accent Color',p?.color||'emerald',colors)}
+      ${fImg(p?.image_url||'')}
+      ${fi('f-shortDesc','Short Description',p?.short_description||'',{required:true,placeholder:'One-line summary shown on project cards'})}
+      ${ft('f-fullDesc','Full Description (What I Built)',p?.full_description||'',{rows:5,placeholder:'Detailed story — separate paragraphs with a blank line'})}
+      ${ft('f-problem','The Problem',p?.problem_solved||'',{rows:2,placeholder:'What real-world problem does this solve?'})}
+      ${ft('f-learnings','Key Learnings',( p?.key_learnings||[]).join('\n'),{rows:3,hint:'One learning per line',placeholder:'Learning 1\nLearning 2'})}
+      ${fi('f-tech','Tech Stack',(p?.tech_stack||[]).join(', '),{placeholder:'JavaScript, React, Python — comma separated'})}
+      ${fi('f-role','Role',p?.role||'',{required:true,placeholder:'e.g. Lead Developer · Project Manager'})}
+      ${fi('f-context','Context',p?.context||'',{placeholder:'e.g. Hylife Hackathon 2025 — CAMT CMU'})}
+      ${ft('f-result','Result',p?.result||'',{rows:2,placeholder:'What was the outcome or impact?'})}
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        ${fi('f-github','GitHub URL',p?.github_url||'',{type:'url',placeholder:'https://github.com/...'})}
+        ${fi('f-live','Live URL',p?.live_url||'',{type:'url',placeholder:'https://...'})}
+        ${fi('f-canva','Presentation URL',p?.canva_url||'',{type:'url',placeholder:'https://canva.link/...'})}
+      </div>`;
+  }
+
+  function buildActivityForm(a) {
+    return `
+      ${fi('f-actName','Activity / Organization Name',a?.activity_name||'',{required:true})}
+      ${fi('f-role','Role',a?.role||'',{required:true,placeholder:'e.g. Developer · Demo Presenter'})}
+      ${fi('f-period','Period',a?.period||'',{placeholder:'e.g. 2025 or Academic Year 2025'})}
+      ${ft('f-desc','Description',a?.description||'',{rows:3,placeholder:'Brief description of what you did and what you learned'})}
+      ${fImg(a?.image_url||'')}
+      ${fi('f-skills','Soft Skills',(a?.soft_skills||[]).join(', '),{placeholder:'Teamwork, Communication, Problem-solving'})}`;
+  }
+
+  function buildCertForm(c) {
+    const types = ['Certification','Workshop/Seminar','Hackathon','Competition','Competition/Workshop','Camp','Course'];
+    return `
+      ${fs('f-type','Type',c?.type||'Certification',types)}
+      ${fi('f-title','Title',c?.title||'',{required:true})}
+      ${fi('f-inst','Institution / Issuer',c?.institution||'',{required:true})}
+      ${fi('f-date','Date',c?.date_issued||'',{type:'date',required:true})}
+      ${fImg(c?.image_url||'')}
+      ${fi('f-credUrl','Credential / Verify URL',c?.credential_url||'',{type:'url',placeholder:'https://...'})}`;
+  }
+
+  function buildAwardForm(a) {
+    const cats = ['Competition','Honor/Scholarship','Recognition'];
+    return `
+      ${fs('f-category','Category',a?.category||'Competition',cats)}
+      ${fi('f-title','Title',a?.title||'',{required:true,placeholder:'e.g. Gold Medalist: C Programming'})}
+      ${fi('f-org','Organization',a?.organization||'',{required:true})}
+      ${fi('f-date','Date',a?.date||'',{type:'date',required:true})}
+      ${ft('f-desc','Description',a?.description||'',{rows:2})}`;
+  }
+
+  // ── Save ──
+  async function saveItem() {
+    sync('saving');
+    document.getElementById('modal-save-btn').textContent = 'Saving…';
+    try {
+      let payload, table;
+      const type = currentType;
+
+      if (type === 'project') {
+        table = 'projects';
+        const slug = gv('f-slug');
+        const title = gv('f-title');
+        const role = gv('f-role');
+        const shortDesc = gv('f-shortDesc');
+        if (!slug || !title || !role || !shortDesc) { showToast('Fill in required fields (Title, Slug, Role, Short Description).','error'); sync('ready'); document.getElementById('modal-save-btn').textContent='Save'; return; }
+        payload = {
+          slug, title,
+          categories: [...document.querySelectorAll('.cat-chk:checked')].map(c=>c.value),
+          color: gv('f-color'),
+          image_url: gv('f-imageUrl')||null,
+          short_description: shortDesc,
+          full_description: gv('f-fullDesc')||null,
+          problem_solved: gv('f-problem')||null,
+          key_learnings: gv('f-learnings').split('\n').map(s=>s.trim()).filter(Boolean),
+          tech_stack: gv('f-tech').split(',').map(s=>s.trim()).filter(Boolean),
+          role, context: gv('f-context')||null,
+          result: gv('f-result')||null,
+          github_url: gv('f-github')||null,
+          live_url: gv('f-live')||null,
+          canva_url: gv('f-canva')||null,
+        };
+      } else if (type === 'activity') {
+        table = 'activities';
+        const activity_name = gv('f-actName');
+        const role = gv('f-role');
+        if (!activity_name || !role) { showToast('Activity name and role are required.','error'); sync('ready'); document.getElementById('modal-save-btn').textContent='Save'; return; }
+        payload = {
+          activity_name, role,
+          period: gv('f-period')||null,
+          description: gv('f-desc')||null,
+          image_url: gv('f-imageUrl')||null,
+          soft_skills: gv('f-skills').split(',').map(s=>s.trim()).filter(Boolean),
+        };
+      } else if (type === 'certificate') {
+        table = 'certificates';
+        const title = gv('f-title');
+        const institution = gv('f-inst');
+        const date_issued = gv('f-date');
+        if (!title || !institution || !date_issued) { showToast('Title, institution, and date are required.','error'); sync('ready'); document.getElementById('modal-save-btn').textContent='Save'; return; }
+        payload = {
+          type: gv('f-type'), title, institution,
+          date_issued,
+          image_url: gv('f-imageUrl')||null,
+          credential_url: gv('f-credUrl')||null,
+        };
+      } else if (type === 'award') {
+        table = 'awards';
+        const title = gv('f-title');
+        const organization = gv('f-org');
+        const date = gv('f-date');
+        if (!title || !organization || !date) { showToast('Title, organization, and date are required.','error'); sync('ready'); document.getElementById('modal-save-btn').textContent='Save'; return; }
+        payload = {
+          category: gv('f-category'), title, organization, date,
+          description: gv('f-desc')||null,
+        };
+      }
 
       if (editingId) {
-        const idx = localCerts.findIndex(c => c.id === editingId);
-        localCerts[idx] = cert;
+        await sbPatch(table, editingId, payload);
+        showToast(`${cap(type)} updated!`, 'success');
       } else {
-        localCerts.push(cert);
+        await sbPost(table, payload);
+        showToast(`${cap(type)} added!`, 'success');
       }
 
-      // Save to localStorage
-      localStorage.setItem('portfolioCerts', JSON.stringify(localCerts));
-      renderCertificates();
-      modal.classList.add('hidden');
-      showNotification('Certificate saved successfully!');
-    });
+      closeModal();
+      loadTab(currentTab);
+    } catch(e) {
+      console.error(e);
+      sync('error');
+      showToast(`Save failed: ${e.message}. Check Supabase RLS policies allow INSERT/UPDATE for anon.`, 'error');
+    } finally {
+      document.getElementById('modal-save-btn').textContent = 'Save';
+    }
+  }
 
-    // Render certificates
-    function renderCertificates() {
-      const container = document.getElementById('certificates-container');
-
-      if (localCerts.length === 0) {
-        container.innerHTML = '<p class="text-sm text-stone-500">No certificates yet. Click "Add Certificate" to get started.</p>';
-        return;
+  // ── Delete ──
+  function confirmDelete(tab, id) {
+    const table = TABLE[TABKEY[tab]];
+    document.getElementById('del-confirm-btn').onclick = async () => {
+      document.getElementById('del-modal').classList.add('hidden');
+      sync('saving');
+      try {
+        await sbDelete(table, id);
+        showToast('Item deleted.', 'success');
+        loadTab(currentTab);
+      } catch(e) {
+        sync('error');
+        showToast(`Delete failed: ${e.message}`, 'error');
       }
+    };
+    document.getElementById('del-modal').classList.remove('hidden');
+  }
 
-      container.innerHTML = localCerts
-        .sort((a, b) => new Date(b.dateIssued) - new Date(a.dateIssued))
-        .map(cert => {
-          const date = new Date(cert.dateIssued).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-          return `
-            <div class="p-4 border border-stone-200 rounded-lg flex justify-between items-start">
-              <div class="flex-1">
-                <p class="font-medium text-stone-800">${cert.title}</p>
-                <p class="text-sm text-stone-500">${cert.issuer}</p>
-                <p class="text-xs text-stone-400 mt-1">${date}</p>
-              </div>
-              <div class="flex gap-2">
-                <button class="edit-btn text-xs px-2 py-1 bg-stone-100 rounded hover:bg-stone-200" data-id="${cert.id}">Edit</button>
-                <button class="delete-btn text-xs px-2 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100" data-id="${cert.id}">Delete</button>
-              </div>
-            </div>
-          `;
-        })
-        .join('');
+  // ── Toast ──
+  function showToast(msg, type='success') {
+    document.getElementById('toast-text').textContent = msg;
+    document.getElementById('toast-icon').innerHTML = type === 'success'
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+    const el = document.getElementById('toast');
+    el.classList.remove('hidden');
+    clearTimeout(window._toast);
+    window._toast = setTimeout(() => el.classList.add('hidden'), 5000);
+  }
 
-      // Attach event listeners
-      document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', editCertificate);
-      });
-      document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', deleteCertificate);
-      });
-    }
+  // ── Utils ──
+  function gv(id) { return (document.getElementById(id)?.value||'').trim(); }
+  function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function cap(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
+  function fmtDate(d) { return d ? new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short'}) : ''; }
 
-    function editCertificate(e) {
-      const id = parseInt(e.target.dataset.id);
-      const cert = localCerts.find(c => c.id === id);
-
-      editingId = id;
-      document.getElementById('cert-title').value = cert.title;
-      document.getElementById('cert-issuer').value = cert.issuer;
-      document.getElementById('cert-date').value = cert.dateIssued;
-      document.getElementById('cert-url').value = cert.credentialUrl || '';
-
-      modal.classList.remove('hidden');
-    }
-
-    function deleteCertificate(e) {
-      const id = parseInt(e.target.dataset.id);
-      if (confirm('Are you sure you want to delete this certificate?')) {
-        localCerts = localCerts.filter(c => c.id !== id);
-        localStorage.setItem('portfolioCerts', JSON.stringify(localCerts));
-        renderCertificates();
-        showNotification('Certificate deleted.');
-      }
-    }
-
-    // Render projects (read-only)
-    function renderProjects() {
-      const container = document.getElementById('projects-container');
-      container.innerHTML = (projectsData || [])
-        .map(proj => `
-          <div class="p-4 border border-stone-200 rounded-lg">
-            <p class="font-medium text-stone-800">${proj.title}</p>
-            <p class="text-sm text-stone-500 mt-1">${proj.shortDescription}</p>
-            <div class="flex gap-2 mt-2">
-              ${proj.githubUrl ? `<a href="${proj.githubUrl}" target="_blank" class="text-xs text-stone-600 hover:text-stone-800">GitHub</a>` : ''}
-              ${proj.liveUrl ? `<a href="${proj.liveUrl}" target="_blank" class="text-xs text-stone-600 hover:text-stone-800">Live</a>` : ''}
-            </div>
-          </div>
-        `)
-        .join('');
-    }
-
-    function showNotification(msg) {
-      const notif = document.createElement('div');
-      notif.className = 'fixed bottom-4 right-4 bg-stone-800 text-white px-4 py-2 rounded-lg text-sm';
-      notif.textContent = msg;
-      document.body.appendChild(notif);
-      setTimeout(() => notif.remove(), 3000);
-    }
-
-    // Initialize
-    function init() {
-      const saved = localStorage.getItem('portfolioCerts');
-      if (saved) {
-        localCerts = JSON.parse(saved);
-      }
-      renderCertificates();
-      renderProjects();
-    }
-
-    init();
+  // ── Init ──
+  loadTab('projects');
   </script>
 </body>
-
 </html>
