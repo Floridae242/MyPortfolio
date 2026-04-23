@@ -4,347 +4,932 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project — Naruephon Yotmao</title>
-  <meta name="description" content="Project case study — the purpose, the technical hurdles, and what was learned.">
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="tailwind.config.js"></script>
+  <title>Technical Drawing — Project Case Study</title>
+  <meta name="description" content="Technical drawing and case study of a project — purpose, constraints, construction notes, lessons.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&family=Big+Shoulders+Stencil+Display:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <style>
-    :root { --accent: #059669; --accent-soft: #0596691a; }
+    /* ═══════════════════════════════════════════
+       THEME — "Blueprint Technical"
+       ═══════════════════════════════════════════ */
+    :root {
+      --blueprint:     #0b2545;
+      --blueprint-2:   #113a66;
+      --blueprint-ink: #142f52;
+      --paper:         #f5f5f0;
+      --paper-dim:     rgba(245,245,240,0.72);
+      --paper-faint:   rgba(245,245,240,0.4);
+      --cyan:          #8ecae6;
+      --cyan-rule:     rgba(142,202,230,0.18);
+      --cyan-strong:   rgba(142,202,230,0.45);
+      --pencil:        #b7c4cf;
+      --orange:        #e76f51;
+      --orange-soft:   rgba(231,111,81,0.14);
+      --green:         #06d6a0;
 
-    /* ── Reading progress bar (top) ── */
-    #read-progress {
-      position: fixed; top: 0; left: 0; height: 2px; width: 0;
-      background: var(--accent); z-index: 100;
-      transition: width .1s linear;
-    }
-
-    /* ── Section labels ── */
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; font-weight: 500; color: #a1a1aa;
-      text-transform: uppercase; letter-spacing: .12em;
-      display: inline-flex; align-items: center; gap: 8px;
-    }
-    .section-label::before {
-      content: ''; display: inline-block;
-      width: 20px; height: 1px; background: #d4d4d8;
-    }
-
-    /* ── Prose reader typography ── */
-    .narrative p {
-      color: #27272a; line-height: 1.8; font-size: 16px;
-      font-weight: 400; letter-spacing: -.005em;
-    }
-    .narrative p + p { margin-top: 1.1em; }
-    .narrative p::first-letter { font-weight: 500; }
-
-    /* ── Scroll-reveal frames ── */
-    .reveal {
-      opacity: 0; transform: translateY(32px);
-      transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1);
-    }
-    .reveal.in { opacity: 1; transform: none; }
-
-    /* Staggered children */
-    .reveal-stagger > * {
-      opacity: 0; transform: translateY(18px);
-      transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);
-    }
-    .reveal-stagger.in > *:nth-child(1) { transition-delay: .05s; opacity: 1; transform: none; }
-    .reveal-stagger.in > *:nth-child(2) { transition-delay: .15s; opacity: 1; transform: none; }
-    .reveal-stagger.in > *:nth-child(3) { transition-delay: .25s; opacity: 1; transform: none; }
-    .reveal-stagger.in > *:nth-child(4) { transition-delay: .35s; opacity: 1; transform: none; }
-    .reveal-stagger.in > *:nth-child(5) { transition-delay: .45s; opacity: 1; transform: none; }
-    .reveal-stagger.in > *:nth-child(6) { transition-delay: .55s; opacity: 1; transform: none; }
-
-    /* ── Frame dividers (vertical line) ── */
-    .frame {
-      position: relative; padding-left: 24px;
-      border-left: 1px solid #e4e4e7;
-    }
-    .frame::before {
-      content: ''; position: absolute; left: -5px; top: 0;
-      width: 9px; height: 9px; border-radius: 50%;
-      background: white; border: 2px solid var(--accent);
+      --stencil: 'Big Shoulders Stencil Display', 'Arial Narrow', sans-serif;
+      --mono:    'IBM Plex Mono', ui-monospace, monospace;
+      --script:  'Newsreader', Georgia, serif;
     }
 
-    /* ── Learning list: numbered with accent ── */
-    .learning-item {
-      display: grid; grid-template-columns: 28px 1fr; gap: 14px;
-      padding: 14px 0; border-top: 1px solid #f4f4f5;
+    /* ═══════════════════════════════════════════
+       RESET
+       ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      background: var(--blueprint);
+      color: var(--paper);
+      font-family: var(--mono);
+      font-size: 13.5px;
+      line-height: 1.65;
+      overflow-x: hidden;
+      position: relative;
+      font-weight: 400;
     }
-    .learning-item:first-child { border-top: 0; }
-    .learning-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px; font-weight: 600; color: var(--accent);
-      padding-top: 2px;
+    ::selection { background: var(--orange); color: var(--blueprint); }
+
+    /* ═══════════════════════════════════════════
+       BLUEPRINT GRID BACKGROUND
+       ═══════════════════════════════════════════ */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(to right, var(--cyan-rule) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--cyan-rule) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(to right, var(--cyan-rule) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--cyan-rule) 1px, transparent 1px);
+      background-size: 200px 200px;
+      opacity: 1.8;
+      pointer-events: none;
     }
 
-    /* ── Tech pill ── */
-    .tech-pill {
-      display: inline-flex; align-items: center;
-      padding: 6px 12px; font-size: 12.5px; font-weight: 500;
-      color: #3f3f46; background: white;
-      border: 1px solid #e4e4e7; border-radius: 999px;
-      transition: border-color .15s, transform .15s;
-    }
-    .tech-pill:hover { border-color: var(--accent); transform: translateY(-1px); }
-
-    /* ── Link card (CTA) ── */
-    .link-card {
-      display: flex; align-items: center; gap: 12px;
-      padding: 14px 18px; background: white;
-      border: 1px solid #e4e4e7; border-radius: 12px;
-      text-decoration: none; color: #18181b;
-      font-size: 14px; font-weight: 600;
-      transition: border-color .2s, transform .2s, box-shadow .2s;
-    }
-    .link-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(5,150,105,.12);
-    }
-    .link-card svg.ext {
-      margin-left: auto; opacity: .4;
-      transition: opacity .2s, transform .2s;
-    }
-    .link-card:hover svg.ext { opacity: 1; transform: translate(2px, -2px); }
-
-    /* ── Image frame (full-bleed, no crop) ── */
-    .img-frame {
-      background: #fafafa;
-      border: 1px solid #e4e4e7;
-      border-radius: 20px; padding: 8px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.04);
-    }
-    .img-frame img {
-      display: block; width: 100%;
-      border-radius: 14px;
+    /* Noise overlay for paper texture */
+    .noise {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    /* ── Section jump nav (desktop only) ── */
-    #section-nav {
-      position: fixed; right: 32px; top: 50%;
-      transform: translateY(-50%); z-index: 30;
-      display: none;
+    .page { position: relative; z-index: 2; }
+
+    /* ═══════════════════════════════════════════
+       TOP TOOLBAR — like CAD application
+       ═══════════════════════════════════════════ */
+    .toolbar {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--blueprint);
+      border-bottom: 1px solid var(--cyan-strong);
+      padding: 10px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--pencil);
     }
-    @media (min-width: 1200px) { #section-nav { display: flex; flex-direction: column; gap: 12px; } }
-    .jump-link {
+    @media (max-width: 640px) { .toolbar { padding: 10px 16px; flex-wrap: wrap; gap: 8px; } }
+
+    .tb-left {
+      display: flex; gap: 18px; align-items: center;
+    }
+    .tb-back {
+      color: var(--paper); text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 0;
+      border-bottom: 1px dashed var(--cyan-strong);
+      transition: color .2s, border-color .2s;
+    }
+    .tb-back:hover { color: var(--orange); border-bottom-color: var(--orange); }
+    .tb-back::before { content: '←'; }
+    .tb-sep { color: var(--cyan); opacity: 0.3; }
+    .tb-title {
+      font-size: 11px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--pencil);
+    }
+    .tb-title em { font-style: normal; color: var(--paper); }
+
+    .tb-right { display: flex; gap: 14px; align-items: center; }
+    .tb-scale {
+      padding: 3px 10px;
+      border: 1px solid var(--cyan-strong);
+      font-size: 10.5px; letter-spacing: 0.08em;
+      color: var(--cyan);
+    }
+
+    /* ═══════════════════════════════════════════
+       DRAWING SHEET — main container
+       ═══════════════════════════════════════════ */
+    .sheet {
+      max-width: 1180px; margin: 0 auto;
+      padding: 40px 40px 0;
+      position: relative;
+    }
+    @media (max-width: 720px) { .sheet { padding: 24px 20px 0; } }
+
+    /* Corner marks (like architectural drawings) */
+    .corner {
+      position: absolute; width: 24px; height: 24px;
+      border: 1px solid var(--cyan-strong);
+      pointer-events: none;
+    }
+    .corner-tl { top: 16px; left: 16px; border-right: none; border-bottom: none; }
+    .corner-tr { top: 16px; right: 16px; border-left: none; border-bottom: none; }
+    .corner-bl { bottom: 16px; left: 16px; border-right: none; border-top: none; }
+    .corner-br { bottom: 16px; right: 16px; border-left: none; border-top: none; }
+
+    /* ═══════════════════════════════════════════
+       REVISION STAMP — top right corner of sheet
+       ═══════════════════════════════════════════ */
+    .rev-stamp {
+      position: absolute; top: 30px; right: 40px;
+      border: 2px solid var(--orange);
+      padding: 6px 14px;
+      transform: rotate(-4deg);
+      font-family: var(--stencil);
+      font-weight: 700; font-size: 18px;
+      letter-spacing: 0.08em;
+      color: var(--orange);
+      text-transform: uppercase;
+      box-shadow: 0 0 0 2px var(--orange) inset;
+      background: var(--blueprint);
+    }
+    @media (max-width: 720px) { .rev-stamp { position: static; display: inline-block; transform: none; margin-bottom: 20px; } }
+
+    /* ═══════════════════════════════════════════
+       HEADER / TITLE BLOCK
+       ═══════════════════════════════════════════ */
+    .title-block {
+      padding: 32px 0 48px;
+      display: grid; grid-template-columns: 3fr 1fr;
+      gap: 32px; align-items: start;
+    }
+    @media (max-width: 900px) { .title-block { grid-template-columns: 1fr; gap: 24px; } }
+
+    .title-block-main { min-width: 0; }
+
+    .t-kicker {
+      font-family: var(--mono); font-size: 10.5px;
+      color: var(--orange); letter-spacing: 0.22em;
+      text-transform: uppercase; font-weight: 500;
       display: flex; align-items: center; gap: 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; color: #a1a1aa; text-decoration: none;
+      margin-bottom: 22px;
+    }
+    .t-kicker::before, .t-kicker::after {
+      content: ''; flex: 1; max-width: 48px;
+      height: 1px; background: var(--orange);
+    }
+    .t-kicker::after { max-width: 80px; }
+    @media (max-width: 720px) { .t-kicker::before { display: none; } }
+
+    .t-cats {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-bottom: 14px;
+    }
+    .t-cat {
+      padding: 3px 9px;
+      border: 1px solid var(--cyan-strong);
+      font-family: var(--mono); font-size: 10.5px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--cyan);
+      background: rgba(142,202,230,0.05);
+    }
+
+    .t-title {
+      font-family: var(--stencil);
+      font-weight: 700;
+      font-size: clamp(44px, 8vw, 96px);
+      line-height: 0.92;
+      letter-spacing: 0.005em;
+      color: var(--paper);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .t-title .char {
+      display: inline-block;
+      transition: color .4s, transform .4s;
+    }
+
+    .t-sub {
+      font-family: var(--script);
+      font-style: italic; font-weight: 400;
+      font-size: clamp(18px, 2.5vw, 24px);
+      line-height: 1.4;
+      color: var(--pencil);
+      max-width: 60ch;
+      font-variation-settings: "opsz" 30;
+    }
+
+    /* Title block "drawing info" sidebar */
+    .drawing-info {
+      border: 1px solid var(--cyan-strong);
+      padding: 0;
+      font-family: var(--mono); font-size: 11px;
+      background: rgba(11,37,69,0.6);
+    }
+    .drawing-info dl { display: grid; grid-template-columns: auto 1fr; gap: 0; }
+    .drawing-info dt, .drawing-info dd {
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--cyan-strong);
+    }
+    .drawing-info dt {
+      color: var(--pencil); letter-spacing: 0.08em;
+      text-transform: uppercase; font-size: 10px;
+      border-right: 1px solid var(--cyan-strong);
+      background: rgba(142,202,230,0.04);
+    }
+    .drawing-info dd { color: var(--paper); font-weight: 500; }
+    .drawing-info dl > :nth-last-child(-n+2) { border-bottom: 0; }
+
+    /* ═══════════════════════════════════════════
+       DIMENSION LINE — horizontal divider w/ ticks
+       ═══════════════════════════════════════════ */
+    .dim-line {
+      position: relative;
+      height: 20px;
+      margin: 40px 0;
+      color: var(--cyan);
+    }
+    .dim-line::before {
+      content: ''; position: absolute; left: 0; right: 0; top: 50%;
+      height: 1px; background: var(--cyan-strong);
+    }
+    .dim-line::after {
+      content: attr(data-label);
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 0 14px; background: var(--blueprint);
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .dim-tick {
+      position: absolute; top: calc(50% - 5px);
+      width: 1px; height: 10px; background: var(--cyan-strong);
+    }
+    .dim-tick.left  { left: 0; }
+    .dim-tick.right { right: 0; }
+
+    /* ═══════════════════════════════════════════
+       HERO FIGURE — technical drawing frame
+       ═══════════════════════════════════════════ */
+    .figure-frame {
+      border: 1px solid var(--cyan-strong);
+      padding: 20px;
+      background: rgba(11,37,69,0.4);
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .figure-frame img {
+      display: block; width: 100%;
+      border: 1px solid rgba(142,202,230,0.3);
+    }
+    .figure-frame::before {
+      content: 'FIG. 01'; position: absolute;
+      top: -1px; left: -1px;
+      padding: 4px 12px;
+      background: var(--orange); color: var(--blueprint);
+      font-family: var(--stencil); font-weight: 700; font-size: 13px;
+      letter-spacing: 0.08em;
+    }
+    .figure-frame::after {
+      content: 'SHEET 1 OF 1'; position: absolute;
+      bottom: -1px; right: -1px;
+      padding: 4px 12px;
+      background: var(--cyan); color: var(--blueprint);
+      font-family: var(--mono); font-weight: 600; font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+    .figure-caption {
+      font-family: var(--mono); font-size: 10.5px;
+      color: var(--pencil); letter-spacing: 0.04em;
+      text-align: center;
+    }
+    .figure-caption em { font-style: normal; color: var(--paper); }
+
+    /* ═══════════════════════════════════════════
+       SECTION CALLOUT — [A] [B] [C] with leader
+       ═══════════════════════════════════════════ */
+    .section {
+      padding: 48px 0;
+      position: relative;
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 720px) { .section { grid-template-columns: 1fr; gap: 16px; padding: 36px 0; } }
+
+    .callout-tag {
+      position: relative;
+      font-family: var(--stencil);
+      font-weight: 700; font-size: 42px;
+      line-height: 1;
+      color: var(--orange);
+      letter-spacing: 0.02em;
+    }
+    .callout-tag::before {
+      content: ''; position: absolute;
+      top: 8px; left: -16px;
+      width: 12px; height: 1px; background: var(--orange);
+    }
+    .callout-tag small {
+      display: block;
+      font-family: var(--mono); font-weight: 400; font-size: 10px;
+      color: var(--pencil);
+      margin-top: 4px; letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    @media (max-width: 720px) {
+      .callout-tag { font-size: 32px; display: flex; align-items: baseline; gap: 12px; }
+      .callout-tag small { margin-top: 0; }
+      .callout-tag::before { display: none; }
+    }
+
+    .section-body { min-width: 0; }
+
+    .section-h {
+      font-family: var(--stencil);
+      font-weight: 500;
+      font-size: clamp(28px, 4.5vw, 44px);
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+      color: var(--paper);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* ═══════════════════════════════════════════
+       NOTE BOX — the Problem / the Result
+       ═══════════════════════════════════════════ */
+    .note-box {
+      border: 1px solid var(--cyan-strong);
+      padding: 20px 22px;
+      position: relative;
+      background: rgba(11,37,69,0.5);
+      margin-bottom: 24px;
+    }
+    .note-box-lbl {
+      position: absolute; top: -10px; left: 18px;
+      padding: 0 10px;
+      background: var(--blueprint);
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--orange);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .note-box p {
+      font-family: var(--script);
+      font-size: 16px; line-height: 1.65;
+      color: var(--paper);
+      font-variation-settings: "opsz" 18;
+    }
+    .note-box.result {
+      border-color: var(--green);
+      background: rgba(6,214,160,0.04);
+    }
+    .note-box.result .note-box-lbl { color: var(--green); }
+
+    /* ═══════════════════════════════════════════
+       NARRATIVE PROSE
+       ═══════════════════════════════════════════ */
+    .narrative p {
+      font-family: var(--script);
+      font-size: 17px; line-height: 1.7;
+      color: var(--pencil);
+      max-width: 64ch;
+      font-weight: 400;
+      font-variation-settings: "opsz" 20;
+    }
+    .narrative p + p { margin-top: 1.2em; }
+    .narrative p:first-of-type::first-letter {
+      font-family: var(--stencil);
+      font-size: 52px; font-weight: 700;
+      color: var(--orange);
+      float: left; line-height: 0.9;
+      margin: 6px 10px -4px 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       CONSTRUCTION NOTES — role + context as specs
+       ═══════════════════════════════════════════ */
+    .spec-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--cyan-strong);
+    }
+    @media (max-width: 640px) { .spec-table { grid-template-columns: 1fr; } }
+    .spec-cell {
+      padding: 20px;
+      border-right: 1px solid var(--cyan-strong);
+    }
+    .spec-cell:last-child { border-right: 0; }
+    @media (max-width: 640px) {
+      .spec-cell { border-right: 0; border-bottom: 1px solid var(--cyan-strong); }
+      .spec-cell:last-child { border-bottom: 0; }
+    }
+    .spec-lbl {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--orange); letter-spacing: 0.18em;
+      text-transform: uppercase; font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .spec-val {
+      font-family: var(--script);
+      font-size: 17px; line-height: 1.5;
+      color: var(--paper); font-variation-settings: "opsz" 20;
+    }
+
+    .tech-specs {
+      margin-top: 20px;
+      border: 1px solid var(--cyan-strong);
+      padding: 18px 20px;
+      background: rgba(11,37,69,0.4);
+    }
+    .tech-specs-lbl {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--orange); letter-spacing: 0.18em;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .tech-specs-list {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .tech-chip {
+      padding: 5px 11px;
+      border: 1px solid var(--pencil);
+      font-family: var(--mono); font-size: 11.5px;
+      color: var(--paper); font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: .2s;
+    }
+    .tech-chip:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-soft); }
+
+    /* ═══════════════════════════════════════════
+       NUMBERED LEARNINGS — as engineering notes
+       ═══════════════════════════════════════════ */
+    .lesson-list { list-style: none; counter-reset: lesson; }
+    .lesson-item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 16px;
+      padding: 18px 0;
+      border-top: 1px dashed var(--cyan-strong);
+      counter-increment: lesson;
+    }
+    .lesson-item:last-child { border-bottom: 1px dashed var(--cyan-strong); }
+
+    .lesson-num {
+      font-family: var(--stencil);
+      font-size: 32px; font-weight: 700;
+      color: var(--orange);
+      line-height: 1;
+      display: flex; align-items: baseline; gap: 4px;
+    }
+    .lesson-num::before {
+      content: 'N-';
+      font-size: 13px; font-weight: 400;
+      color: var(--pencil); font-family: var(--mono);
+      letter-spacing: 0.08em;
+    }
+    .lesson-num::after { content: counter(lesson, decimal-leading-zero); }
+
+    .lesson-text {
+      font-family: var(--script);
+      font-size: 16.5px; line-height: 1.55;
+      color: var(--paper);
+      padding-top: 4px;
+      font-variation-settings: "opsz" 18;
+    }
+
+    /* ═══════════════════════════════════════════
+       LINKS / DEPLOYMENTS — schematic button row
+       ═══════════════════════════════════════════ */
+    .deploy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--cyan-strong);
+    }
+    @media (max-width: 700px) { .deploy-grid { grid-template-columns: 1fr; } }
+
+    .deploy {
+      padding: 24px 20px;
+      border-right: 1px solid var(--cyan-strong);
+      text-decoration: none;
+      color: var(--paper);
+      transition: background .25s;
+      display: flex; flex-direction: column; gap: 8px;
+      position: relative;
+      min-height: 130px;
+    }
+    .deploy:last-child { border-right: 0; }
+    @media (max-width: 700px) {
+      .deploy { border-right: 0; border-bottom: 1px solid var(--cyan-strong); }
+      .deploy:last-child { border-bottom: 0; }
+    }
+    .deploy:hover { background: rgba(231,111,81,0.08); }
+    .deploy:hover .deploy-val { color: var(--orange); }
+    .deploy:hover .deploy-arr { color: var(--orange); transform: translate(2px, -2px); }
+
+    .deploy-port {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--cyan); letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .deploy-port::before {
+      content: ''; width: 8px; height: 8px;
+      background: var(--green); border-radius: 50%;
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    .deploy-val {
+      font-family: var(--stencil);
+      font-size: 22px; font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--paper);
+      text-transform: uppercase;
       transition: color .2s;
     }
-    .jump-link::before {
-      content: ''; width: 18px; height: 1px; background: #d4d4d8;
-      transition: width .25s, background .25s;
+    .deploy-sub {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--pencil); letter-spacing: 0.02em;
+      margin-top: auto;
+      word-break: break-all;
     }
-    .jump-link:hover, .jump-link.active { color: #18181b; }
-    .jump-link.active::before { width: 32px; background: var(--accent); }
+    .deploy-arr {
+      position: absolute; top: 16px; right: 16px;
+      font-family: var(--mono); font-size: 18px;
+      color: var(--pencil); transition: .2s;
+    }
 
-    /* ── Accessibility: reduce motion ── */
+    /* ═══════════════════════════════════════════
+       FOOTER TITLE BLOCK — like architect's signature
+       ═══════════════════════════════════════════ */
+    .tb-footer {
+      margin-top: 80px;
+      border: 1px solid var(--cyan-strong);
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      background: rgba(11,37,69,0.5);
+    }
+    @media (max-width: 800px) { .tb-footer { grid-template-columns: 1fr 1fr; } .tb-footer > :first-child { grid-column: 1 / -1; } }
+
+    .tbf-cell {
+      padding: 18px 20px;
+      border-right: 1px solid var(--cyan-strong);
+    }
+    .tbf-cell:last-child { border-right: 0; }
+    @media (max-width: 800px) {
+      .tbf-cell:nth-child(2n) { border-right: 0; }
+      .tbf-cell { border-bottom: 1px solid var(--cyan-strong); }
+      .tbf-cell:nth-last-child(-n+2) { border-bottom: 0; }
+    }
+    .tbf-lbl {
+      font-family: var(--mono); font-size: 9.5px;
+      color: var(--pencil); letter-spacing: 0.18em;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .tbf-val {
+      font-family: var(--stencil);
+      font-size: 18px; font-weight: 500;
+      color: var(--paper); letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .tbf-val.signature {
+      font-family: var(--script); font-style: italic;
+      font-size: 22px; font-weight: 500;
+      color: var(--orange); text-transform: none;
+    }
+
+    /* Sheet footer — drawing number */
+    .sheet-footer {
+      padding: 32px 0 48px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      flex-wrap: wrap; gap: 20px;
+      font-family: var(--mono); font-size: 11px;
+      color: var(--pencil); letter-spacing: 0.04em;
+    }
+    .drw-no {
+      font-family: var(--stencil);
+      font-size: 15px; font-weight: 700;
+      letter-spacing: 0.12em; color: var(--paper);
+    }
+
+    /* ═══════════════════════════════════════════
+       CLOSING CTA — stencil
+       ═══════════════════════════════════════════ */
+    .closing {
+      margin-top: 60px;
+      padding: 48px 32px;
+      border: 1px solid var(--orange);
+      background: rgba(231,111,81,0.04);
+      text-align: center;
+      position: relative;
+    }
+    .closing::before, .closing::after {
+      content: ''; position: absolute;
+      width: 16px; height: 16px;
+      border: 2px solid var(--orange);
+    }
+    .closing::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .closing::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+    .closing-lbl {
+      font-family: var(--mono); font-size: 10.5px;
+      color: var(--orange); letter-spacing: 0.22em;
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    .closing h3 {
+      font-family: var(--stencil);
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 500; color: var(--paper);
+      letter-spacing: 0.01em; text-transform: uppercase;
+      line-height: 1.05; margin-bottom: 24px;
+    }
+    .closing h3 em { font-family: var(--script); font-style: italic; color: var(--orange); text-transform: none; font-weight: 500; }
+    .closing-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 28px;
+      background: var(--orange); color: var(--blueprint);
+      text-decoration: none;
+      font-family: var(--stencil); font-weight: 700; font-size: 16px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      transition: .2s;
+    }
+    .closing-cta:hover { background: var(--paper); color: var(--blueprint); letter-spacing: 0.2em; }
+
+    /* ═══════════════════════════════════════════
+       SKELETON / NOT FOUND
+       ═══════════════════════════════════════════ */
+    .skel { background: rgba(142,202,230,0.08); border-radius: 0; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .skel { animation: pulse 1.8s ease infinite; }
+
+    .not-found {
+      text-align: center; padding: 120px 20px;
+      font-family: var(--mono);
+    }
+    .not-found .nf-stamp {
+      display: inline-block;
+      border: 3px solid var(--orange);
+      padding: 10px 22px;
+      font-family: var(--stencil);
+      font-size: 24px; font-weight: 700;
+      color: var(--orange); text-transform: uppercase;
+      transform: rotate(-3deg); margin-bottom: 28px;
+      letter-spacing: 0.1em;
+    }
+    .not-found p { font-size: 13px; color: var(--pencil); margin-bottom: 16px; }
+    .not-found a { color: var(--orange); text-decoration: none; border-bottom: 1px dashed var(--orange); padding-bottom: 2px; }
+
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+       ═══════════════════════════════════════════ */
+    @keyframes drawIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .anim-in { opacity: 0; }
+    .anim-in.shown { animation: drawIn .9s cubic-bezier(.22,1,.36,1) forwards; }
+
+    /* Stencil title — cycle letter color on load */
+    @keyframes titleInk {
+      from { color: transparent; }
+      to   { color: var(--paper); }
+    }
+    .t-title .char {
+      animation: titleInk .4s ease forwards;
+      animation-delay: var(--d, 0s);
+    }
+
+    /* Reading progress bar top */
+    #progress-bar {
+      position: fixed; top: 0; left: 0;
+      height: 2px; background: var(--orange);
+      width: 0; z-index: 100;
+      transition: width .08s linear;
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      .reveal, .reveal-stagger > *, .link-card, .tech-pill {
-        opacity: 1 !important; transform: none !important; transition: none !important;
-      }
+      .anim-in, .t-title .char { animation: none !important; opacity: 1 !important; transform: none !important; color: var(--paper) !important; }
+      html { scroll-behavior: auto; }
     }
-    body.no-motion .reveal,
-    body.no-motion .reveal-stagger > * {
-      opacity: 1 !important; transform: none !important; transition: none !important;
-    }
-
-    /* ── Skeleton ── */
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
-    .skel { animation: pulse 1.6s ease-in-out infinite; background: #f4f4f5; border-radius: 12px; }
   </style>
 </head>
 
 <body>
+  <div class="noise"></div>
+  <div id="progress-bar"></div>
 
-  <!-- Reading progress indicator -->
-  <div id="read-progress" role="progressbar" aria-label="Reading progress"></div>
-
-  <!-- Section jump nav (desktop) -->
-  <aside id="section-nav" aria-label="Section navigation">
-    <a href="#overview"  class="jump-link" data-target="overview">Overview</a>
-    <a href="#purpose"   class="jump-link" data-target="purpose">The Purpose</a>
-    <a href="#hurdles"   class="jump-link" data-target="hurdles">The Hurdles</a>
-    <a href="#lessons"   class="jump-link" data-target="lessons">The Lessons</a>
-    <a href="#outcome"   class="jump-link" data-target="outcome">The Outcome</a>
-  </aside>
-
-  <!-- Sticky back nav -->
-  <nav class="sticky top-0 z-50 bg-zinc-50/90 backdrop-blur-md border-b border-zinc-200/70" aria-label="Primary">
-    <div class="max-w-2xl mx-auto px-6 flex items-center justify-between" style="height:56px">
-      <a href="index.html"
-        class="group inline-flex items-center gap-2 text-sm text-zinc-500 font-medium hover:text-zinc-900 transition-colors"
-        aria-label="Back to portfolio">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="group-hover:-translate-x-0.5 transition-transform" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-        <span>Portfolio</span>
-      </a>
-      <div class="flex items-center gap-3">
-        <span id="nav-title" class="text-sm font-medium text-zinc-400 truncate max-w-[260px] hidden sm:block"></span>
-        <button id="motion-toggle" type="button" class="text-xs font-mono text-zinc-400 hover:text-zinc-900 transition-colors px-2 py-1 rounded-md border border-transparent hover:border-zinc-200" aria-pressed="false" title="Toggle animations">
-          motion: on
-        </button>
-      </div>
+  <!-- ═══ TOOLBAR ═══ -->
+  <nav class="toolbar">
+    <div class="tb-left">
+      <a href="index.html" class="tb-back">Index</a>
+      <span class="tb-sep">|</span>
+      <span class="tb-title">DRAWING · <em id="nav-title">loading…</em></span>
+    </div>
+    <div class="tb-right">
+      <span class="tb-scale">Scale 1:1</span>
+      <button id="motion-toggle" class="tb-scale" style="background:none;cursor:pointer;color:var(--pencil);font-family:var(--mono);" aria-pressed="false">Motion · ON</button>
     </div>
   </nav>
 
-  <main class="max-w-2xl mx-auto px-6 pt-12 pb-24" id="main">
+  <div class="page">
 
-    <!-- Loading skeleton -->
-    <div id="skeleton" class="space-y-5" aria-live="polite" aria-busy="true">
-      <div class="skel h-5 w-24"></div>
-      <div class="skel h-10 w-4/5"></div>
-      <div class="skel h-5 w-2/3"></div>
-      <div class="flex gap-2 mt-4">
-        <div class="skel h-7 w-20 rounded-full"></div>
-        <div class="skel h-7 w-20 rounded-full"></div>
-      </div>
-      <div class="skel h-64 mt-8"></div>
+    <!-- Skeleton state -->
+    <div id="skeleton" style="max-width:1180px;margin:0 auto;padding:80px 40px;">
+      <div class="skel" style="height:14px;width:220px;margin-bottom:22px;"></div>
+      <div class="skel" style="height:80px;width:70%;margin-bottom:18px;"></div>
+      <div class="skel" style="height:24px;width:60%;margin-bottom:40px;"></div>
+      <div class="skel" style="height:400px;width:100%;"></div>
     </div>
 
-    <!-- Project content -->
-    <article id="project-content" class="hidden">
+    <!-- Not found state -->
+    <div id="not-found" class="not-found" style="display:none;">
+      <div class="nf-stamp">Drawing Not Found</div>
+      <p>No blueprint exists for this slug.</p>
+      <a href="index.html">← Return to index sheet</a>
+    </div>
 
-      <!-- ═══ FRAME 1 — OVERVIEW (Who, What, Why) ═══ -->
-      <header id="overview" class="reveal-stagger mb-16" aria-labelledby="project-title">
-        <p class="section-label mb-5">Case Study</p>
+    <!-- ═══ MAIN SHEET ═══ -->
+    <article id="content" class="sheet" style="display:none;">
+      <span class="corner corner-tl"></span>
+      <span class="corner corner-tr"></span>
+      <span class="corner corner-bl"></span>
+      <span class="corner corner-br"></span>
 
-        <div class="flex flex-wrap items-center gap-2 mb-5" id="project-cats" role="list"></div>
+      <div class="rev-stamp" id="rev-stamp">APPROVED</div>
 
-        <h1 id="project-title" class="text-3xl sm:text-[40px] font-bold tracking-tight text-zinc-900 leading-[1.1] mb-4"></h1>
+      <!-- ── TITLE BLOCK ── -->
+      <header class="title-block">
+        <div class="title-block-main">
+          <p class="t-kicker">Technical Drawing · Case Study</p>
+          <div class="t-cats" id="t-cats"></div>
+          <h1 class="t-title" id="t-title"></h1>
+          <p class="t-sub" id="t-sub"></p>
+        </div>
 
-        <p id="project-tagline" class="text-lg sm:text-xl leading-relaxed text-zinc-600 font-normal max-w-xl"></p>
-
-        <div id="project-meta" class="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-6 text-sm text-zinc-500 font-mono tracking-tight"></div>
-
-        <!-- Tech stack -->
-        <div id="project-tech" class="flex flex-wrap gap-2 mt-6"></div>
+        <aside class="drawing-info">
+          <dl>
+            <dt>Drawing №</dt>  <dd id="i-drw">—</dd>
+            <dt>Project</dt>    <dd id="i-slug">—</dd>
+            <dt>Revision</dt>   <dd>R.03</dd>
+            <dt>Scale</dt>      <dd>1 : 1</dd>
+            <dt>Units</dt>      <dd>commits</dd>
+            <dt>Status</dt>     <dd style="color:var(--green)">● Shipped</dd>
+          </dl>
+        </aside>
       </header>
 
-      <!-- ═══ HERO IMAGE (full natural height) ═══ -->
-      <figure id="project-image-wrapper" class="hidden mb-20 reveal">
-        <div class="img-frame">
-          <img id="project-image" src="" alt="">
+      <!-- ── FIGURE 01 — hero image ── -->
+      <section id="fig-wrap" style="display:none;">
+        <figure class="figure-frame">
+          <img id="fig-img" src="" alt="">
+        </figure>
+        <p class="figure-caption" id="fig-cap"></p>
+      </section>
+
+      <!-- ── [A] — PURPOSE ── -->
+      <div class="dim-line" data-label="A — B · OBJECTIVE"><span class="dim-tick left"></span><span class="dim-tick right"></span></div>
+
+      <section class="section anim-in" id="sec-purpose">
+        <div class="callout-tag">[A]<small>Objective</small></div>
+        <div class="section-body">
+          <h2 class="section-h">The Purpose</h2>
+
+          <div class="note-box" id="problem-wrap" style="display:none;">
+            <span class="note-box-lbl">Problem Statement</span>
+            <p id="problem-text"></p>
+          </div>
+
+          <div class="narrative" id="description"></div>
         </div>
-        <figcaption id="project-image-cap" class="text-xs font-mono text-zinc-400 text-center mt-3"></figcaption>
-      </figure>
+      </section>
 
-      <!-- ═══ FRAME 2 — THE PURPOSE ═══ -->
-      <section id="purpose" class="mb-20 reveal" aria-labelledby="purpose-heading">
-        <p class="section-label mb-5">01 — The Purpose</p>
-        <h2 id="purpose-heading" class="text-2xl font-bold text-zinc-900 leading-snug mb-6">Why this exists.</h2>
+      <!-- ── [B] — CONSTRUCTION NOTES ── -->
+      <div class="dim-line" data-label="B — C · CONSTRUCTION"><span class="dim-tick left"></span><span class="dim-tick right"></span></div>
 
-        <div id="project-problem-wrapper" class="hidden mb-8">
-          <div class="frame">
-            <p class="text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">The problem</p>
-            <p id="project-problem" class="text-[15px] leading-relaxed text-zinc-700"></p>
+      <section class="section anim-in" id="sec-hurdles">
+        <div class="callout-tag">[B]<small>Specs</small></div>
+        <div class="section-body">
+          <h2 class="section-h">Construction Notes</h2>
+
+          <div class="spec-table" id="spec-table"></div>
+
+          <div class="tech-specs">
+            <div class="tech-specs-lbl">Materials · Instruments · Libraries</div>
+            <div class="tech-specs-list" id="tech-list"></div>
           </div>
         </div>
-
-        <div id="project-description" class="narrative"></div>
       </section>
 
-      <!-- ═══ FRAME 3 — THE TECHNICAL HURDLES ═══ -->
-      <section id="hurdles" class="mb-20 reveal" aria-labelledby="hurdles-heading">
-        <p class="section-label mb-5">02 — The Hurdles</p>
-        <h2 id="hurdles-heading" class="text-2xl font-bold text-zinc-900 leading-snug mb-6">What made it hard.</h2>
+      <!-- ── [C] — LESSONS ── -->
+      <div class="dim-line" data-label="C — D · FIELD NOTES"><span class="dim-tick left"></span><span class="dim-tick right"></span></div>
 
-        <div id="project-role-context" class="text-sm text-zinc-600 leading-relaxed"></div>
-      </section>
-
-      <!-- ═══ FRAME 4 — THE LESSONS ═══ -->
-      <section id="lessons" class="mb-20 reveal" aria-labelledby="lessons-heading">
-        <p class="section-label mb-5">03 — What I Learned</p>
-        <h2 id="lessons-heading" class="text-2xl font-bold text-zinc-900 leading-snug mb-6">Lessons, not brags.</h2>
-
-        <ol id="project-learnings" class="mt-2" role="list"></ol>
-      </section>
-
-      <!-- ═══ FRAME 5 — THE OUTCOME ═══ -->
-      <section id="outcome" class="mb-20 reveal" aria-labelledby="outcome-heading">
-        <p class="section-label mb-5">04 — The Outcome</p>
-        <h2 id="outcome-heading" class="text-2xl font-bold text-zinc-900 leading-snug mb-6">Where it ended up.</h2>
-
-        <div id="project-result-wrapper" class="hidden">
-          <blockquote class="relative pl-6 border-l-2 border-emerald-500">
-            <p id="project-result" class="text-[17px] leading-relaxed text-zinc-800 font-medium italic"></p>
-          </blockquote>
+      <section class="section anim-in" id="sec-lessons" style="display:none;">
+        <div class="callout-tag">[C]<small>Findings</small></div>
+        <div class="section-body">
+          <h2 class="section-h">Field Notes</h2>
+          <ol class="lesson-list" id="lesson-list"></ol>
         </div>
       </section>
 
-      <!-- ═══ LINKS ═══ -->
-      <section id="project-links-wrapper" class="mt-16 pt-10 border-t border-zinc-200 reveal" aria-labelledby="links-heading">
-        <p class="section-label mb-5">05 — Explore</p>
-        <h2 id="links-heading" class="text-lg font-bold text-zinc-900 mb-6">See it for yourself.</h2>
-        <div id="project-links" class="grid gap-3 sm:grid-cols-2"></div>
+      <!-- ── [D] — OUTCOME ── -->
+      <div class="dim-line" data-label="D · OUTCOME"><span class="dim-tick left"></span><span class="dim-tick right"></span></div>
+
+      <section class="section anim-in" id="sec-outcome" style="display:none;">
+        <div class="callout-tag">[D]<small>Result</small></div>
+        <div class="section-body">
+          <h2 class="section-h">Outcome</h2>
+
+          <div class="note-box result">
+            <span class="note-box-lbl">As Built</span>
+            <p id="result-text"></p>
+          </div>
+        </div>
       </section>
 
-      <!-- Closing CTA -->
-      <section class="mt-20 pt-10 border-t border-zinc-200 text-center reveal">
-        <p class="text-sm font-mono text-zinc-400 mb-4">/* end of case study */</p>
-        <p class="text-zinc-600 mb-6">Want to work on something like this together?</p>
-        <a href="mailto:naruephonyotmao@gmail.com"
-          class="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white rounded-xl text-sm font-semibold hover:bg-zinc-700 transition-colors">
-          Let's talk
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+      <!-- ── DEPLOYMENT PORTS ── -->
+      <div class="dim-line" data-label="DEPLOYMENT PORTS"><span class="dim-tick left"></span><span class="dim-tick right"></span></div>
+
+      <section class="anim-in" id="sec-deploy" style="display:none;">
+        <div class="deploy-grid" id="deploy-grid"></div>
       </section>
+
+      <!-- ── CLOSING CTA ── -->
+      <section class="closing anim-in">
+        <p class="closing-lbl">End of Drawing</p>
+        <h3>Want to commission <em>something like this?</em></h3>
+        <a href="mailto:naruephonyotmao@gmail.com" class="closing-cta">Open a Work Order →</a>
+      </section>
+
+      <!-- ── TITLE BLOCK FOOTER (architect's signature) ── -->
+      <div class="tb-footer">
+        <div class="tbf-cell">
+          <div class="tbf-lbl">Drawn By</div>
+          <div class="tbf-val signature">N. Yotmao</div>
+        </div>
+        <div class="tbf-cell">
+          <div class="tbf-lbl">Date</div>
+          <div class="tbf-val" id="tbf-date">MMXXVI</div>
+        </div>
+        <div class="tbf-cell">
+          <div class="tbf-lbl">Reviewed</div>
+          <div class="tbf-val">Self</div>
+        </div>
+        <div class="tbf-cell">
+          <div class="tbf-lbl">Sheet</div>
+          <div class="tbf-val">01 / 01</div>
+        </div>
+      </div>
+
+      <!-- Sheet footer — drawing number -->
+      <div class="sheet-footer">
+        <div><span id="drw-no" class="drw-no">DRW-000</span><br>© MMXXVI · N. Yotmao</div>
+        <div><a href="index.html" style="color:var(--pencil);text-decoration:none;border-bottom:1px dashed var(--cyan-strong);">← Return to index sheet</a></div>
+      </div>
 
     </article>
 
-    <!-- Not found -->
-    <div id="not-found" class="hidden text-center py-24" role="alert">
-      <p class="text-6xl mb-4">¯\_(ツ)_/¯</p>
-      <p class="text-zinc-500 text-base mb-4">Project not found.</p>
-      <a href="index.html" class="text-accent underline underline-offset-2 text-sm font-medium">Back to portfolio →</a>
-    </div>
-
-  </main>
-
-  <footer class="border-t border-zinc-100 py-8">
-    <div class="max-w-2xl mx-auto px-6 flex items-center justify-between">
-      <p class="text-xs font-mono text-zinc-400"><span class="italic font-sans">Crafted by</span> Naruephon Yotmao</p>
-      <a href="index.html" class="text-xs font-mono text-zinc-400 hover:text-zinc-700 transition-colors">← Portfolio</a>
-    </div>
-  </footer>
+  </div>
 
   <script>
   document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const slug = params.get('slug');
 
-    // ── Motion toggle ──
+    // Motion toggle
     const motionBtn = document.getElementById('motion-toggle');
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced || localStorage.getItem('no-motion') === '1') {
-      document.body.classList.add('no-motion');
-      motionBtn.textContent = 'motion: off';
-      motionBtn.setAttribute('aria-pressed', 'true');
+      document.body.style.setProperty('--motion', 'off');
+      motionBtn.textContent = 'Motion · OFF';
     }
     motionBtn.addEventListener('click', () => {
-      const off = document.body.classList.toggle('no-motion');
-      motionBtn.textContent = off ? 'motion: off' : 'motion: on';
-      motionBtn.setAttribute('aria-pressed', String(off));
+      const off = motionBtn.textContent.includes('ON');
+      motionBtn.textContent = off ? 'Motion · OFF' : 'Motion · ON';
       localStorage.setItem('no-motion', off ? '1' : '0');
+      if (off) document.querySelectorAll('.anim-in').forEach(el => el.classList.add('shown'));
     });
 
     if (!slug) {
-      document.getElementById('skeleton').classList.add('hidden');
-      document.getElementById('not-found').classList.remove('hidden');
+      document.getElementById('skeleton').style.display = 'none';
+      document.getElementById('not-found').style.display = 'block';
       return;
     }
 
-    // ── Fetch project ──
     const SB_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
     const H = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Accept: 'application/json' };
@@ -372,76 +957,65 @@
       }
     } catch (e) { console.error(e); }
 
-    document.getElementById('skeleton').classList.add('hidden');
+    document.getElementById('skeleton').style.display = 'none';
 
     if (!project) {
-      document.getElementById('not-found').classList.remove('hidden');
+      document.getElementById('not-found').style.display = 'block';
       return;
     }
 
-    document.title = `${project.title} — Naruephon Yotmao`;
+    document.title = `DRW · ${project.title}`;
+    document.getElementById('nav-title').textContent = project.title.toUpperCase();
 
-    // ── Color map (per-project accent) ──
-    const CMAP = { emerald:'#059669', violet:'#7c3aed', amber:'#d97706', sky:'#0284c7', rose:'#e11d48', orange:'#ea580c', teal:'#0d9488', blue:'#2563eb' };
-    const color = CMAP[project.color] || '#059669';
-    document.documentElement.style.setProperty('--accent', color);
-    document.documentElement.style.setProperty('--accent-soft', color + '1a');
+    // Drawing number — generate from slug
+    const drwNo = `DRW-${String(slug.length).padStart(3, '0')}-${slug.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8)}`;
+    document.getElementById('drw-no').textContent = drwNo;
+    document.getElementById('i-drw').textContent = drwNo;
+    document.getElementById('i-slug').textContent = project.slug;
 
-    // ── Nav title ──
-    document.getElementById('nav-title').textContent = project.title;
+    // Year in footer
+    document.getElementById('tbf-date').textContent = new Date().getFullYear();
 
-    // ── Categories ──
-    const catsEl = document.getElementById('project-cats');
+    // Categories
+    const catsEl = document.getElementById('t-cats');
     (project.categories || []).forEach(cat => {
       const sp = document.createElement('span');
-      sp.className = 'text-xs font-semibold px-2.5 py-1 rounded-full border';
-      sp.style.color = color;
-      sp.style.borderColor = color + '40';
-      sp.style.background = color + '0d';
+      sp.className = 't-cat';
       sp.textContent = cat;
-      sp.setAttribute('role', 'listitem');
       catsEl.appendChild(sp);
     });
 
-    // ── Title & tagline ──
-    document.getElementById('project-title').textContent = project.title;
-    document.getElementById('project-tagline').textContent = project.shortDescription || '';
-
-    // ── Meta (role · context) ──
-    const metaEl = document.getElementById('project-meta');
-    const metaItems = [];
-    if (project.role)    metaItems.push({ label: 'Role',    value: project.role });
-    if (project.context) metaItems.push({ label: 'Context', value: project.context });
-    metaEl.innerHTML = metaItems.map(m =>
-      `<span><span class="text-zinc-400">${m.label}</span> · <span class="text-zinc-700">${m.value}</span></span>`
-    ).join('');
-
-    // ── Tech stack ──
-    const techEl = document.getElementById('project-tech');
-    (project.techStack || []).forEach(t => {
-      const sp = document.createElement('span');
-      sp.className = 'tech-pill';
-      sp.textContent = t;
-      techEl.appendChild(sp);
+    // Title — wrap each char for stagger-ink animation
+    const titleEl = document.getElementById('t-title');
+    titleEl.textContent = '';
+    [...project.title].forEach((ch, i) => {
+      if (ch === ' ') { titleEl.appendChild(document.createTextNode(' ')); return; }
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = ch;
+      span.style.setProperty('--d', (i * 0.03) + 's');
+      titleEl.appendChild(span);
     });
 
-    // ── Image (full natural height, no crop) ──
+    // Sub
+    document.getElementById('t-sub').textContent = project.shortDescription || '';
+
+    // Figure
     if (project.imageUrl) {
-      const img = document.getElementById('project-image');
-      img.src = project.imageUrl;
-      img.alt = `${project.title} — visual overview`;
-      document.getElementById('project-image-wrapper').classList.remove('hidden');
-      document.getElementById('project-image-cap').textContent = `Fig. 01 — ${project.title}`;
+      document.getElementById('fig-img').src = project.imageUrl;
+      document.getElementById('fig-img').alt = project.title;
+      document.getElementById('fig-cap').innerHTML = `<em>Fig. 01.</em> ${project.title} — primary subject.`;
+      document.getElementById('fig-wrap').style.display = 'block';
     }
 
-    // ── The Problem ──
+    // Problem
     if (project.problemSolved) {
-      document.getElementById('project-problem').textContent = project.problemSolved;
-      document.getElementById('project-problem-wrapper').classList.remove('hidden');
+      document.getElementById('problem-text').textContent = project.problemSolved;
+      document.getElementById('problem-wrap').style.display = 'block';
     }
 
-    // ── Full description (Purpose narrative) ──
-    const descEl = document.getElementById('project-description');
+    // Description
+    const descEl = document.getElementById('description');
     if (project.fullDescription) {
       project.fullDescription.split(/\n\n+/).forEach(para => {
         if (!para.trim()) return;
@@ -451,139 +1025,91 @@
       });
     }
 
-    // ── Role context (hurdles section) ──
-    const roleCtx = document.getElementById('project-role-context');
-    if (project.role || project.context) {
-      roleCtx.innerHTML = `
-        <div class="grid sm:grid-cols-2 gap-5">
-          ${project.role ? `<div class="frame">
-            <p class="text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">My Role</p>
-            <p class="text-[15px] text-zinc-700">${project.role}</p>
-          </div>` : ''}
-          ${project.context ? `<div class="frame">
-            <p class="text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">Context</p>
-            <p class="text-[15px] text-zinc-700">${project.context}</p>
-          </div>` : ''}
-        </div>
-      `;
+    // Spec table (role + context)
+    const specEl = document.getElementById('spec-table');
+    if (project.role) {
+      specEl.innerHTML += `<div class="spec-cell"><div class="spec-lbl">Role</div><div class="spec-val">${project.role}</div></div>`;
+    }
+    if (project.context) {
+      specEl.innerHTML += `<div class="spec-cell"><div class="spec-lbl">Context</div><div class="spec-val">${project.context}</div></div>`;
+    }
+    if (!project.role && !project.context) {
+      specEl.style.display = 'none';
     }
 
-    // ── Key Learnings (numbered) ──
+    // Tech stack
+    const techEl = document.getElementById('tech-list');
+    if (project.techStack?.length) {
+      project.techStack.forEach(t => {
+        const sp = document.createElement('span');
+        sp.className = 'tech-chip';
+        sp.textContent = t;
+        techEl.appendChild(sp);
+      });
+    } else {
+      techEl.parentElement.style.display = 'none';
+    }
+
+    // Lessons
     if (project.keyLearnings?.length) {
-      const ol = document.getElementById('project-learnings');
-      project.keyLearnings.forEach((lesson, i) => {
+      const ol = document.getElementById('lesson-list');
+      project.keyLearnings.forEach(lesson => {
         const li = document.createElement('li');
-        li.className = 'learning-item';
-        li.setAttribute('role', 'listitem');
-        li.innerHTML = `
-          <span class="learning-num">${String(i + 1).padStart(2, '0')}</span>
-          <span class="text-[15px] text-zinc-700 leading-relaxed">${lesson}</span>
-        `;
+        li.className = 'lesson-item';
+        li.innerHTML = `<span class="lesson-num"></span><span class="lesson-text">${lesson}</span>`;
         ol.appendChild(li);
       });
-    } else {
-      document.getElementById('lessons').style.display = 'none';
+      document.getElementById('sec-lessons').style.display = 'grid';
     }
 
-    // ── Result ──
+    // Result
     if (project.result) {
-      document.getElementById('project-result').textContent = project.result;
-      document.getElementById('project-result-wrapper').classList.remove('hidden');
-    } else {
-      document.getElementById('outcome').style.display = 'none';
+      document.getElementById('result-text').textContent = project.result;
+      document.getElementById('sec-outcome').style.display = 'grid';
     }
 
-    // ── Links ──
-    const linksEl = document.getElementById('project-links');
-    const linkData = [
-      {
-        url: project.githubUrl, label: 'Source Code', sub: 'View on GitHub',
-        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>'
-      },
-      {
-        url: project.liveUrl, label: 'Live Demo', sub: 'Open the live site',
-        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
-      },
-      {
-        url: project.canvaUrl, label: 'Presentation', sub: 'View the slides',
-        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="18" height="14" x="3" y="5" rx="2"/><path d="M8 21h8M12 19v2"/></svg>'
-      }
-    ];
+    // Deployment ports (links)
+    const deployEl = document.getElementById('deploy-grid');
+    const links = [
+      { url: project.githubUrl, label: 'Source', sub: 'View on GitHub', port: 'GIT' },
+      { url: project.liveUrl,   label: 'Live',   sub: 'Open live build',  port: 'HTTPS' },
+      { url: project.canvaUrl,  label: 'Docs',   sub: 'Presentation deck', port: 'PDF' }
+    ].filter(l => l.url);
 
-    let hasLinks = false;
-    linkData.forEach(({ url, label, sub, icon }) => {
-      if (!url) return;
-      hasLinks = true;
-      const a = document.createElement('a');
-      a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.className = 'link-card';
-      a.setAttribute('aria-label', `${label} — opens in a new tab`);
-      a.innerHTML = `
-        <span style="color:${color}">${icon}</span>
-        <span class="flex flex-col">
-          <span>${label}</span>
-          <span class="text-[11px] font-normal text-zinc-400 font-mono">${sub}</span>
-        </span>
-        <svg class="ext" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
-      `;
-      linksEl.appendChild(a);
-    });
-    if (!hasLinks) document.getElementById('project-links-wrapper').style.display = 'none';
+    if (links.length) {
+      deployEl.innerHTML = links.map(l => `
+        <a class="deploy" href="${l.url}" target="_blank" rel="noopener">
+          <span class="deploy-port">${l.port}</span>
+          <span class="deploy-val">${l.label}</span>
+          <span class="deploy-sub">${l.sub}</span>
+          <span class="deploy-arr">↗</span>
+        </a>`).join('');
+      document.getElementById('sec-deploy').style.display = 'block';
+    }
 
-    document.getElementById('project-content').classList.remove('hidden');
+    // Show content
+    document.getElementById('content').style.display = 'block';
 
-    // ══════════════════════════════════════════
-    //  Scroll-reveal + reading progress + jump nav
-    // ══════════════════════════════════════════
-
-    // Reveal on scroll
-    const revealObs = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          revealObs.unobserve(entry.target);
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('shown');
+          obs.unobserve(e.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObs.observe(el));
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.anim-in').forEach(el => obs.observe(el));
 
-    // Reading progress
-    const progressBar = document.getElementById('read-progress');
+    // Reading progress bar
+    const bar = document.getElementById('progress-bar');
     function updateProgress() {
-      const scrollTop   = window.scrollY;
-      const docHeight   = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
-      progressBar.style.width = pct + '%';
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+      bar.style.width = pct + '%';
     }
     window.addEventListener('scroll', updateProgress, { passive: true });
     updateProgress();
-
-    // Active section in jump nav
-    const jumpLinks = document.querySelectorAll('.jump-link');
-    const sections  = ['overview','purpose','hurdles','lessons','outcome']
-      .map(id => document.getElementById(id))
-      .filter(Boolean);
-
-    const sectionObs = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          jumpLinks.forEach(l => l.classList.toggle('active', l.dataset.target === id));
-        }
-      });
-    }, { rootMargin: '-30% 0px -60% 0px' });
-    sections.forEach(s => sectionObs.observe(s));
-
-    // Smooth scroll for jump links
-    jumpLinks.forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const target = document.getElementById(link.dataset.target);
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
   });
   </script>
 

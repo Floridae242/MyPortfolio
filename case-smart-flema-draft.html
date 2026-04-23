@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Flema — Case File · Naruephon Yotmao</title>
+  <meta name="description" content="How a Smart City pilot for a Thai municipality became a street-market insight system for a Japanese competition — and what I learned in the pivot.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bone:   #f5f1ea;
+      --bone-2: #ede7db;
+      --iron:   #1a1a1a;
+      --graphite: #4a4a4a;
+      --pencil: #807a6d;
+      --rule:   #d9d2c4;
+      --rule-2: #c8bfad;
+      --oxide:  #c1440e;
+      --oxide-soft: rgba(193,68,14,0.08);
+      --serif: 'Fraunces', Georgia, serif;
+      --italic: 'Instrument Serif', Georgia, serif;
+      --mono:  'JetBrains Mono', ui-monospace, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bone);
+      color: var(--iron);
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Reading progress bar — signals "this is long-form" */
+    .progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: var(--oxide); z-index: 100; transition: width 0.1s linear;
+    }
+
+    /* Slim masthead — no "Vol. 01 Issue 04" here, per section 6 */
+    .masthead {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--bone);
+      border-bottom: 1px solid var(--rule);
+      padding: 14px 32px;
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-family: var(--mono); font-size: 11px; color: var(--pencil);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .masthead a { color: var(--iron); text-decoration: none; border-bottom: 1px solid var(--iron); }
+    .masthead a:hover { color: var(--oxide); border-color: var(--oxide); }
+
+    /* Page grid */
+    .page { max-width: 720px; margin: 0 auto; padding: 80px 32px 120px; }
+    @media (max-width: 600px) { .page { padding: 48px 20px 80px; } }
+
+    /* Eyebrow labels (mono, uppercase) */
+    .eyebrow {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--pencil); letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+
+    /* Title */
+    h1.case-title {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(36px, 6vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
+      font-variation-settings: "opsz" 144, "SOFT" 30;
+    }
+    h1.case-title em { font-style: italic; color: var(--oxide); }
+
+    /* Dek (one-sentence subtitle) */
+    .dek {
+      font-family: var(--italic);
+      font-style: italic;
+      font-size: clamp(20px, 2.6vw, 26px);
+      line-height: 1.4;
+      color: var(--graphite);
+      margin-bottom: 48px;
+      max-width: 38ch;
+    }
+
+    /* TL;DR block */
+    .tldr {
+      border-top: 2px solid var(--iron);
+      border-bottom: 1px solid var(--rule);
+      padding: 24px 0 20px;
+      margin-bottom: 56px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 32px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+    @media (max-width: 600px) { .tldr { grid-template-columns: 1fr; } }
+    .tldr .row { display: flex; flex-direction: column; gap: 4px; }
+    .tldr .k { color: var(--pencil); text-transform: uppercase; letter-spacing: 0.08em; font-size: 10.5px; }
+    .tldr .v { color: var(--iron); }
+    .tldr .v em { font-family: var(--italic); color: var(--oxide); font-style: italic; font-size: 14px; }
+
+    /* Section header */
+    h2.beat {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(24px, 3.2vw, 30px);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin: 72px 0 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--rule);
+      position: relative;
+    }
+    h2.beat::before {
+      content: attr(data-beat);
+      position: absolute; top: 16px; right: 0;
+      font-family: var(--mono); font-size: 11px;
+      color: var(--pencil); letter-spacing: 0.08em;
+    }
+
+    p { margin-bottom: 20px; }
+    p + p { margin-top: -4px; }
+
+    strong { font-weight: 600; }
+    em { font-style: italic; }
+
+    /* Inline placeholder — things Tle needs to fill */
+    .fill {
+      background: var(--oxide-soft);
+      border-bottom: 1px dashed var(--oxide);
+      padding: 0 4px;
+      font-family: var(--mono);
+      font-size: 0.82em;
+      color: var(--oxide);
+      font-style: normal;
+    }
+
+    /* Pull quote */
+    .pull {
+      font-family: var(--italic);
+      font-style: italic;
+      font-size: clamp(22px, 3vw, 28px);
+      line-height: 1.35;
+      color: var(--iron);
+      padding: 32px 0;
+      margin: 48px 0;
+      border-top: 1px solid var(--iron);
+      border-bottom: 1px solid var(--iron);
+      max-width: 32ch;
+    }
+    .pull .attr {
+      display: block;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 11px;
+      color: var(--pencil);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 16px;
+    }
+
+    /* Obstacle list */
+    ol.obstacles { list-style: none; counter-reset: ob; margin: 16px 0 32px; }
+    ol.obstacles > li {
+      counter-increment: ob;
+      padding-left: 48px; position: relative;
+      margin-bottom: 28px;
+    }
+    ol.obstacles > li::before {
+      content: counter(ob, decimal-leading-zero);
+      position: absolute; left: 0; top: 2px;
+      font-family: var(--mono); font-size: 13px;
+      color: var(--oxide); font-weight: 500;
+    }
+    ol.obstacles h3 {
+      font-family: var(--mono); font-size: 12px;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--graphite); margin-bottom: 6px;
+    }
+
+    /* Footer note */
+    .end-note {
+      margin-top: 96px; padding-top: 32px;
+      border-top: 1px solid var(--rule);
+      font-family: var(--mono); font-size: 12px;
+      color: var(--pencil); line-height: 1.7;
+    }
+    .end-note a { color: var(--iron); border-bottom: 1px solid var(--iron); text-decoration: none; }
+
+    /* Draft banner */
+    .draft-banner {
+      background: var(--oxide);
+      color: var(--bone);
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 10px 32px;
+      text-align: center;
+    }
+    .draft-banner strong { color: #fff; }
+  </style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="draft-banner">
+  ⚠ <strong>Voice demo — not final copy.</strong>  Placeholders in orange are things I need from your worksheet.  Everything else is draft tone, free to edit.
+</div>
+
+<header class="masthead">
+  <div>Case File · 03</div>
+  <div><a href="index.html">← back to index</a></div>
+  <div>~4 min read</div>
+</header>
+
+<main class="page">
+
+  <div class="eyebrow">Case File · Smart Flema · 2026</div>
+
+  <h1 class="case-title">
+    I pitched a city-hall tool. The <em>market auntie</em> rewrote the product.
+  </h1>
+
+  <p class="dek">
+    How a Smart City pilot for a Thai municipality became a street-market insight system for a Japanese competition — and what I learned in the pivot.
+  </p>
+
+  <!-- ═══════ TL;DR ═══════ -->
+  <div class="tldr">
+    <div class="row">
+      <div class="k">Role</div>
+      <div class="v">Idea initiator, analysis lead</div>
+    </div>
+    <div class="row">
+      <div class="k">Team</div>
+      <div class="v"><span class="fill">[team size — 3? 5?]</span></div>
+    </div>
+    <div class="row">
+      <div class="k">Timeframe</div>
+      <div class="v"><span class="fill">[weeks — e.g. "6 weeks, Jan–Mar 2026"]</span></div>
+    </div>
+    <div class="row">
+      <div class="k">Context</div>
+      <div class="v">3rd ICT Startup Competition — ICT Kanazawa, Japan</div>
+    </div>
+    <div class="row">
+      <div class="k">Outcome</div>
+      <div class="v"><span class="fill">[your Q8 answer — placement, feedback, next steps]</span></div>
+    </div>
+    <div class="row">
+      <div class="k">The question I was trying to answer</div>
+      <div class="v"><em><span class="fill">[your Q5 answer, in one line]</span></em></div>
+    </div>
+  </div>
+
+  <!-- ═══════ BEAT 1 — HAND-OFF ═══════ -->
+  <h2 class="beat" data-beat="Beat 01">The idea arrived out of order.</h2>
+
+  <p>
+    Most projects start with a brief. Smart Flema started with a feeling — the uncomfortable kind, where you've just finished a project and you suspect you built the wrong thing for the wrong people.
+  </p>
+
+  <p>
+    I'd just wrapped the Smart City Lampang pilot. CCTV feeds, AI people-counting, LINE OA alerts for the municipality. Technically, it worked. But I kept noticing who <em>wasn't</em> in our stakeholder meetings: the people who actually made daily decisions in the spaces we were measuring.
+  </p>
+
+  <p>
+    <span class="fill">[Q4 — where were you when the idea clicked? "I was walking Kad Luang on a Saturday night in January…" — 3–4 sentences of the specific moment, who you told first, what you felt]</span>
+  </p>
+
+  <p>
+    I want to say I was confident. I wasn't. I was maybe 60% sure it was a real idea and 40% sure I was just tired of the old one.
+  </p>
+
+  <!-- ═══════ BEAT 2 — FIRST QUESTION ═══════ -->
+  <h2 class="beat" data-beat="Beat 02">Before a slide, a question.</h2>
+
+  <p>
+    The first instinct in a competition team is to build. A mockup, a pitch deck, a demo. I tried to hold that off for a week.
+  </p>
+
+  <p>
+    The question I needed to answer — the one that would tell me whether the pivot was real or just a mood — was this:
+  </p>
+
+  <p style="font-family: var(--italic); font-style: italic; font-size: 22px; color: var(--oxide); border-left: 2px solid var(--oxide); padding-left: 20px; margin: 28px 0;">
+    <span class="fill">[Q5 — the first question you needed answered. Something like: "Do street-market vendors actually want foot-traffic data, or is this a solution looking for a problem?"]</span>
+  </p>
+
+  <p>
+    <span class="fill">[2–3 sentences: what you did to investigate — walked a market? talked to vendors? re-read the competition brief? — with specific details. If you skipped this and went straight to building, say so. That's also an honest data point we'll use in Beat 06.]</span>
+  </p>
+
+  <!-- ═══════ PULL QUOTE ═══════ -->
+  <blockquote class="pull">
+    "<span class="fill">[a one-line insight that surprised you during the first-question phase — ideally something a real vendor or teammate said, or something you wrote in your notebook]</span>"
+    <span class="attr">— field note, <span class="fill">[date]</span></span>
+  </blockquote>
+
+  <!-- ═══════ BEAT 3 — THE MESS ═══════ -->
+  <h2 class="beat" data-beat="Beat 03">Three messy things.</h2>
+
+  <p>
+    The hand-off to myself felt clean. The project wasn't. Here's what I ran into that I didn't see coming:
+  </p>
+
+  <ol class="obstacles">
+    <li>
+      <h3>People</h3>
+      <p><span class="fill">[Q6.1 — the people obstacle. A teammate disagreement, an advisor pulling in a different direction, a stakeholder who went quiet. Be specific about the conversation.]</span></p>
+    </li>
+    <li>
+      <h3>Data / tech</h3>
+      <p><span class="fill">[Q6.2 — the data or technical obstacle. Camera footage you couldn't get, a model that choked on crowds, a dataset that didn't exist. Name the specific limitation and what you did about it.]</span></p>
+    </li>
+    <li>
+      <h3>Scope / time</h3>
+      <p><span class="fill">[Q6.3 — what you had to cut, a deadline that slipped, a judge question you couldn't answer cleanly.]</span></p>
+    </li>
+  </ol>
+
+  <!-- ═══════ BEAT 4 — THE MOVES ═══════ -->
+  <h2 class="beat" data-beat="Beat 04">What I actually did.</h2>
+
+  <p>
+    Not a methodology. Just the sequence, so you can see where I made the calls.
+  </p>
+
+  <p>
+    <strong>Week 1 — Walk and ask.</strong> Before any slide, I went to <span class="fill">[market name]</span> and talked to <span class="fill">[N]</span> vendors. I wasn't interviewing — I was listening for the thing they couldn't quite articulate. Two things showed up that I hadn't planned for: <span class="fill">[surprise 1]</span> and <span class="fill">[surprise 2]</span>.
+  </p>
+
+  <p>
+    <strong>Week 2 — Narrow.</strong> We had <span class="fill">[N]</span> candidate features. I drew them on a whiteboard in a spare classroom and asked the team one question: <em>which of these would a vendor notice was missing?</em> We cut <span class="fill">[N]</span> to <span class="fill">[N]</span> in about 40 minutes. I took a photo of the whiteboard. It's below — rough, but it's the single most important artifact of the project.
+  </p>
+
+  <p>
+    <strong>Week 3–4 — Build the rough one.</strong> <span class="fill">[what you actually prototyped — the heatmap UI? the vendor-side alert? a Figma mock? a working camera demo?]</span>
+  </p>
+
+  <p>
+    <strong>Week 5 — Test on the thing, not the deck.</strong> <span class="fill">[any validation you did — showed the prototype to a vendor / professor / judge, got a reaction, adjusted. If you didn't do this, say so — it goes in "what I'd redo."]</span>
+  </p>
+
+  <!-- ═══════ BEAT 5 — OUTCOME ═══════ -->
+  <h2 class="beat" data-beat="Beat 05">What changed because of it.</h2>
+
+  <p>
+    Three numbers, honest:
+  </p>
+
+  <ul style="list-style: none; padding: 0; margin: 16px 0 24px; font-family: var(--mono); font-size: 13px; line-height: 1.9;">
+    <li>— <strong>Scope:</strong> <span class="fill">[e.g. "14 feature ideas narrowed to 3"]</span></li>
+    <li>— <strong>Evidence:</strong> <span class="fill">[e.g. "5 vendor conversations, 2 judge feedback rounds"]</span></li>
+    <li>— <strong>Outcome:</strong> <span class="fill">[competition result, or a qualitative signal — judge comment, follow-up, professor interest]</span></li>
+  </ul>
+
+  <p>
+    The thing I actually want you to remember isn't the placement. It's <span class="fill">[the one specific moment from Q8 — a compliment, a follow-up, a thing a judge said, a moment a vendor's face changed when she saw the mockup]</span>.
+  </p>
+
+  <!-- ═══════ BEAT 6 — REDOS ═══════ -->
+  <h2 class="beat" data-beat="Beat 06">The decisions I'm still chewing on.</h2>
+
+  <p>
+    Three things I'd redo, ordered by how much they still bug me:
+  </p>
+
+  <p>
+    <strong>1.</strong> <span class="fill">[Q9.1 — methodological regret. "I'd have interviewed vendors before the mock, not after."]</span>
+  </p>
+
+  <p>
+    <strong>2.</strong> <span class="fill">[Q9.2 — scoping regret. "I'd have picked one market type, not three."]</span>
+  </p>
+
+  <p>
+    <strong>3.</strong> <span class="fill">[Q9.3 — team or pitch regret.]</span>
+  </p>
+
+  <p style="font-family: var(--italic); font-style: italic; font-size: 22px; line-height: 1.4; color: var(--iron); margin-top: 40px; max-width: 34ch;">
+    If I did it again, would I <span class="fill">[blank]</span>? Probably — but <span class="fill">[blank]</span>. I'm still not sure that was the right call.
+  </p>
+
+  <!-- ═══════ END NOTE ═══════ -->
+  <div class="end-note">
+    <p><strong>Artifacts</strong> — rough whiteboard photo, vendor field notes, pitch deck excerpt. <em>[to be added from your worksheet Part 3]</em></p>
+    <p style="margin-top: 12px;">Written April 2026. Read next: <a href="#">Smart City Lampang</a> — the project this one grew out of, and whose scope I was quietly uncomfortable with the whole time.</p>
+  </div>
+
+</main>
+
+<script>
+  // Reading progress
+  const bar = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = pct + '%';
+  });
+</script>
+
+</body>
+</html>
