@@ -3,203 +3,538 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio CMS</title>
+  <title>Studio · Portfolio CMS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: #f4f4f5; color: #18181b; min-height: 100vh; }
-    /* Form controls */
-    .f-input {
-      width: 100%; padding: 9px 12px; border: 1.5px solid #e4e4e7; border-radius: 10px;
-      font-size: 13.5px; background: #fff; color: #18181b; outline: none;
-      transition: border-color .15s, box-shadow .15s; font-family: inherit; line-height: 1.4;
+    :root {
+      --bg: #f7f7f8;
+      --surface: #ffffff;
+      --border: #e7e7ea;
+      --text: #0a0a0b;
+      --muted: #71717a;
+      --subtle: #a1a1aa;
+      --accent: #059669;
+      --accent-soft: rgba(5, 150, 105, .08);
+      --danger: #ef4444;
+      --warning: #f59e0b;
     }
-    .f-input:focus { border-color: #a1a1aa; box-shadow: 0 0 0 3px rgba(161,161,170,.15); }
-    .f-input.mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
-    textarea.f-input { resize: vertical; }
-    select.f-input { cursor: pointer; }
-    .f-label { display: block; font-size: 11px; font-weight: 700; color: #71717a; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
-    .f-hint { font-size: 11.5px; color: #a1a1aa; margin-bottom: 6px; line-height: 1.5; }
-    .f-group { display: flex; flex-direction: column; gap: 0; }
-    /* Tab active */
-    .tab-btn.active { background: white; box-shadow: 0 1px 4px rgba(0,0,0,.08); color: #18181b; font-weight: 600; }
-    /* Scrollbar */
-    .modal-body::-webkit-scrollbar { width: 5px; }
-    .modal-body::-webkit-scrollbar-track { background: transparent; }
-    .modal-body::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 10px; }
-    /* Pulse */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: "cv11", "ss01";
+    }
+    code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: #f4f4f5; padding: 1px 6px; border-radius: 5px; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* ── Layout shell ── */
+    .shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+    @media (max-width: 900px) { .shell { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: var(--surface); border-right: 1px solid var(--border);
+      padding: 20px 16px; position: sticky; top: 0; height: 100vh;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 10px 18px; margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-mark {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: linear-gradient(135deg, #059669, #0d9488);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700; font-size: 14px;
+      box-shadow: 0 2px 8px rgba(5,150,105,.3);
+    }
+    .brand-text h1 { font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+    .brand-text p  { font-size: 11px; color: var(--subtle); margin-top: 1px; }
+
+    .nav-label {
+      font-size: 10px; font-weight: 700; color: var(--subtle);
+      text-transform: uppercase; letter-spacing: .1em;
+      padding: 14px 10px 6px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: 8px;
+      font-size: 13px; font-weight: 500; color: #52525b;
+      cursor: pointer; transition: background .12s, color .12s;
+      border: none; background: transparent; width: 100%; text-align: left;
+      font-family: inherit;
+    }
+    .nav-item:hover { background: #f4f4f5; color: var(--text); }
+    .nav-item.active { background: var(--text); color: white; }
+    .nav-item.active .nav-count { background: rgba(255,255,255,.15); color: white; }
+    .nav-item svg { flex-shrink: 0; }
+    .nav-count {
+      margin-left: auto; font-size: 11px; font-weight: 600;
+      padding: 2px 7px; border-radius: 20px;
+      background: #f4f4f5; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .sidebar-footer {
+      margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .db-status {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px; border-radius: 8px; background: #fafafa;
+      font-size: 11.5px; font-family: 'JetBrains Mono', monospace;
+      color: var(--muted);
+    }
+    .db-dot { width: 7px; height: 7px; border-radius: 50%; background: #d4d4d8; flex-shrink: 0; }
+    .db-dot.ok       { background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,.15); }
+    .db-dot.loading  { background: #facc15; }
+    .db-dot.saving   { background: #60a5fa; }
+    .db-dot.error    { background: var(--danger); }
+
+    /* ── Main content ── */
+    .main { padding: 28px 32px 60px; max-width: 1100px; width: 100%; margin: 0 auto; }
+    @media (max-width: 640px) { .main { padding: 20px 16px 40px; } }
+
+    /* Mobile top bar */
+    .mobile-bar {
+      display: none;
+      align-items: center; justify-content: space-between;
+      padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 30;
+    }
+    @media (max-width: 900px) { .mobile-bar { display: flex; } }
+    .mobile-tabs {
+      display: flex; gap: 4px; overflow-x: auto;
+      padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+    }
+    .mobile-tabs::-webkit-scrollbar { display: none; }
+    @media (min-width: 901px) { .mobile-tabs { display: none; } }
+
+    /* ── Header row ── */
+    .page-head { margin-bottom: 24px; }
+    .page-head h2 { font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+    .page-head p { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+    .page-head-row {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+
+    /* ── Stats strip ── */
+    .stats-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; margin-bottom: 28px;
+    }
+    @media (max-width: 640px) { .stats-strip { grid-template-columns: repeat(2, 1fr); } }
+    .stat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+      cursor: pointer; transition: border-color .15s, transform .1s;
+    }
+    .stat:hover { border-color: #a1a1aa; transform: translateY(-1px); }
+    .stat.active { border-color: var(--text); box-shadow: 0 0 0 3px rgba(0,0,0,.04); }
+    .stat-label { font-size: 11px; font-weight: 700; color: var(--subtle); text-transform: uppercase; letter-spacing: .06em; }
+    .stat-value { font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: -.02em; margin-top: 4px; }
+
+    /* ── Connection error banner ── */
+    .banner {
+      display: none; background: #fef2f2; border: 1px solid #fecaca;
+      border-radius: 12px; padding: 12px 16px; margin-bottom: 20px;
+      font-size: 13px; color: #b91c1c; gap: 10px; align-items: flex-start;
+    }
+    .banner.show { display: flex; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 14px; border-radius: 10px;
+      font-size: 13px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: background .12s, border-color .12s, transform .1s;
+      border: 1px solid transparent;
+    }
+    .btn-primary { background: var(--text); color: white; }
+    .btn-primary:hover { background: #27272a; }
+    .btn-primary:active { transform: scale(.97); }
+    .btn-ghost { background: transparent; border-color: var(--border); color: #52525b; }
+    .btn-ghost:hover { background: #f4f4f5; }
+    .btn-icon {
+      padding: 7px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--muted); cursor: pointer;
+      display: inline-flex; transition: background .12s;
+    }
+    .btn-icon:hover { background: #f4f4f5; color: var(--text); }
+
+    /* ── Data list items ── */
+    .card-list { display: flex; flex-direction: column; gap: 8px; }
+    .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 640px) { .proj-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+      display: flex; gap: 12px; align-items: flex-start;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .card:hover { border-color: #a1a1aa; box-shadow: 0 1px 3px rgba(0,0,0,.03); }
+    .card-thumb {
+      width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+      object-fit: cover; border: 1px solid var(--border); background: #fafafa;
+      display: flex; align-items: center; justify-content: center;
+      color: #d4d4d8; font-weight: 700; font-size: 14px;
+    }
+    .card-body { flex: 1; min-width: 0; }
+    .card-title {
+      font-weight: 600; font-size: 13.5px; color: var(--text);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .card-sub {
+      font-size: 12px; color: var(--muted); margin-top: 2px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .card-meta {
+      font-size: 11.5px; font-family: 'JetBrains Mono', monospace;
+      color: var(--subtle); margin-top: 3px;
+    }
+    .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .chip {
+      display: inline-flex; font-size: 11px; font-weight: 500;
+      padding: 2px 8px; border-radius: 20px;
+      background: #f4f4f5; color: var(--muted);
+    }
+    .chip-mono {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 7px; border-radius: 5px;
+      background: #f4f4f5; color: #52525b; font-size: 10.5px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+
+    .empty {
+      padding: 48px 24px; text-align: center;
+      background: var(--surface); border: 1.5px dashed var(--border);
+      border-radius: 14px; color: var(--subtle); font-size: 13.5px;
+    }
+    .empty-icon {
+      width: 42px; height: 42px; margin: 0 auto 12px;
+      border-radius: 12px; background: #f4f4f5;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .empty strong { display: block; color: #3f3f46; font-weight: 600; margin-bottom: 4px; font-size: 14px; }
+
+    .skel { height: 72px; background: #f4f4f5; border-radius: 12px; animation: pulse 1.6s ease infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .spinner { animation: spin .8s linear infinite; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
-    .fade-in { animation: fadeIn .2s ease; }
-    /* Image drag highlight */
-    .img-drop-zone.drag-over { border-color: #059669; background: #f0fdf4; }
+    .spin { animation: spin .8s linear infinite; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .fade-in { animation: fadeIn .22s ease; }
+
+    /* ── Modal ── */
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0; z-index: 50;
+      background: rgba(10,10,11,.5); backdrop-filter: blur(6px);
+      overflow-y: auto; padding: 32px 16px;
+    }
+    .modal-backdrop.show { display: block; animation: fadeIn .18s ease; }
+    .modal {
+      position: relative; background: var(--surface);
+      border-radius: 18px; box-shadow: 0 30px 70px rgba(0,0,0,.24);
+      width: 100%; max-width: 720px; margin: 0 auto;
+      display: flex; flex-direction: column; max-height: 90vh;
+      overflow: hidden;
+    }
+    .modal-head {
+      padding: 18px 22px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0; background: #fafafa;
+    }
+    .modal-head h3 { font-size: 15.5px; font-weight: 700; }
+    .modal-head p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .modal-body {
+      padding: 22px; overflow-y: auto; flex: 1;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .modal-body::-webkit-scrollbar { width: 6px; }
+    .modal-body::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 8px; }
+    .modal-foot {
+      padding: 14px 22px; border-top: 1px solid var(--border);
+      display: flex; gap: 10px; flex-shrink: 0; background: #fafafa;
+    }
+
+    /* ── Form fields ── */
+    .field { display: flex; flex-direction: column; }
+    .label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; }
+    .label-req::after { content: ' *'; color: var(--danger); font-weight: 600; }
+    .hint { font-size: 11.5px; color: var(--subtle); margin-bottom: 6px; line-height: 1.5; }
+    .input, .textarea, .select {
+      width: 100%; padding: 9px 12px;
+      border: 1.5px solid var(--border); border-radius: 9px;
+      font-size: 13.5px; font-family: inherit; color: var(--text);
+      background: white; outline: none; line-height: 1.4;
+      transition: border-color .12s, box-shadow .12s;
+    }
+    .input:focus, .textarea:focus, .select:focus {
+      border-color: var(--text); box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+    }
+    .input.mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+    .textarea { resize: vertical; min-height: 72px; }
+    .select { cursor: pointer; }
+    .section-break {
+      font-size: 10.5px; font-weight: 700; color: var(--subtle);
+      text-transform: uppercase; letter-spacing: .08em;
+      padding: 12px 0 4px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-break::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chk {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 12px; border: 1.5px solid var(--border); border-radius: 20px;
+      font-size: 12.5px; cursor: pointer; user-select: none; transition: .12s;
+    }
+    .chk:hover { border-color: #a1a1aa; }
+    .chk input { accent-color: var(--text); width: 14px; height: 14px; cursor: pointer; }
+    .chk:has(input:checked) { background: var(--text); color: white; border-color: var(--text); }
+
+    /* ── Image field ── */
+    .img-block { background: #fafafa; border: 1.5px solid var(--border); border-radius: 12px; padding: 14px; }
+    .img-preview {
+      max-width: 100%; max-height: 160px; object-fit: contain;
+      border-radius: 10px; border: 1px solid var(--border);
+      margin-top: 12px; background: white;
+    }
+    .file-pick {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 13px; border: 1.5px solid var(--border); border-radius: 8px;
+      background: white; font-size: 12.5px; cursor: pointer;
+      transition: .12s;
+    }
+    .file-pick:hover { background: #f4f4f5; border-color: #a1a1aa; }
+
+    /* ── Action buttons in modal foot ── */
+    .save-btn { flex: 2; padding: 10px; border-radius: 10px; background: var(--text); color: white; font-size: 13.5px; font-weight: 600; border: none; cursor: pointer; font-family: inherit; transition: .12s; }
+    .save-btn:hover { background: #27272a; }
+    .save-btn:disabled { opacity: .6; cursor: not-allowed; }
+    .cancel-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1.5px solid var(--border); background: white; font-size: 13.5px; font-weight: 500; cursor: pointer; font-family: inherit; transition: .12s; }
+    .cancel-btn:hover { background: #f4f4f5; }
+
+    /* ── Row action buttons ── */
+    .btn-sm {
+      font-size: 12px; padding: 4px 11px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      background: white; cursor: pointer; font-family: inherit;
+      transition: .12s;
+    }
+    .btn-sm.edit { color: #52525b; }
+    .btn-sm.edit:hover { background: #f4f4f5; border-color: #a1a1aa; }
+    .btn-sm.del { color: var(--danger); border-color: #fecaca; }
+    .btn-sm.del:hover { background: #fef2f2; border-color: #fca5a5; }
+
+    /* ── Del confirm ── */
+    .del-modal { display: none; position: fixed; inset: 0; z-index: 60; align-items: center; justify-content: center; padding: 16px; background: rgba(10,10,11,.5); backdrop-filter: blur(6px); }
+    .del-modal.show { display: flex; }
+    .del-box { background: white; border-radius: 16px; padding: 28px 24px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 30px 70px rgba(0,0,0,.22); }
+
+    /* ── Toast ── */
+    .toast { display: none; position: fixed; bottom: 24px; right: 24px; z-index: 100; animation: fadeIn .22s ease; }
+    .toast.show { display: block; }
+    .toast-inner {
+      background: var(--text); color: white; font-size: 13px;
+      padding: 12px 16px; border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.24);
+      display: flex; align-items: center; gap: 10px;
+      min-width: 240px; max-width: 380px;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    @media (max-width: 560px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    .badge-accent {
+      width: 26px; height: 26px; border-radius: 8px;
+      background: #fffbeb; border: 1px solid #fde68a;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
 
-<!-- ─── TOP NAV ─── -->
-<nav style="position:sticky;top:0;z-index:40;background:white;border-bottom:1px solid #e4e4e7;">
-  <div style="max-width:1100px;margin:0 auto;padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <a href="index.html" style="display:flex;align-items:center;gap:5px;color:#a1a1aa;font-size:13px;text-decoration:none;padding:5px 8px;border-radius:8px;transition:all .15s;" onmouseover="this.style.background='#f4f4f5';this.style.color='#3f3f46'" onmouseout="this.style.background='transparent';this.style.color='#a1a1aa'">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
-        Portfolio
-      </a>
-      <span style="color:#e4e4e7">|</span>
-      <span style="font-weight:700;font-size:14px;">Portfolio CMS</span>
-      <span style="font-size:10px;font-family:'JetBrains Mono',monospace;background:#f4f4f5;color:#a1a1aa;padding:2px 8px;border-radius:6px;">admin</span>
+<div class="shell">
+
+  <!-- ═══ Sidebar ═══ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">T</div>
+      <div class="brand-text">
+        <h1>Studio</h1>
+        <p>Content editor</p>
+      </div>
     </div>
-    <!-- Connection status -->
-    <div style="display:flex;align-items:center;gap:8px;">
-      <div id="db-status" style="display:flex;align-items:center;gap:6px;font-size:12px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;">
-        <span id="db-dot" style="width:7px;height:7px;border-radius:50%;background:#d4d4d8;display:inline-block;"></span>
+
+    <p class="nav-label">Content</p>
+    <button class="nav-item active" data-tab="projects">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+      Projects
+      <span class="nav-count" id="count-projects">—</span>
+    </button>
+    <button class="nav-item" data-tab="activities">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Activities
+      <span class="nav-count" id="count-activities">—</span>
+    </button>
+    <button class="nav-item" data-tab="certificates">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+      Certificates
+      <span class="nav-count" id="count-certificates">—</span>
+    </button>
+    <button class="nav-item" data-tab="awards">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+      Awards
+      <span class="nav-count" id="count-awards">—</span>
+    </button>
+
+    <div class="sidebar-footer">
+      <div class="db-status">
+        <span class="db-dot" id="db-dot"></span>
         <span id="db-text">Connecting…</span>
       </div>
-      <button id="refresh-btn" onclick="refreshTab()" title="Refresh" style="padding:6px;border:1px solid #e4e4e7;border-radius:8px;background:white;cursor:pointer;color:#71717a;display:flex;align-items:center;transition:all .15s;" onmouseover="this.style.background='#f4f4f5'" onmouseout="this.style.background='white'">
-        <svg id="refresh-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+      <a href="index.html" class="nav-item" style="color: var(--muted)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        Back to Portfolio
+      </a>
+    </div>
+  </aside>
+
+  <!-- ═══ Main ═══ -->
+  <div>
+    <!-- Mobile header -->
+    <div class="mobile-bar">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="brand-mark" style="width:26px;height:26px;font-size:12px;">T</div>
+        <strong style="font-size:14px;">Studio</strong>
+      </div>
+      <div class="db-status" style="padding:6px 10px;font-size:10.5px;">
+        <span class="db-dot" id="db-dot-m"></span>
+        <span id="db-text-m">…</span>
+      </div>
+    </div>
+    <div class="mobile-tabs">
+      <button class="btn btn-ghost tab-btn-m active" data-tab="projects" style="font-size:12px;">Projects</button>
+      <button class="btn btn-ghost tab-btn-m" data-tab="activities" style="font-size:12px;">Activities</button>
+      <button class="btn btn-ghost tab-btn-m" data-tab="certificates" style="font-size:12px;">Certificates</button>
+      <button class="btn btn-ghost tab-btn-m" data-tab="awards" style="font-size:12px;">Awards</button>
+    </div>
+
+    <main class="main">
+
+      <!-- Banner -->
+      <div class="banner" id="conn-banner">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+        <div>
+          <strong>Cannot write to Supabase.</strong> Tables may not exist yet. Open your Supabase SQL editor and run <code>init-db.sql</code>.
+        </div>
+      </div>
+
+      <!-- Page head -->
+      <div class="page-head">
+        <div class="page-head-row">
+          <div>
+            <h2 id="page-title">Projects</h2>
+            <p id="page-desc">Full case-study details for each project.</p>
+          </div>
+          <button class="btn btn-primary" id="add-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Add Project
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div class="stats-strip">
+        <div class="stat active" data-tab="projects">
+          <p class="stat-label">Projects</p>
+          <p class="stat-value" id="stat-projects">—</p>
+        </div>
+        <div class="stat" data-tab="activities">
+          <p class="stat-label">Activities</p>
+          <p class="stat-value" id="stat-activities">—</p>
+        </div>
+        <div class="stat" data-tab="certificates">
+          <p class="stat-label">Certificates</p>
+          <p class="stat-value" id="stat-certificates">—</p>
+        </div>
+        <div class="stat" data-tab="awards">
+          <p class="stat-label">Awards</p>
+          <p class="stat-value" id="stat-awards">—</p>
+        </div>
+      </div>
+
+      <!-- Panes -->
+      <div class="tab-pane fade-in" id="pane-projects">
+        <div id="list-projects" class="proj-grid"></div>
+      </div>
+      <div class="tab-pane" id="pane-activities" style="display:none;">
+        <div id="list-activities" class="card-list"></div>
+      </div>
+      <div class="tab-pane" id="pane-certificates" style="display:none;">
+        <div id="list-certificates" class="card-list"></div>
+      </div>
+      <div class="tab-pane" id="pane-awards" style="display:none;">
+        <div id="list-awards" class="card-list"></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ═══ Add / Edit modal ═══ -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3 id="modal-title"></h3>
+        <p id="modal-desc"></p>
+      </div>
+      <button class="btn-icon" onclick="closeModal()" aria-label="Close">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
-  </div>
-</nav>
-
-<!-- ─── MAIN ─── -->
-<main style="max-width:1100px;margin:0 auto;padding:24px 20px;">
-
-  <!-- Connection error banner -->
-  <div id="conn-banner" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#b91c1c;">
-    <strong>⚠️ Cannot write to Supabase.</strong> Make sure your tables exist and the service key is correct.
-    Run <code style="background:#fee2e2;padding:1px 5px;border-radius:4px;">init-db.sql</code> in your Supabase SQL editor first.
-  </div>
-
-  <!-- Stats Row -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
-    <div class="stat-card" data-tab="projects" style="background:white;border:1.5px solid #e4e4e7;border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
-      <p style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Projects</p>
-      <p id="count-projects" style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;">—</p>
-    </div>
-    <div class="stat-card" data-tab="activities" style="background:white;border:1.5px solid #e4e4e7;border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
-      <p style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Activities</p>
-      <p id="count-activities" style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;">—</p>
-    </div>
-    <div class="stat-card" data-tab="certificates" style="background:white;border:1.5px solid #e4e4e7;border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
-      <p style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Certificates</p>
-      <p id="count-certificates" style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;">—</p>
-    </div>
-    <div class="stat-card" data-tab="awards" style="background:white;border:1.5px solid #e4e4e7;border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
-      <p style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Awards</p>
-      <p id="count-awards" style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;">—</p>
-    </div>
-  </div>
-
-  <!-- Tab Nav -->
-  <div style="background:#f4f4f5;padding:4px;border-radius:12px;width:fit-content;display:flex;gap:2px;margin-bottom:20px;">
-    <button class="tab-btn active" data-tab="projects" style="font-size:13.5px;font-weight:500;padding:7px 18px;border-radius:9px;border:none;cursor:pointer;transition:all .15s;background:white;box-shadow:0 1px 4px rgba(0,0,0,.08);color:#18181b;">Projects</button>
-    <button class="tab-btn" data-tab="activities" style="font-size:13.5px;font-weight:500;padding:7px 18px;border-radius:9px;border:none;cursor:pointer;transition:all .15s;background:transparent;color:#71717a;">Activities</button>
-    <button class="tab-btn" data-tab="certificates" style="font-size:13.5px;font-weight:500;padding:7px 18px;border-radius:9px;border:none;cursor:pointer;transition:all .15s;background:transparent;color:#71717a;">Certificates</button>
-    <button class="tab-btn" data-tab="awards" style="font-size:13.5px;font-weight:500;padding:7px 18px;border-radius:9px;border:none;cursor:pointer;transition:all .15s;background:transparent;color:#71717a;">Awards</button>
-  </div>
-
-  <!-- ── Projects ── -->
-  <div class="tab-pane" id="pane-projects">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <div><h2 style="font-size:16px;font-weight:700;">Projects</h2><p style="font-size:12.5px;color:#71717a;margin-top:2px;">Full case-study details for each project</p></div>
-      <button onclick="openModal('project')" class="btn-primary">+ Add Project</button>
-    </div>
-    <div id="list-projects" style="display:grid;gap:10px;grid-template-columns:1fr 1fr;"></div>
-  </div>
-
-  <!-- ── Activities ── -->
-  <div class="tab-pane" id="pane-activities" style="display:none;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <div><h2 style="font-size:16px;font-weight:700;">Activities</h2><p style="font-size:12.5px;color:#71717a;margin-top:2px;">Leadership, clubs, and extracurriculars</p></div>
-      <button onclick="openModal('activity')" class="btn-primary">+ Add Activity</button>
-    </div>
-    <div id="list-activities" style="display:flex;flex-direction:column;gap:8px;"></div>
-  </div>
-
-  <!-- ── Certificates ── -->
-  <div class="tab-pane" id="pane-certificates" style="display:none;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <div><h2 style="font-size:16px;font-weight:700;">Certificates</h2><p style="font-size:12.5px;color:#71717a;margin-top:2px;">Courses, workshops, hackathons, competitions</p></div>
-      <button onclick="openModal('certificate')" class="btn-primary">+ Add Certificate</button>
-    </div>
-    <div id="list-certificates" style="display:flex;flex-direction:column;gap:8px;"></div>
-  </div>
-
-  <!-- ── Awards ── -->
-  <div class="tab-pane" id="pane-awards" style="display:none;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-      <div><h2 style="font-size:16px;font-weight:700;">Awards & Achievements</h2><p style="font-size:12.5px;color:#71717a;margin-top:2px;">Competitions, honors, and recognitions</p></div>
-      <button onclick="openModal('award')" class="btn-primary">+ Add Award</button>
-    </div>
-    <div id="list-awards" style="display:flex;flex-direction:column;gap:8px;"></div>
-  </div>
-
-</main>
-
-<!-- ─── ADD / EDIT MODAL ─── -->
-<div id="modal" style="display:none;position:fixed;inset:0;z-index:50;overflow-y:auto;padding:20px;">
-  <div onclick="closeModal()" style="position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);"></div>
-  <div style="position:relative;background:white;border-radius:20px;box-shadow:0 25px 60px rgba(0,0,0,.18);width:100%;max-width:680px;margin:0 auto;display:flex;flex-direction:column;max-height:90vh;">
-    <!-- Modal header -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid #f4f4f5;flex-shrink:0;">
-      <h3 id="modal-title" style="font-size:15px;font-weight:700;"></h3>
-      <button onclick="closeModal()" style="padding:6px;border:none;background:transparent;cursor:pointer;color:#a1a1aa;border-radius:8px;display:flex;align-items:center;transition:.15s;" onmouseover="this.style.background='#f4f4f5';this.style.color='#3f3f46'" onmouseout="this.style.background='transparent';this.style.color='#a1a1aa'">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <!-- Modal body -->
-    <div id="modal-body" class="modal-body" style="padding:22px 24px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:16px;"></div>
-    <!-- Modal footer -->
-    <div style="display:flex;gap:10px;padding:16px 24px 20px;border-top:1px solid #f4f4f5;flex-shrink:0;">
-      <button onclick="closeModal()" style="flex:1;padding:10px;border:1.5px solid #e4e4e7;border-radius:11px;background:white;font-size:13.5px;font-weight:500;cursor:pointer;transition:.15s;font-family:inherit;" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='white'">Cancel</button>
-      <button id="save-btn" onclick="saveItem()" style="flex:2;padding:10px;border:none;border-radius:11px;background:#18181b;color:white;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;" onmouseover="this.style.background='#27272a'" onmouseout="this.style.background='#18181b'">Save Changes</button>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-foot">
+      <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+      <button class="save-btn" id="save-btn" onclick="saveItem()">Save Changes</button>
     </div>
   </div>
 </div>
 
-<!-- ─── DELETE CONFIRM ─── -->
-<div id="del-modal" style="display:none;position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:20px;">
-  <div onclick="document.getElementById('del-modal').style.display='none'" style="position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);"></div>
-  <div style="position:relative;background:white;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.2);width:100%;max-width:320px;padding:28px 24px;text-align:center;">
-    <div style="width:48px;height:48px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+<!-- ═══ Delete confirm ═══ -->
+<div class="del-modal" id="del-modal">
+  <div class="del-box">
+    <div style="width:48px;height:48px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2"/></svg>
     </div>
     <h3 style="font-size:15px;font-weight:700;margin-bottom:6px;">Delete this item?</h3>
-    <p style="font-size:13px;color:#71717a;margin-bottom:20px;">This action cannot be undone.</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:18px;">This action cannot be undone.</p>
     <div style="display:flex;gap:10px;">
-      <button onclick="document.getElementById('del-modal').style.display='none'" style="flex:1;padding:10px;border:1.5px solid #e4e4e7;border-radius:10px;background:white;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">Cancel</button>
-      <button id="del-confirm" style="flex:1;padding:10px;border:none;border-radius:10px;background:#ef4444;color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">Delete</button>
+      <button class="cancel-btn" onclick="document.getElementById('del-modal').classList.remove('show')">Cancel</button>
+      <button class="save-btn" id="del-confirm" style="background:var(--danger)">Delete</button>
     </div>
   </div>
 </div>
 
-<!-- ─── TOAST ─── -->
-<div id="toast" style="display:none;position:fixed;bottom:24px;right:24px;z-index:100;">
-  <div style="background:#18181b;color:white;font-size:13px;padding:12px 16px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;min-width:220px;max-width:360px;">
+<!-- ═══ Toast ═══ -->
+<div class="toast" id="toast">
+  <div class="toast-inner">
     <span id="toast-icon" style="flex-shrink:0;display:flex;"></span>
     <span id="toast-msg" style="line-height:1.4;"></span>
   </div>
 </div>
-
-<!-- ─── BUTTON STYLES via JS ─── -->
-<style>
-  .btn-primary { display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#18181b;color:white;border:none;border-radius:11px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit; }
-  .btn-primary:hover { background:#27272a; }
-  .btn-edit { font-size:12px;padding:5px 12px;border:1.5px solid #e4e4e7;border-radius:8px;background:white;cursor:pointer;color:#52525b;font-family:inherit;transition:.15s; }
-  .btn-edit:hover { background:#f4f4f5; }
-  .btn-del { font-size:12px;padding:5px 12px;border:1.5px solid #fee2e2;border-radius:8px;background:white;cursor:pointer;color:#ef4444;font-family:inherit;transition:.15s; }
-  .btn-del:hover { background:#fef2f2; }
-  .section-divider { font-size:10.5px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.08em;padding:10px 0 6px;border-top:1px solid #f4f4f5;margin-top:4px; }
-  code { background:#f4f4f5;padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px; }
-  @media (max-width:640px) {
-    #list-projects { grid-template-columns:1fr !important; }
-  }
-</style>
 
 <script>
 // ─── CONFIG ───
@@ -208,83 +543,94 @@ const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const SVC  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjY5NTE0OCwiZXhwIjoyMDkyMjcxMTQ4fQ.tOap3UMeUzmpy--Gwa_AJ7ZiYc96JoidQ6mOztYETDw";
 
 const RH = { apikey: ANON, Authorization: `Bearer ${ANON}`, Accept: 'application/json' };
-const WH = { apikey: SVC,  Authorization: `Bearer ${SVC}`,  'Content-Type': 'application/json', Prefer: 'return=representation', Accept: 'application/json' };
+const WH = { apikey: SVC, Authorization: `Bearer ${SVC}`, 'Content-Type': 'application/json', Prefer: 'return=representation', Accept: 'application/json' };
 
 // ─── STATE ───
 let currentTab = 'projects';
-let editingId  = null;
-let editingType = null;
-const store = { projects:[], activities:[], certificates:[], awards:[] };
+let editingId = null, editingType = null;
+const store = { projects: [], activities: [], certificates: [], awards: [] };
 
-const TABLES = { project:'projects', activity:'activities', certificate:'certificates', award:'awards' };
-const PANE_OF = { projects:'pane-projects', activities:'pane-activities', certificates:'pane-certificates', awards:'pane-awards' };
-const COLOR_HEX = { emerald:'#34d399', violet:'#a78bfa', amber:'#fbbf24', sky:'#38bdf8', rose:'#fb7185', orange:'#fb923c', teal:'#2dd4bf', blue:'#60a5fa' };
+const TABLES = { project: 'projects', activity: 'activities', certificate: 'certificates', award: 'awards' };
+const TYPE_OF = { projects: 'project', activities: 'activity', certificates: 'certificate', awards: 'award' };
+const PANE = { projects: 'pane-projects', activities: 'pane-activities', certificates: 'pane-certificates', awards: 'pane-awards' };
+const LABELS = {
+  projects:    { title: 'Projects',     desc: 'Full case-study details for each project.',      btn: 'Add Project' },
+  activities:  { title: 'Activities',   desc: 'Leadership, clubs, and extracurriculars.',       btn: 'Add Activity' },
+  certificates:{ title: 'Certificates', desc: 'Courses, workshops, hackathons, competitions.', btn: 'Add Certificate' },
+  awards:      { title: 'Awards',       desc: 'Competitions, honors, and recognitions.',        btn: 'Add Award' },
+};
 
 // ─── INIT ───
 (async function init() {
   setDB('loading');
   await loadAllCounts();
   await loadTab('projects');
-  // Test write ability
   try {
     const r = await fetch(`${SB}/projects?select=id&limit=0`, { headers: RH });
     setDB(r.ok ? 'ok' : 'error');
   } catch { setDB('error'); }
 })();
 
-// Stat cards click
-document.querySelectorAll('.stat-card').forEach(c => {
-  c.addEventListener('click', () => switchTab(c.dataset.tab));
-});
-// Tab buttons click
-document.querySelectorAll('.tab-btn').forEach(b => {
-  b.addEventListener('click', () => switchTab(b.dataset.tab));
-});
+document.getElementById('add-btn').addEventListener('click', () => openModal(TYPE_OF[currentTab]));
+
+// Stat click → switch tab
+document.querySelectorAll('.stat').forEach(s => s.addEventListener('click', () => switchTab(s.dataset.tab)));
+// Sidebar nav click
+document.querySelectorAll('.nav-item[data-tab]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+// Mobile tabs
+document.querySelectorAll('.tab-btn-m').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
 
 function setDB(state) {
-  const dot = document.getElementById('db-dot');
-  const txt = document.getElementById('db-text');
-  const map = { ok:['#22c55e','Connected'], loading:['#facc15','Connecting…'], error:['#ef4444','Error'], saving:['#60a5fa','Saving…'] };
-  dot.style.background = map[state][0];
-  txt.textContent      = map[state][1];
-  document.getElementById('conn-banner').style.display = state === 'error' ? 'block' : 'none';
+  const txt = { ok: 'Connected', loading: 'Connecting…', error: 'Connection error', saving: 'Saving…' }[state];
+  ['db-dot', 'db-dot-m'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.className = `db-dot ${state}`;
+  });
+  ['db-text', 'db-text-m'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = txt;
+  });
+  document.getElementById('conn-banner').classList.toggle('show', state === 'error');
 }
 
 function switchTab(tab) {
   currentTab = tab;
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    const active = b.dataset.tab === tab;
-    b.style.background   = active ? 'white' : 'transparent';
-    b.style.color        = active ? '#18181b' : '#71717a';
-    b.style.fontWeight   = active ? '600' : '500';
-    b.style.boxShadow    = active ? '0 1px 4px rgba(0,0,0,.08)' : 'none';
-  });
-  document.querySelectorAll('.tab-pane').forEach(p => p.style.display = 'none');
-  document.getElementById(PANE_OF[tab]).style.display = 'block';
+  // sidebar
+  document.querySelectorAll('.nav-item[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  // stats
+  document.querySelectorAll('.stat').forEach(s => s.classList.toggle('active', s.dataset.tab === tab));
+  // mobile tabs
+  document.querySelectorAll('.tab-btn-m').forEach(b => b.classList.toggle('btn-primary', b.dataset.tab === tab) || b.classList.toggle('btn-ghost', b.dataset.tab !== tab));
+  // panes
+  Object.entries(PANE).forEach(([t, id]) => document.getElementById(id).style.display = t === tab ? 'block' : 'none');
+  // page head
+  const l = LABELS[tab];
+  document.getElementById('page-title').textContent = l.title;
+  document.getElementById('page-desc').textContent  = l.desc;
+  document.getElementById('add-btn').innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+    ${l.btn}`;
   loadTab(tab);
 }
 
 async function loadAllCounts() {
-  const tabs = ['projects','activities','certificates','awards'];
+  const tabs = ['projects', 'activities', 'certificates', 'awards'];
   await Promise.all(tabs.map(async t => {
     try {
-      const r = await fetch(`${SB}/${t}?select=id`, { headers: { ...RH, 'Prefer':'count=exact', 'Range':'0-0' } });
+      const r = await fetch(`${SB}/${t}?select=id`, { headers: { ...RH, 'Prefer': 'count=exact', 'Range': '0-0' } });
       const count = r.headers.get('Content-Range')?.split('/')[1] ?? '—';
       document.getElementById(`count-${t}`).textContent = count;
-    } catch { document.getElementById(`count-${t}`).textContent = '—'; }
+      document.getElementById(`stat-${t}`).textContent = count;
+    } catch {
+      document.getElementById(`count-${t}`).textContent = '—';
+      document.getElementById(`stat-${t}`).textContent = '—';
+    }
   }));
 }
 
-function refreshTab() {
-  const icon = document.getElementById('refresh-icon');
-  icon.classList.add('spinner');
-  loadTab(currentTab).finally(() => icon.classList.remove('spinner'));
-}
-
-// ─── LOAD TAB ───
 async function loadTab(tab) {
   const listEl = document.getElementById(`list-${tab}`);
-  listEl.innerHTML = skeletonRows(tab === 'projects' ? 4 : 3);
+  listEl.innerHTML = Array(3).fill(0).map(() => `<div class="skel"></div>`).join('');
   const q = {
     projects:    `projects?select=*&order=created_at.asc`,
     activities:  `activities?select=*&order=created_at.asc`,
@@ -298,84 +644,80 @@ async function loadTab(tab) {
     store[tab] = data;
     renderList(tab, data);
     document.getElementById(`count-${tab}`).textContent = data.length;
+    document.getElementById(`stat-${tab}`).textContent = data.length;
     setDB('ok');
-  } catch(e) {
-    listEl.innerHTML = errRow(`Failed to load: ${e.message}`);
+  } catch (e) {
+    listEl.innerHTML = `<div class="empty" style="color:var(--danger);background:#fef2f2;border-color:#fecaca;">Failed to load: ${esc(e.message)}</div>`;
     setDB('error');
   }
 }
 
-function skeletonRows(n) {
-  return Array(n).fill(0).map(()=>`<div style="height:64px;background:#f4f4f5;border-radius:12px;animation:pulse 1.5s ease infinite;"></div>`).join('');
-}
-function errRow(msg) {
-  return `<div style="padding:24px;text-align:center;color:#ef4444;font-size:13px;background:#fef2f2;border-radius:12px;">${msg}</div>`;
-}
-
-// ─── RENDER LISTS ───
 function renderList(tab, items) {
   const el = document.getElementById(`list-${tab}`);
-  el.style.animation = 'fadeIn .2s ease';
+  el.classList.add('fade-in');
   if (!items.length) {
-    el.innerHTML = `<div style="padding:40px 20px;text-align:center;background:white;border-radius:14px;border:1.5px dashed #e4e4e7;color:#a1a1aa;font-size:13px;">No items yet. Click "+ Add" to create your first one.</div>`;
+    const emptyLabels = {
+      projects: 'No projects yet', activities: 'No activities yet',
+      certificates: 'No certificates yet', awards: 'No awards yet'
+    };
+    el.innerHTML = `
+      <div class="empty" style="grid-column:1/-1;">
+        <div class="empty-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        </div>
+        <strong>${emptyLabels[tab]}</strong>
+        Click "Add" above to create your first one.
+      </div>`;
     return;
   }
-  el.innerHTML = items.map(i => {
-    switch(tab) {
-      case 'projects':    return cardProject(i);
-      case 'activities':  return cardActivity(i);
-      case 'certificates':return cardCert(i);
-      case 'awards':      return cardAward(i);
-    }
-  }).join('');
+  const renderer = { projects: cardProject, activities: cardActivity, certificates: cardCert, awards: cardAward }[tab];
+  el.innerHTML = items.map(renderer).join('');
   el.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => {
     const item = store[tab].find(x => String(x.id) === btn.dataset.edit);
-    openModal({ projects:'project', activities:'activity', certificates:'certificate', awards:'award' }[tab], item);
+    openModal(TYPE_OF[tab], item);
   }));
   el.querySelectorAll('[data-del]').forEach(btn => btn.addEventListener('click', () => confirmDel(tab, btn.dataset.del)));
 }
 
 function cardProject(p) {
-  const dot = COLOR_HEX[p.color] || '#a1a1aa';
-  const cats = (p.categories||[]).map(c=>`<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#f4f4f5;color:#71717a;">${esc(c)}</span>`).join('');
-  const tech = (p.tech_stack||[]).slice(0,3).map(t=>`<span style="font-size:11px;padding:2px 8px;border-radius:6px;background:#f4f4f5;color:#52525b;font-family:'JetBrains Mono',monospace;">${esc(t)}</span>`).join('');
-  const img  = p.image_url ? `<img src="${esc(p.image_url)}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;border:1px solid #e4e4e7;flex-shrink:0;" onerror="this.style.display='none'">` : '';
-  return `<div style="background:white;border:1.5px solid #e4e4e7;border-left:3px solid ${dot};border-radius:13px;padding:14px 16px;transition:.15s;" onmouseover="this.style.borderColor='#a1a1aa';this.style.borderLeftColor='${dot}'" onmouseout="this.style.borderColor='#e4e4e7';this.style.borderLeftColor='${dot}'">
-    <div style="display:flex;gap:10px;align-items:flex-start;">
-      ${img}
-      <div style="flex:1;min-width:0;">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;">
-          <span style="font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.title)}</span>
-          <div style="display:flex;gap:6px;flex-shrink:0;">
-            <button class="btn-edit" data-edit="${p.id}">Edit</button>
-            <button class="btn-del" data-del="${p.id}">Delete</button>
-          </div>
+  const img = p.image_url
+    ? `<img src="${esc(p.image_url)}" class="card-thumb" onerror="this.style.display='none'">`
+    : `<div class="card-thumb">${esc((p.title || '?').charAt(0))}</div>`;
+  const cats = (p.categories || []).map(c => `<span class="chip">${esc(c)}</span>`).join('');
+  const tech = (p.tech_stack || []).slice(0, 3).map(t => `<span class="chip-mono">${esc(t)}</span>`).join('');
+  return `<div class="card">
+    ${img}
+    <div class="card-body">
+      <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:3px;">
+        <p class="card-title">${esc(p.title || '')}</p>
+        <div class="card-actions">
+          <button class="btn-sm edit" data-edit="${p.id}">Edit</button>
+          <button class="btn-sm del" data-del="${p.id}">Delete</button>
         </div>
-        <p style="font-size:12px;color:#71717a;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.short_description||'')}</p>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;">${cats}</div>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;">${tech}</div>
       </div>
+      <p class="card-sub">${esc(p.short_description || '')}</p>
+      <div class="chips">${cats}${tech}</div>
     </div>
   </div>`;
 }
 
 function cardActivity(a) {
   const thumb = a.image_url
-    ? `<img src="${esc(a.image_url)}" style="width:44px;height:44px;border-radius:10px;object-fit:cover;border:1px solid #e4e4e7;flex-shrink:0;" onerror="this.style.display='none'">`
-    : `<div style="width:44px;height:44px;border-radius:10px;background:#f4f4f5;border:1px solid #e4e4e7;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#d4d4d8;">${esc((a.activity_name||'?').charAt(0))}</div>`;
-  const skills = (a.soft_skills||[]).map(s=>`<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#f4f4f5;color:#71717a;">${esc(s)}</span>`).join('');
-  return `<div style="background:white;border:1.5px solid #e4e4e7;border-radius:13px;padding:12px 16px;display:flex;gap:12px;align-items:center;transition:.15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
+    ? `<img src="${esc(a.image_url)}" class="card-thumb" onerror="this.style.display='none'">`
+    : `<div class="card-thumb">${esc((a.activity_name || '?').charAt(0))}</div>`;
+  const skills = (a.soft_skills || []).map(s => `<span class="chip">${esc(s)}</span>`).join('');
+  return `<div class="card">
     ${thumb}
-    <div style="flex:1;min-width:0;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+    <div class="card-body">
+      <div style="display:flex;justify-content:space-between;gap:10px;">
         <div style="min-width:0;">
-          <p style="font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(a.activity_name||'')}</p>
-          <p style="font-size:12px;color:#a1a1aa;font-family:'JetBrains Mono',monospace;margin-top:2px;">${esc(a.role||'')}${a.period ? ' · '+esc(a.period) : ''}</p>
-          ${skills ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${skills}</div>` : ''}
+          <p class="card-title">${esc(a.activity_name || '')}</p>
+          <p class="card-meta">${esc(a.role || '')}${a.period ? ' · ' + esc(a.period) : ''}</p>
+          ${skills ? `<div class="chips">${skills}</div>` : ''}
         </div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">
-          <button class="btn-edit" data-edit="${a.id}">Edit</button>
-          <button class="btn-del" data-del="${a.id}">Delete</button>
+        <div class="card-actions">
+          <button class="btn-sm edit" data-edit="${a.id}">Edit</button>
+          <button class="btn-sm del" data-del="${a.id}">Delete</button>
         </div>
       </div>
     </div>
@@ -383,24 +725,21 @@ function cardActivity(a) {
 }
 
 function cardCert(c) {
-  const date  = fmt(c.date_issued);
   const thumb = c.image_url
-    ? `<img src="${esc(c.image_url)}" style="width:52px;height:52px;border-radius:10px;object-fit:cover;border:1px solid #e4e4e7;flex-shrink:0;" onerror="this.style.display='none'">`
-    : `<div style="width:52px;height:52px;border-radius:10px;background:#f4f4f5;border:1px solid #e4e4e7;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-       </div>`;
-  return `<div style="background:white;border:1.5px solid #e4e4e7;border-radius:13px;padding:12px 16px;display:flex;gap:12px;align-items:center;transition:.15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
+    ? `<img src="${esc(c.image_url)}" class="card-thumb" onerror="this.style.display='none'">`
+    : `<div class="card-thumb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>`;
+  return `<div class="card">
     ${thumb}
-    <div style="flex:1;min-width:0;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+    <div class="card-body">
+      <div style="display:flex;justify-content:space-between;gap:10px;">
         <div style="min-width:0;">
-          <p style="font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.title||'')}</p>
-          <p style="font-size:12px;color:#71717a;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.institution||'')}</p>
-          <p style="font-size:11.5px;color:#a1a1aa;font-family:'JetBrains Mono',monospace;margin-top:2px;">${esc(c.type||'')} · ${date}</p>
+          <p class="card-title">${esc(c.title || '')}</p>
+          <p class="card-sub">${esc(c.institution || '')}</p>
+          <p class="card-meta">${esc(c.type || '')} · ${fmt(c.date_issued)}</p>
         </div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">
-          <button class="btn-edit" data-edit="${c.id}">Edit</button>
-          <button class="btn-del" data-del="${c.id}">Delete</button>
+        <div class="card-actions">
+          <button class="btn-sm edit" data-edit="${c.id}">Edit</button>
+          <button class="btn-sm del" data-del="${c.id}">Delete</button>
         </div>
       </div>
     </div>
@@ -408,21 +747,20 @@ function cardCert(c) {
 }
 
 function cardAward(a) {
-  const date = fmt(a.date);
-  return `<div style="background:white;border:1.5px solid #e4e4e7;border-radius:13px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:.15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
-    <div style="width:38px;height:38px;border-radius:10px;background:#fffbeb;border:1px solid #fde68a;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+  return `<div class="card">
+    <div class="badge-accent">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
     </div>
-    <div style="flex:1;min-width:0;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+    <div class="card-body">
+      <div style="display:flex;justify-content:space-between;gap:10px;">
         <div style="min-width:0;">
-          <p style="font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(a.title||'')}</p>
-          <p style="font-size:12px;color:#71717a;margin-top:2px;">${esc(a.organization||'')} · <span style="color:#a1a1aa;">${esc(a.category||'')}</span></p>
-          <p style="font-size:11.5px;color:#a1a1aa;font-family:'JetBrains Mono',monospace;margin-top:1px;">${date}</p>
+          <p class="card-title">${esc(a.title || '')}</p>
+          <p class="card-sub">${esc(a.organization || '')} · <span style="color:var(--subtle)">${esc(a.category || '')}</span></p>
+          <p class="card-meta">${fmt(a.date)}</p>
         </div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">
-          <button class="btn-edit" data-edit="${a.id}">Edit</button>
-          <button class="btn-del" data-del="${a.id}">Delete</button>
+        <div class="card-actions">
+          <button class="btn-sm edit" data-edit="${a.id}">Edit</button>
+          <button class="btn-sm del" data-del="${a.id}">Delete</button>
         </div>
       </div>
     </div>
@@ -431,23 +769,24 @@ function cardAward(a) {
 
 // ─── MODAL ───
 function openModal(type, item = null) {
-  editingId   = item?.id ?? null;
+  editingId = item?.id ?? null;
   editingType = type;
-  document.getElementById('modal-title').textContent = `${item ? 'Edit' : 'Add'} ${cap(type)}`;
-  document.getElementById('save-btn').textContent    = item ? 'Save Changes' : `Add ${cap(type)}`;
+  const titleMap = { project: 'Project', activity: 'Activity', certificate: 'Certificate', award: 'Award' };
+  document.getElementById('modal-title').textContent = `${item ? 'Edit' : 'New'} ${titleMap[type]}`;
+  document.getElementById('modal-desc').textContent  = item ? 'Update the details below.' : 'Fill in the details to create a new entry.';
+  document.getElementById('save-btn').textContent    = item ? 'Save Changes' : `Create ${titleMap[type]}`;
   document.getElementById('modal-body').innerHTML    = buildForm(type, item);
-  document.getElementById('modal').style.display     = 'block';
+  document.getElementById('modal').classList.add('show');
   document.body.style.overflow = 'hidden';
-  // wire up image preview + slug generator
+
   wireImgPreview();
   if (type === 'project' && !item) wireSlug();
-  // wire file picker
   const picker = document.getElementById('f-img-file');
   if (picker) picker.addEventListener('change', handleFilePick);
 }
 
 function closeModal() {
-  document.getElementById('modal').style.display = 'none';
+  document.getElementById('modal').classList.remove('show');
   document.body.style.overflow = '';
   editingId = null; editingType = null;
 }
@@ -456,21 +795,18 @@ function wireImgPreview() {
   const inp = document.getElementById('f-imgUrl');
   const pre = document.getElementById('img-pre');
   if (!inp || !pre) return;
-  const update = () => {
-    const v = inp.value.trim();
-    pre.src = v; pre.style.display = v ? 'block' : 'none';
-  };
+  const update = () => { const v = inp.value.trim(); pre.src = v; pre.style.display = v ? 'block' : 'none'; };
   inp.addEventListener('input', update);
   update();
 }
 
 function wireSlug() {
   const title = document.getElementById('f-title');
-  const slug  = document.getElementById('f-slug');
+  const slug = document.getElementById('f-slug');
   if (!title || !slug) return;
   title.addEventListener('input', () => {
     if (slug.dataset.touched) return;
-    slug.value = title.value.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+    slug.value = title.value.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
   });
   slug.addEventListener('input', () => { slug.dataset.touched = '1'; });
 }
@@ -489,137 +825,135 @@ function handleFilePick(e) {
 }
 
 // ─── FORM BUILDERS ───
-function field(id, label, val='', opts={}) {
-  const { type='text', placeholder='', required=false, hint='', mono=false, rows=0 } = opts;
-  const req = required ? ' <span style="color:#f87171">*</span>' : '';
-  const ra  = required ? 'required' : '';
-  const mc  = mono ? ' mono' : '';
-  if (rows > 0) return `<div class="f-group">
-    <label class="f-label" for="${id}">${label}${req}</label>
-    ${hint ? `<p class="f-hint">${hint}</p>` : ''}
-    <textarea id="${id}" rows="${rows}" placeholder="${placeholder}" ${ra} class="f-input${mono?' mono':''}">${esc(val)}</textarea>
+function field(id, label, val = '', opts = {}) {
+  const { type = 'text', placeholder = '', required = false, hint = '', mono = false, rows = 0 } = opts;
+  const labelClass = required ? 'label label-req' : 'label';
+  const inputClass = mono ? 'input mono' : 'input';
+  if (rows > 0) return `<div class="field">
+    <label class="${labelClass}" for="${id}">${label}</label>
+    ${hint ? `<p class="hint">${hint}</p>` : ''}
+    <textarea id="${id}" rows="${rows}" placeholder="${placeholder}" ${required ? 'required' : ''} class="textarea">${esc(val)}</textarea>
   </div>`;
-  return `<div class="f-group">
-    <label class="f-label" for="${id}">${label}${req}</label>
-    ${hint ? `<p class="f-hint">${hint}</p>` : ''}
-    <input type="${type}" id="${id}" value="${esc(val)}" placeholder="${placeholder}" ${ra} class="f-input${mc}">
-  </div>`;
-}
-
-function select(id, label, val='', opts=[]) {
-  return `<div class="f-group">
-    <label class="f-label" for="${id}">${label}</label>
-    <select id="${id}" class="f-input">${opts.map(o=>`<option value="${esc(o)}" ${val===o?'selected':''}>${esc(o)}</option>`).join('')}</select>
+  return `<div class="field">
+    <label class="${labelClass}" for="${id}">${label}</label>
+    ${hint ? `<p class="hint">${hint}</p>` : ''}
+    <input type="${type}" id="${id}" value="${esc(val)}" placeholder="${placeholder}" ${required ? 'required' : ''} class="${inputClass}">
   </div>`;
 }
 
-function imgField(val='') {
-  return `<div class="f-group">
-    <label class="f-label">Image</label>
-    <p class="f-hint">Paste a URL <strong>or</strong> pick a local file (will be encoded as base64). For best results host on <a href="https://imgur.com" target="_blank" style="color:#059669;">Imgur</a> and paste the link.</p>
-    <input type="text" id="f-imgUrl" value="${esc(val)}" placeholder="https://... or pic/filename.jpg" class="f-input" style="margin-bottom:6px;">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#71717a;cursor:pointer;padding:6px 12px;border:1.5px solid #e4e4e7;border-radius:8px;background:white;transition:.15s;" onmouseover="this.style.background='#f4f4f5'" onmouseout="this.style.background='white'">
+function select(id, label, val = '', opts = []) {
+  return `<div class="field">
+    <label class="label" for="${id}">${label}</label>
+    <select id="${id}" class="select">${opts.map(o => `<option value="${esc(o)}" ${val === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>
+  </div>`;
+}
+
+function imgField(val = '') {
+  return `<div class="field">
+    <label class="label">Image</label>
+    <p class="hint">Paste a URL or upload a local file (encoded as base64). For production, host on <a href="https://imgur.com" target="_blank" style="color:var(--accent);">Imgur</a> and paste the link.</p>
+    <div class="img-block">
+      <input type="text" id="f-imgUrl" value="${esc(val)}" placeholder="https://... or pic/filename.jpg" class="input mono" style="margin-bottom:10px;">
+      <label class="file-pick">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Upload File
+        Upload file
         <input type="file" id="f-img-file" accept="image/*" style="display:none;">
       </label>
-      <span style="font-size:11px;color:#a1a1aa;">Converts to base64 automatically</span>
+      <img id="img-pre" src="${esc(val)}" alt="Preview" class="img-preview" style="display:${val ? 'block' : 'none'};" onerror="this.style.display='none'">
     </div>
-    <img id="img-pre" src="${esc(val)}" alt="Preview" style="display:${val?'block':'none'};margin-top:10px;max-width:200px;max-height:130px;object-fit:contain;border-radius:10px;border:1px solid #e4e4e7;" onerror="this.style.display='none'">
   </div>`;
 }
 
-function divider(label) {
-  return `<div class="section-divider">${label}</div>`;
+function sectionBreak(label) {
+  return `<div class="section-break">${label}</div>`;
 }
 
 function buildForm(type, p) {
-  switch(type) {
+  switch (type) {
     case 'project': {
-      const cats    = ['Production','Competition','Academic','Personal','Open Source'];
-      const colors  = ['emerald','violet','amber','sky','rose','orange','teal','blue'];
+      const cats = ['Production', 'Competition', 'Academic', 'Personal', 'Open Source'];
+      const colors = ['emerald', 'violet', 'amber', 'sky', 'rose', 'orange', 'teal', 'blue'];
       const selCats = p?.categories || [];
       return `
-        ${divider('Basic Info')}
-        ${field('f-title','Title',p?.title||'',{required:true,placeholder:'e.g. Smart Flema Dashboard'})}
-        <div class="f-group">
-          <label class="f-label" for="f-slug">Slug <span style="color:#f87171">*</span></label>
-          <p class="f-hint">URL path — auto-generated from title. Must be unique (e.g. <code>smart-flema</code>).</p>
-          <input type="text" id="f-slug" value="${esc(p?.slug||'')}" placeholder="my-project-name" class="f-input mono">
+        ${sectionBreak('Basic Info')}
+        ${field('f-title', 'Title', p?.title || '', { required: true, placeholder: 'e.g. Smart Flema Dashboard' })}
+        <div class="field">
+          <label class="label label-req" for="f-slug">Slug</label>
+          <p class="hint">URL path — auto-generated from title. Must be unique (e.g. <code>smart-flema</code>).</p>
+          <input type="text" id="f-slug" value="${esc(p?.slug || '')}" placeholder="my-project-name" class="input mono">
         </div>
-        <div class="f-group">
-          <label class="f-label">Categories</label>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
-            ${cats.map(c=>`<label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;color:#3f3f46;user-select:none;">
-              <input type="checkbox" class="cat-chk" value="${c}" ${selCats.includes(c)?'checked':''} style="accent-color:#18181b;width:14px;height:14px;cursor:pointer;"> ${c}
+        <div class="field">
+          <label class="label">Categories</label>
+          <div class="checkbox-group">
+            ${cats.map(c => `<label class="chk">
+              <input type="checkbox" class="cat-chk" value="${c}" ${selCats.includes(c) ? 'checked' : ''}>${c}
             </label>`).join('')}
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          ${select('f-color','Accent Color',p?.color||'emerald',colors)}
-          ${field('f-role','Role',p?.role||'',{required:true,placeholder:'Lead Developer · PM'})}
+        <div class="grid-2">
+          ${select('f-color', 'Accent Color', p?.color || 'emerald', colors)}
+          ${field('f-role', 'Role', p?.role || '', { required: true, placeholder: 'Lead Developer · PM' })}
         </div>
 
-        ${divider('Media')}
-        ${imgField(p?.image_url||'')}
+        ${sectionBreak('Media')}
+        ${imgField(p?.image_url || '')}
 
-        ${divider('Content')}
-        ${field('f-shortDesc','Short Description',p?.short_description||'',{required:true,placeholder:'One-line summary shown on project cards'})}
-        ${field('f-fullDesc','Full Description',p?.full_description||'',{rows:5,placeholder:'Tell the full story. Separate paragraphs with a blank line.'})}
+        ${sectionBreak('Content')}
+        ${field('f-shortDesc', 'Short Description', p?.short_description || '', { required: true, placeholder: 'One-line summary shown on project cards' })}
+        ${field('f-fullDesc', 'Full Description', p?.full_description || '', { rows: 5, placeholder: 'Tell the full story. Separate paragraphs with a blank line.' })}
 
-        ${divider('Case Study')}
-        ${field('f-problem','The Problem',p?.problem_solved||'',{rows:2,placeholder:'What real problem does this solve?'})}
-        ${field('f-learnings','Key Learnings',( p?.key_learnings||[]).join('\n'),{rows:3,hint:'One learning per line.',placeholder:'Learning 1\nLearning 2',mono:true})}
-        ${field('f-result','Result / Outcome',p?.result||'',{rows:2,placeholder:'What happened? Any metrics or awards?'})}
+        ${sectionBreak('Case Study')}
+        ${field('f-problem', 'The Problem', p?.problem_solved || '', { rows: 2, placeholder: 'What real problem does this solve?' })}
+        ${field('f-learnings', 'Key Learnings', (p?.key_learnings || []).join('\n'), { rows: 3, hint: 'One learning per line.', placeholder: 'Learning 1\nLearning 2', mono: true })}
+        ${field('f-result', 'Result / Outcome', p?.result || '', { rows: 2, placeholder: 'What happened? Any metrics or awards?' })}
 
-        ${divider('Details')}
-        ${field('f-context','Context',p?.context||'',{placeholder:'e.g. Hylife Hackathon 2025 — CAMT CMU'})}
-        ${field('f-tech','Tech Stack',(p?.tech_stack||[]).join(', '),{placeholder:'JavaScript, React, Tailwind, Python — comma separated'})}
+        ${sectionBreak('Details')}
+        ${field('f-context', 'Context', p?.context || '', { placeholder: 'e.g. Hylife Hackathon 2025 — CAMT CMU' })}
+        ${field('f-tech', 'Tech Stack', (p?.tech_stack || []).join(', '), { placeholder: 'JavaScript, React, Tailwind, Python — comma separated' })}
 
-        ${divider('Links')}
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-          ${field('f-github','GitHub URL',p?.github_url||'',{type:'url',placeholder:'https://github.com/...'})}
-          ${field('f-live','Live URL',p?.live_url||'',{type:'url',placeholder:'https://...'})}
-          ${field('f-canva','Presentation',p?.canva_url||'',{type:'url',placeholder:'https://canva.link/...'})}
+        ${sectionBreak('Links')}
+        <div class="grid-3">
+          ${field('f-github', 'GitHub URL', p?.github_url || '', { type: 'url', placeholder: 'https://github.com/...' })}
+          ${field('f-live', 'Live URL', p?.live_url || '', { type: 'url', placeholder: 'https://...' })}
+          ${field('f-canva', 'Presentation', p?.canva_url || '', { type: 'url', placeholder: 'https://canva.link/...' })}
         </div>`;
     }
     case 'activity': return `
-      ${divider('Info')}
-      ${field('f-actName','Activity / Organization Name',p?.activity_name||'',{required:true})}
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        ${field('f-role','Role',p?.role||'',{required:true,placeholder:'Developer · Demo Presenter'})}
-        ${field('f-period','Period',p?.period||'',{placeholder:'2025 or Academic Year 2025'})}
+      ${sectionBreak('Info')}
+      ${field('f-actName', 'Activity / Organization Name', p?.activity_name || '', { required: true })}
+      <div class="grid-2">
+        ${field('f-role', 'Role', p?.role || '', { required: true, placeholder: 'Developer · Demo Presenter' })}
+        ${field('f-period', 'Period', p?.period || '', { placeholder: '2025 or Academic Year 2025' })}
       </div>
-      ${field('f-desc','Description',p?.description||'',{rows:3,placeholder:'What did you do? What did you learn?'})}
-      ${divider('Media')}
-      ${imgField(p?.image_url||'')}
-      ${divider('Skills')}
-      ${field('f-skills','Soft Skills',(p?.soft_skills||[]).join(', '),{placeholder:'Teamwork, Communication, Problem-solving'})}`;
+      ${field('f-desc', 'Description', p?.description || '', { rows: 3, placeholder: 'What did you do? What did you learn?' })}
+      ${sectionBreak('Media')}
+      ${imgField(p?.image_url || '')}
+      ${sectionBreak('Skills')}
+      ${field('f-skills', 'Soft Skills', (p?.soft_skills || []).join(', '), { placeholder: 'Teamwork, Communication, Problem-solving' })}`;
 
     case 'certificate': {
-      const types = ['Certification','Workshop/Seminar','Hackathon','Competition','Competition/Workshop','Camp','Course'];
+      const types = ['Certification', 'Workshop/Seminar', 'Hackathon', 'Competition', 'Competition/Workshop', 'Camp', 'Course'];
       return `
-        ${divider('Details')}
-        ${select('f-certType','Type',p?.type||'Certification',types)}
-        ${field('f-title','Title',p?.title||'',{required:true})}
-        ${field('f-inst','Institution / Issuer',p?.institution||'',{required:true})}
-        ${field('f-date','Date Issued',p?.date_issued||'',{type:'date',required:true})}
-        ${divider('Media')}
-        ${imgField(p?.image_url||'')}
-        ${divider('Verification')}
-        ${field('f-credUrl','Credential URL',p?.credential_url||'',{type:'url',placeholder:'https://credential.link/...'})}`;
+        ${sectionBreak('Details')}
+        ${select('f-certType', 'Type', p?.type || 'Certification', types)}
+        ${field('f-title', 'Title', p?.title || '', { required: true })}
+        ${field('f-inst', 'Institution / Issuer', p?.institution || '', { required: true })}
+        ${field('f-date', 'Date Issued', p?.date_issued || '', { type: 'date', required: true })}
+        ${sectionBreak('Media')}
+        ${imgField(p?.image_url || '')}
+        ${sectionBreak('Verification')}
+        ${field('f-credUrl', 'Credential URL', p?.credential_url || '', { type: 'url', placeholder: 'https://credential.link/...' })}`;
     }
     case 'award': {
-      const cats = ['Competition','Honor/Scholarship','Recognition'];
+      const cats = ['Competition', 'Honor/Scholarship', 'Recognition'];
       return `
-        ${divider('Details')}
-        ${select('f-cat','Category',p?.category||'Competition',cats)}
-        ${field('f-title','Title',p?.title||'',{required:true,placeholder:'e.g. Gold Medalist: C Programming'})}
-        ${field('f-org','Organization',p?.organization||'',{required:true})}
-        ${field('f-date','Date',p?.date||'',{type:'date',required:true})}
-        ${divider('Description')}
-        ${field('f-desc','Description',p?.description||'',{rows:2,placeholder:'Brief context about this award'})}`;
+        ${sectionBreak('Details')}
+        ${select('f-cat', 'Category', p?.category || 'Competition', cats)}
+        ${field('f-title', 'Title', p?.title || '', { required: true, placeholder: 'e.g. Gold Medalist: C Programming' })}
+        ${field('f-org', 'Organization', p?.organization || '', { required: true })}
+        ${field('f-date', 'Date', p?.date || '', { type: 'date', required: true })}
+        ${sectionBreak('Description')}
+        ${field('f-desc', 'Description', p?.description || '', { rows: 2, placeholder: 'Brief context about this award' })}`;
     }
   }
 }
@@ -627,6 +961,7 @@ function buildForm(type, p) {
 // ─── SAVE ───
 async function saveItem() {
   const btn = document.getElementById('save-btn');
+  const orig = btn.textContent;
   btn.textContent = 'Saving…'; btn.disabled = true;
   setDB('saving');
 
@@ -640,19 +975,19 @@ async function saveItem() {
       if (!slug || !title || !role || !sd) throw new Error('Title, Slug, Role, and Short Description are required.');
       payload = {
         slug, title, role,
-        categories:      [...document.querySelectorAll('.cat-chk:checked')].map(c=>c.value),
-        color:           gv('f-color') || 'emerald',
-        image_url:       gv('f-imgUrl') || null,
+        categories: [...document.querySelectorAll('.cat-chk:checked')].map(c => c.value),
+        color: gv('f-color') || 'emerald',
+        image_url: gv('f-imgUrl') || null,
         short_description: sd,
-        full_description:  gv('f-fullDesc') || null,
-        problem_solved:    gv('f-problem') || null,
-        key_learnings:     gv('f-learnings').split('\n').map(s=>s.trim()).filter(Boolean),
-        tech_stack:        gv('f-tech').split(',').map(s=>s.trim()).filter(Boolean),
-        context:           gv('f-context') || null,
-        result:            gv('f-result') || null,
-        github_url:        gv('f-github') || null,
-        live_url:          gv('f-live') || null,
-        canva_url:         gv('f-canva') || null,
+        full_description: gv('f-fullDesc') || null,
+        problem_solved: gv('f-problem') || null,
+        key_learnings: gv('f-learnings').split('\n').map(s => s.trim()).filter(Boolean),
+        tech_stack: gv('f-tech').split(',').map(s => s.trim()).filter(Boolean),
+        context: gv('f-context') || null,
+        result: gv('f-result') || null,
+        github_url: gv('f-github') || null,
+        live_url: gv('f-live') || null,
+        canva_url: gv('f-canva') || null,
       };
     } else if (type === 'activity') {
       table = 'activities';
@@ -660,19 +995,19 @@ async function saveItem() {
       if (!activity_name || !role) throw new Error('Activity name and role are required.');
       payload = {
         activity_name, role,
-        period:      gv('f-period') || null,
+        period: gv('f-period') || null,
         description: gv('f-desc') || null,
-        image_url:   gv('f-imgUrl') || null,
-        soft_skills: gv('f-skills').split(',').map(s=>s.trim()).filter(Boolean),
+        image_url: gv('f-imgUrl') || null,
+        soft_skills: gv('f-skills').split(',').map(s => s.trim()).filter(Boolean),
       };
     } else if (type === 'certificate') {
       table = 'certificates';
       const title = gv('f-title'), institution = gv('f-inst'), date_issued = gv('f-date');
       if (!title || !institution || !date_issued) throw new Error('Title, institution, and date are required.');
       payload = {
-        type:           gv('f-certType') || 'Certification',
+        type: gv('f-certType') || 'Certification',
         title, institution, date_issued,
-        image_url:      gv('f-imgUrl') || null,
+        image_url: gv('f-imgUrl') || null,
         credential_url: gv('f-credUrl') || null,
       };
     } else if (type === 'award') {
@@ -680,7 +1015,7 @@ async function saveItem() {
       const title = gv('f-title'), organization = gv('f-org'), date = gv('f-date');
       if (!title || !organization || !date) throw new Error('Title, organization, and date are required.');
       payload = {
-        category:    gv('f-cat') || 'Competition',
+        category: gv('f-cat') || 'Competition',
         title, organization, date,
         description: gv('f-desc') || null,
       };
@@ -688,9 +1023,9 @@ async function saveItem() {
 
     let res;
     if (editingId) {
-      res = await fetch(`${SB}/${table}?id=eq.${editingId}`, { method:'PATCH', headers:WH, body:JSON.stringify(payload) });
+      res = await fetch(`${SB}/${table}?id=eq.${editingId}`, { method: 'PATCH', headers: WH, body: JSON.stringify(payload) });
     } else {
-      res = await fetch(`${SB}/${table}`, { method:'POST', headers:WH, body:JSON.stringify(payload) });
+      res = await fetch(`${SB}/${table}`, { method: 'POST', headers: WH, body: JSON.stringify(payload) });
     }
 
     if (!res.ok) {
@@ -700,35 +1035,35 @@ async function saveItem() {
       throw new Error(msg);
     }
 
-    toast(`${cap(type)} ${editingId ? 'updated' : 'added'} successfully!`, 'ok');
+    toast(`${type.charAt(0).toUpperCase() + type.slice(1)} ${editingId ? 'updated' : 'created'} successfully.`, 'ok');
     closeModal();
     await loadAllCounts();
     await loadTab(currentTab);
     setDB('ok');
-  } catch(e) {
+  } catch (e) {
     toast(e.message, 'err');
     setDB('error');
   } finally {
-    btn.textContent = 'Save Changes'; btn.disabled = false;
+    btn.textContent = orig; btn.disabled = false;
   }
 }
 
 // ─── DELETE ───
 function confirmDel(tab, id) {
-  const delModal = document.getElementById('del-modal');
-  delModal.style.display = 'flex';
+  const del = document.getElementById('del-modal');
+  del.classList.add('show');
   document.getElementById('del-confirm').onclick = async () => {
-    delModal.style.display = 'none';
+    del.classList.remove('show');
     setDB('saving');
     try {
-      const table = TABLES[{ projects:'project', activities:'activity', certificates:'certificate', awards:'award' }[tab]];
-      const res = await fetch(`${SB}/${table}?id=eq.${id}`, { method:'DELETE', headers:WH });
+      const table = TABLES[TYPE_OF[tab]];
+      const res = await fetch(`${SB}/${table}?id=eq.${id}`, { method: 'DELETE', headers: WH });
       if (!res.ok) throw new Error(await res.text());
       toast('Item deleted.', 'ok');
       await loadAllCounts();
       await loadTab(currentTab);
       setDB('ok');
-    } catch(e) {
+    } catch (e) {
       toast(`Delete failed: ${e.message}`, 'err');
       setDB('error');
     }
@@ -737,24 +1072,23 @@ function confirmDel(tab, id) {
 
 // ─── TOAST ───
 let _toastT;
-function toast(msg, state='ok') {
+function toast(msg, state = 'ok') {
   const icons = {
     ok: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
-    err:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+    err: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
   };
   document.getElementById('toast-icon').innerHTML = icons[state] || '';
   document.getElementById('toast-msg').textContent = msg;
   const el = document.getElementById('toast');
-  el.style.display = 'block';
+  el.classList.add('show');
   clearTimeout(_toastT);
-  _toastT = setTimeout(() => { el.style.display = 'none'; }, 5000);
+  _toastT = setTimeout(() => el.classList.remove('show'), 4500);
 }
 
 // ─── UTILS ───
 function gv(id) { return (document.getElementById(id)?.value || '').trim(); }
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-function fmt(d) { return d ? new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '—'; }
+function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function fmt(d) { return d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : '—'; }
 </script>
 </body>
 </html>
