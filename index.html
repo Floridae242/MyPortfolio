@@ -5,38 +5,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Naruephon Yotmao — Developer Portfolio</title>
-  <meta name="description"
-    content="Portfolio of Naruephon Yotmao, a software engineering student at Chiang Mai University specializing in C, C++, Java, and JavaScript.">
+  <meta name="description" content="Portfolio of Naruephon Yotmao (Tle) — Digital Industry student at CAMT CMU. Building real projects with AI, IoT, and web technologies.">
 
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="tailwind.config.js"></script>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
-
-  <!-- Devicon for SKills -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-
-  <!-- Custom Styles -->
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    section[id] { scroll-margin-top: 64px; }
+    .project-card { border-left: 3px solid transparent; }
+    .project-card:hover { border-left-color: var(--card-accent); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .pulse-dot { animation: blink 2.4s ease-in-out infinite; }
+    #site-nav { transition: box-shadow .2s; }
+    #site-nav.scrolled { box-shadow: 0 1px 12px rgba(0,0,0,0.06); }
+  </style>
 </head>
 
 <body>
-  <!-- Banner -->
+
+  <!-- ── Sticky Nav ── -->
+  <nav id="site-nav" class="sticky top-0 z-50 bg-zinc-50/95 backdrop-blur-md border-b border-zinc-200/70">
+    <div class="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
+      <a href="index.html" class="font-mono text-sm font-semibold text-zinc-800 hover:text-accent transition-colors tracking-tight">
+        tle.dev
+      </a>
+      <div class="hidden sm:flex items-center gap-6 text-sm font-medium text-zinc-500">
+        <a href="#github-stats" class="hover:text-zinc-900 transition-colors">Activity</a>
+        <a href="#experience" class="hover:text-zinc-900 transition-colors">Projects</a>
+        <a href="#awards" class="hover:text-zinc-900 transition-colors">Awards</a>
+        <a href="#contact" class="hover:text-zinc-900 transition-colors">Contact</a>
+      </div>
+      <a href="mailto:naruephonyotmao@gmail.com"
+        class="text-xs font-semibold px-3.5 py-2 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">
+        Hire Me
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Banner ── -->
   <header class="relative">
     <img src="pic/IMG_3880 3.jpg" alt="Banner" class="h-44 sm:h-52 w-full object-cover object-center">
-
-    <!-- Avatar -->
     <div class="max-w-3xl mx-auto px-6 relative">
       <div class="absolute -top-14 sm:-top-16">
-        <div
-          class="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-accent flex items-center justify-center text-white text-4xl sm:text-5xl font-bold ring-4 ring-zinc-50 shadow-lg select-none">
-          <img src="pic/IMG_4219.JPG" alt="Naruephon Yotmao" class="w-full h-full rounded-full object-cover">
+        <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full ring-4 ring-zinc-50 shadow-lg overflow-hidden">
+          <img src="pic/IMG_4219.JPG" alt="Naruephon Yotmao" class="w-full h-full object-cover">
         </div>
       </div>
     </div>
@@ -44,11 +62,18 @@
 
   <main class="max-w-3xl mx-auto px-6">
 
-    <!-- Profile Info -->
-    <section class="pt-20 sm:pt-22 pb-8" id="about">
+    <!-- ── About ── -->
+    <section class="pt-20 sm:pt-22 pb-14" id="about">
+
+      <!-- Availability badge -->
+      <div class="inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/80 rounded-full px-3 py-1.5 mb-4 select-none">
+        <span class="pulse-dot w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
+        Open to Internship Opportunities
+      </div>
+
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Naruephon Yotmao</h1>
-      <p class="text-zinc-600 font-mono tracking-tight text-sm mt-1 font-medium">@tle · Digital Industry Integration ·
-        CMU</p>
+      <p class="text-zinc-500 font-mono tracking-tight text-sm mt-1 font-medium">@tle · Digital Industry Integration · CMU</p>
+
       <p class="mt-4 text-base leading-relaxed text-zinc-700 max-w-prose">
         I'm Tle — a first-year student at the College of Arts, Media and Technology, Chiang Mai University.
         When I focus on something, I go deep. Whether it's building a city management dashboard for
@@ -61,515 +86,462 @@
         learns fast, and ships working code while figuring out the rest along the way.
       </p>
 
-      <!-- Authentic Terminal Snippet -->
-      <div
-        class="mt-6 font-mono text-[13px] bg-zinc-900 text-zinc-100 rounded-lg p-4 max-w-lg border border-zinc-700/50 shadow-inner">
+      <!-- Terminal snippet -->
+      <div class="mt-6 font-mono text-[13px] bg-zinc-900 text-zinc-100 rounded-xl p-4 max-w-lg border border-zinc-700/30 shadow-inner select-none">
         <div class="flex gap-1.5 mb-3">
-          <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
-          <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-red-400/80"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-green-400/80"></div>
         </div>
-        <p><span class="text-emerald-400">import</span> { loadPortfolio, connectValues } <span
-            class="text-emerald-400">from</span> <span class="text-yellow-200">'@core/mindset'</span>;</p>
-        <p class="mt-2"><span class="text-blue-300">async function</span> <span class="text-yellow-100">init</span>() {
-        </p>
-        <p class="pl-4"><span class="text-blue-300">await</span> <span
-            class="text-yellow-100">connectValues</span>([<span class="text-yellow-200">'focus'</span>, <span
-            class="text-yellow-200">'curiosity'</span>, <span class="text-yellow-200">'ship-it'</span>]);</p>
-        <p class="pl-4"><span class="text-blue-300">return</span> <span class="text-yellow-100">loadPortfolio</span>();
-        </p>
+        <p><span class="text-emerald-400">import</span> { loadPortfolio, connectValues } <span class="text-emerald-400">from</span> <span class="text-amber-200">'@core/mindset'</span>;</p>
+        <p class="mt-2"><span class="text-sky-300">async function</span> <span class="text-amber-100">init</span>() {</p>
+        <p class="pl-4"><span class="text-sky-300">await</span> <span class="text-amber-100">connectValues</span>([<span class="text-amber-200">'focus'</span>, <span class="text-amber-200">'curiosity'</span>, <span class="text-amber-200">'ship-it'</span>]);</p>
+        <p class="pl-4"><span class="text-sky-300">return</span> <span class="text-amber-100">loadPortfolio</span>();</p>
         <p>}</p>
       </div>
     </section>
 
-    <hr class="border-zinc-200">
+    <hr class="border-zinc-100">
 
-    <!-- Skills -->
-    <section class="py-20 md:py-24" id="skills">
-      <h2 class="text-xl font-bold text-zinc-900 mb-3">Core Competencies</h2>
-      <p class="text-sm text-zinc-600 max-w-prose mb-5">Functional expertise focused on building functional, highly
-        integrated environments rather than generic framework juggling.</p>
-      <div class="flex flex-wrap gap-2.5">
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-c-plain text-[#A8B9CC]"></i> C
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-cplusplus-plain text-[#00599C]"></i> C++
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-java-plain text-[#5382a1]"></i> Java
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-javascript-plain text-[#F7DF1E]"></i> JavaScript
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-html5-plain text-[#E34F26]"></i> HTML / CSS
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-tailwindcss-original text-[#38B2AC]"></i> Tailwind CSS
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-react-original text-[#61DAFB]"></i> React
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-nodejs-plain text-[#339933]"></i> Node.js
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-arduino-plain text-[#00979D]"></i> Arduino / PlatformIO
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-embeddedc-plain text-[#12314F][#EAEAEA]"></i> ESP32
-        </span>
-        <span
-          class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 cursor-default">
-          <i class="devicon-git-plain text-[#F05032]"></i> Git/GitHub
-        </span>
+    <!-- ── Skills ── -->
+    <section class="py-14" id="skills">
+      <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Core Competencies</h2>
+      <p class="text-sm text-zinc-500 max-w-prose mb-5">Languages and tools I use across production, research, and competition work.</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-c-plain text-[#A8B9CC]"></i> C</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-cplusplus-plain text-[#00599C]"></i> C++</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-java-plain text-[#5382a1]"></i> Java</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-javascript-plain text-[#F7DF1E]"></i> JavaScript</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-html5-plain text-[#E34F26]"></i> HTML / CSS</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-tailwindcss-original text-[#38B2AC]"></i> Tailwind CSS</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-react-original text-[#61DAFB]"></i> React</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-nodejs-plain text-[#339933]"></i> Node.js</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-arduino-plain text-[#00979D]"></i> Arduino / PlatformIO</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-embeddedc-plain"></i> ESP32</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-git-plain text-[#F05032]"></i> Git / GitHub</span>
+        <span class="skill-tag flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-700 border border-zinc-200 shadow-sm"><i class="devicon-firebase-plain text-[#FFCA28]"></i> Firebase</span>
       </div>
     </section>
 
-    <hr class="border-zinc-200">
+    <hr class="border-zinc-100">
 
-    <!-- GitHub Activity -->
-    <section class="py-20 md:py-24" id="github-stats">
-      <div class="flex items-baseline justify-between mb-2">
+    <!-- ── GitHub Activity ── -->
+    <section class="py-14" id="github-stats">
+      <div class="flex items-baseline justify-between mb-1.5">
         <h2 class="text-xl font-bold text-zinc-900">GitHub Activity</h2>
         <a href="https://github.com/Floridae242" target="_blank" rel="noopener noreferrer"
           class="text-sm text-accent hover:opacity-70 font-medium inline-flex items-center gap-1.5">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
           Floridae242
         </a>
       </div>
-      <p class="text-sm text-zinc-600 max-w-prose mb-8">
-        Code tells a clearer story than skill bars. Here's the actual activity.
-      </p>
+      <p class="text-sm text-zinc-500 max-w-prose mb-7">Code tells a clearer story than skill bars. Here's the actual activity.</p>
 
       <!-- Quick Stats -->
-      <div class="grid grid-cols-3 gap-3 mb-5">
-        <div class="rounded-xl border border-zinc-200 bg-white p-4 text-center">
+      <div class="grid grid-cols-3 gap-3 mb-4">
+        <div class="rounded-xl border border-zinc-200 bg-white p-4 text-center shadow-sm">
           <p class="text-2xl font-bold text-zinc-900 font-mono" id="stat-repos">—</p>
           <p class="text-xs text-zinc-500 mt-1">Public Repos</p>
         </div>
-        <div class="rounded-xl border border-zinc-200 bg-white p-4 text-center">
+        <div class="rounded-xl border border-zinc-200 bg-white p-4 text-center shadow-sm">
           <p class="text-2xl font-bold text-zinc-900 font-mono" id="stat-stars">—</p>
           <p class="text-xs text-zinc-500 mt-1">Total Stars</p>
         </div>
-        <div class="rounded-xl border border-zinc-200 bg-white p-4 text-center">
+        <div class="rounded-xl border border-zinc-200 bg-white p-4 text-center shadow-sm">
           <p class="text-2xl font-bold text-zinc-900 font-mono" id="stat-langs">—</p>
           <p class="text-xs text-zinc-500 mt-1">Languages</p>
         </div>
       </div>
 
-      <!-- Contribution Activity Graph -->
-      <div class="rounded-xl border border-zinc-200 overflow-hidden bg-white mb-4">
-        <div class="px-5 pt-5 pb-3 border-b border-zinc-100">
-          <p class="text-xs font-semibold text-zinc-500 tracking-widest uppercase">Contribution Activity</p>
+      <!-- Contribution Graph -->
+      <div class="rounded-xl border border-zinc-200 overflow-hidden bg-white mb-4 shadow-sm">
+        <div class="px-5 pt-4 pb-3 border-b border-zinc-100">
+          <p class="text-[11px] font-semibold text-zinc-400 tracking-widest uppercase">Contribution Activity</p>
         </div>
         <div class="p-3">
           <img
             src="https://github-readme-activity-graph.vercel.app/graph?username=Floridae242&bg_color=ffffff&color=71717a&line=059669&point=059669&area=true&area_color=059669&hide_border=true&custom_title=&height=200"
             alt="GitHub contribution activity graph for Floridae242"
-            class="w-full rounded-lg"
-            loading="lazy"
-            id="contribution-graph"
+            class="w-full rounded-lg" loading="lazy"
             onerror="this.closest('.rounded-xl').style.display='none'">
         </div>
       </div>
 
       <!-- Most Used Languages -->
-      <div class="rounded-xl border border-zinc-200 bg-white p-5">
-        <p class="text-xs font-semibold text-zinc-500 tracking-widest uppercase mb-4">Most Used Languages</p>
+      <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
+        <p class="text-[11px] font-semibold text-zinc-400 tracking-widest uppercase mb-4">Most Used Languages</p>
         <div class="flex flex-wrap gap-2" id="top-languages">
           <span class="text-xs text-zinc-400 italic">Loading…</span>
         </div>
       </div>
     </section>
 
-    <hr class="border-zinc-200">
+    <hr class="border-zinc-100">
 
-    <!-- Professional Experience -->
-    <section class="py-20 md:py-24" id="experience">
-      <h2 class="text-xl font-bold text-zinc-900 mb-3">Professional Experience</h2>
+    <!-- ── Professional Experience ── -->
+    <section class="py-14" id="experience">
+      <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Professional Experience</h2>
+      <p class="text-sm text-zinc-500 max-w-prose mb-5">Production work, competitions, and academic projects — each with a full case study.</p>
 
       <!-- Filters -->
-      <div class="flex flex-wrap gap-2 mb-5" id="project-filters">
-        <button
-          class="filter-btn active skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-800 text-white border border-zinc-800 transition-colors"
-          data-filter="All">All</button>
-        <button
-          class="filter-btn skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 hover:bg-stone-200 transition-colors"
-          data-filter="Production">Production</button>
-        <button
-          class="filter-btn skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 hover:bg-stone-200 transition-colors"
-          data-filter="Competition">Competition</button>
-        <button
-          class="filter-btn skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 hover:bg-stone-200 transition-colors"
-          data-filter="Academic">Academic</button>
-        <button
-          class="filter-btn skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 hover:bg-stone-200 transition-colors"
-          data-filter="Personal">Personal</button>
-        <button
-          class="filter-btn skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 hover:bg-stone-200 transition-colors"
-          data-filter="Open Source">Open Source</button>
+      <div class="flex flex-wrap gap-2 mb-6" id="project-filters">
+        <button class="filter-btn active px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-900 text-white border border-zinc-900 transition-all" data-filter="All">All</button>
+        <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-600 border border-zinc-200 hover:border-zinc-300 transition-all" data-filter="Production">Production</button>
+        <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-600 border border-zinc-200 hover:border-zinc-300 transition-all" data-filter="Competition">Competition</button>
+        <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-600 border border-zinc-200 hover:border-zinc-300 transition-all" data-filter="Academic">Academic</button>
+        <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-600 border border-zinc-200 hover:border-zinc-300 transition-all" data-filter="Personal">Personal</button>
+        <button class="filter-btn px-3 py-1.5 text-sm font-medium rounded-full bg-white text-zinc-600 border border-zinc-200 hover:border-zinc-300 transition-all" data-filter="Open Source">Open Source</button>
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2" id="projects-grid">
-        <!-- Rendered by JavaScript -->
+        <!-- Rendered by JS -->
       </div>
     </section>
 
-    <hr class="border-zinc-200">
+    <hr class="border-zinc-100">
 
-    <!-- Leadership, Volunteer & Part-time -->
-    <section class="py-20 md:py-24" id="leadership">
-      <h2 class="text-xl font-bold text-zinc-900 mb-5">Leadership & Extracurriculars</h2>
-      <div class="space-y-6" id="activities-list">
-        <!-- Rendered by JavaScript -->
+    <!-- ── Leadership ── -->
+    <section class="py-14" id="leadership">
+      <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Leadership & Extracurriculars</h2>
+      <p class="text-sm text-zinc-500 max-w-prose mb-6">Clubs, teaching roles, and team contributions outside the classroom.</p>
+      <div class="space-y-5" id="activities-list">
+        <!-- Rendered by JS -->
       </div>
     </section>
 
-    <hr class="border-zinc-200">
+    <hr class="border-zinc-100">
 
-    <!-- Awards & Achievements -->
-    <section class="py-20 md:py-24" id="awards">
-      <h2 class="text-xl font-bold text-zinc-900 mb-5">Awards & Achievements</h2>
+    <!-- ── Awards ── -->
+    <section class="py-14" id="awards">
+      <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Awards & Achievements</h2>
+      <p class="text-sm text-zinc-500 max-w-prose mb-6">Competition results and notable recognitions.</p>
       <div class="space-y-5" id="awards-list">
-        <!-- Rendered by JavaScript -->
+        <!-- Rendered by JS -->
       </div>
     </section>
 
-    <hr class="border-zinc-200">
+    <hr class="border-zinc-100">
 
-    <!-- Self-Development -->
-    <section class="py-20 md:py-24" id="self-development">
-      <h2 class="text-xl font-bold text-zinc-900 mb-5">Self-Development</h2>
-      <div class="space-y-3" id="self-development-list">
-        <!-- Rendered by JavaScript -->
+    <!-- ── Self-Development ── -->
+    <section class="py-14" id="self-development">
+      <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Self-Development</h2>
+      <p class="text-sm text-zinc-500 max-w-prose mb-6">Certifications, workshops, camps, and competitions that shaped my thinking.</p>
+      <div class="space-y-2" id="self-development-list">
+        <!-- Rendered by JS -->
       </div>
     </section>
 
-    <hr class="border-zinc-200">
+    <hr class="border-zinc-100">
 
-    <!-- Education -->
-    <section class="py-20 md:py-24" id="education">
-      <h2 class="text-xl font-bold text-zinc-900 mb-4">Education</h2>
-      <div class="space-y-4">
-        <div>
-          <p class="text-sm font-semibold">Chiang Mai University</p>
-          <p class="text-sm text-zinc-600">B.Sc. in Digital Industry Integration — College of Arts, Media and
-            Technology</p>
-          <p class="text-xs text-zinc-600 font-mono tracking-tight mt-0.5">Present (started 2025)</p>
+    <!-- ── Education ── -->
+    <section class="py-14" id="education">
+      <h2 class="text-xl font-bold text-zinc-900 mb-5">Education</h2>
+      <div class="space-y-5">
+        <div class="flex gap-4">
+          <div class="flex flex-col items-center pt-1 flex-shrink-0">
+            <div class="w-2 h-2 rounded-full bg-accent"></div>
+            <div class="w-px flex-1 bg-zinc-200 mt-1.5"></div>
+          </div>
+          <div class="pb-4">
+            <p class="text-sm font-semibold text-zinc-900">Chiang Mai University</p>
+            <p class="text-sm text-zinc-600">B.Sc. in Digital Industry Integration — College of Arts, Media and Technology</p>
+            <p class="text-xs text-zinc-400 font-mono tracking-tight mt-0.5">2025 — Present</p>
+          </div>
         </div>
-        <div>
-          <p class="text-sm font-semibold">Thung Saliam Chanupatham School</p>
-          <p class="text-sm text-zinc-600">Engineering Preparation Program — Sukhothai, Thailand</p>
-          <p class="text-xs text-zinc-600 font-mono tracking-tight mt-0.5">Graduated 2025</p>
+        <div class="flex gap-4">
+          <div class="flex flex-col items-center pt-1 flex-shrink-0">
+            <div class="w-2 h-2 rounded-full bg-zinc-300"></div>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-zinc-900">Thung Saliam Chanupatham School</p>
+            <p class="text-sm text-zinc-600">Engineering Preparation Program — Sukhothai, Thailand</p>
+            <p class="text-xs text-zinc-400 font-mono tracking-tight mt-0.5">Graduated 2025</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <hr class="border-zinc-200">
+    <hr class="border-zinc-100">
 
-    <!-- Contact -->
-    <section class="py-20 md:py-24 pb-16" id="contact">
-      <h2 class="text-xl font-bold text-zinc-900 mb-4">Contact</h2>
-      <div class="space-y-2">
-        <p class="text-sm text-zinc-700">
-          <span class="text-zinc-600 font-mono tracking-tight mr-2">Email</span>
-          <a href="mailto:naruephonyotmao@gmail.com"
-            class="text-accent hover:opacity-70 underline underline-offset-2">naruephonyotmao@gmail.com</a>
-        </p>
-        <p class="text-sm text-zinc-700">
-          <span class="text-zinc-600 font-mono tracking-tight mr-2">GitHub</span>
-          <a href="https://github.com/Floridae242" target="_blank" rel="noopener noreferrer"
-            class="text-accent hover:opacity-70 underline underline-offset-2">github.com/Floridae242</a>
-        </p>
-        <p class="text-sm text-zinc-700">
-          <span class="text-zinc-600 font-mono tracking-tight mr-2">Phone</span>
-          <a href="tel:+660801066891" class="text-accent hover:opacity-70 underline underline-offset-2">+66
-            080-106-6891</a>
-        </p>
+    <!-- ── Contact ── -->
+    <section class="py-14 pb-16" id="contact">
+      <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Let's Talk</h2>
+      <p class="text-sm text-zinc-500 max-w-prose mb-7">Open to internships, collaborations, or just a good conversation about building things. I reply fast.</p>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="mailto:naruephonyotmao@gmail.com"
+          class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-zinc-900 text-white rounded-xl text-sm font-semibold hover:bg-zinc-700 transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          naruephonyotmao@gmail.com
+        </a>
+        <a href="https://github.com/Floridae242" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white text-zinc-700 border border-zinc-200 rounded-xl text-sm font-semibold hover:bg-zinc-50 hover:border-zinc-300 transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          github.com/Floridae242
+        </a>
       </div>
+
+      <p class="text-sm text-zinc-500 mt-5">
+        <span class="font-mono text-zinc-400 text-xs mr-2">Phone</span>
+        <a href="tel:+660801066891" class="text-accent hover:opacity-70 transition-opacity">+66 080-106-6891</a>
+      </p>
     </section>
 
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-zinc-200 py-10 mt-10 text-center flex flex-col items-center justify-center gap-2">
-    <p class="text-sm font-mono tracking-tight text-zinc-700 opacity-90"><span class="italic font-sans">Crafted
-        by</span> Naruephon Yotmao</p>
-    <p class="text-xs text-zinc-600 font-mono tracking-tight opacity-75">Last Updated: April 2026</p>
+  <!-- ── Footer ── -->
+  <footer class="border-t border-zinc-100 py-10 mt-4">
+    <div class="max-w-3xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-center sm:text-left">
+        <p class="text-sm font-mono tracking-tight text-zinc-600"><span class="italic font-sans">Crafted by</span> Naruephon Yotmao</p>
+        <p class="text-xs text-zinc-400 font-mono mt-0.5">Last Updated: April 2026</p>
+      </div>
+      <div class="flex items-center gap-5 text-xs text-zinc-400">
+        <a href="admin.html" class="hover:text-zinc-600 transition-colors font-mono">Manage Content →</a>
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="hover:text-zinc-600 transition-colors font-mono">↑ Top</button>
+      </div>
+    </div>
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const SUPABASE_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
-      const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
-      const headers = { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}`, 'Accept': 'application/json' };
+  document.addEventListener('DOMContentLoaded', async () => {
 
-      let projectsData = [];
-      let activitiesData = [];
-      let awardsData = [];
-      let selfDevelopmentData = [];
-
-      try {
-        const [projRes, actRes, awdRes, certRes] = await Promise.all([
-          fetch(`${SUPABASE_URL}/projects?select=*&order=created_at.asc`, { headers }),
-          fetch(`${SUPABASE_URL}/activities?select=*&order=created_at.asc`, { headers }),
-          fetch(`${SUPABASE_URL}/awards?select=*&order=date.desc`, { headers }),
-          fetch(`${SUPABASE_URL}/certificates?select=*&order=date_issued.desc`, { headers })
-        ]);
-
-        if (projRes.ok) {
-          const data = await projRes.json();
-          projectsData = data.map(p => ({
-            ...p,
-            shortDescription: p.short_description,
-            techStack: p.tech_stack
-          }));
-        }
-        if (actRes.ok) {
-          const data = await actRes.json();
-          activitiesData = data.map(a => ({
-            ...a,
-            activityName: a.activity_name,
-            imageUrl: a.image_url,
-            softSkills: a.soft_skills
-          }));
-        }
-        if (awdRes.ok) {
-          awardsData = await awdRes.json();
-        }
-        if (certRes.ok) {
-          const data = await certRes.json();
-          selfDevelopmentData = data.map(c => ({
-            ...c,
-            date: c.date_issued,
-            imageUrl: c.image_url,
-            credentialUrl: c.credential_url
-          }));
-        }
-      } catch (error) {
-        console.error("Error fetching data from Supabase:", error);
-      }
-
-      // --- Professional Experience (Projects) ---
-      const projectsGrid = document.getElementById('projects-grid');
-      const filterBtns = document.querySelectorAll('.filter-btn');
-
-      function renderProjects(filterCategory = 'All') {
-        if (!projectsData || projectsData.length === 0) {
-          projectsGrid.innerHTML = '<p class="text-sm text-zinc-600 col-span-2">Loading projects...</p>';
-          return;
-        }
-
-        const filtered = projectsData.filter(p =>
-          filterCategory === 'All' || (p.categories && p.categories.includes(filterCategory))
-        );
-
-        if (filtered.length === 0) {
-          projectsGrid.innerHTML = '<p class="text-sm text-zinc-600 col-span-2">No projects found for this category.</p>';
-          return;
-        }
-
-        projectsGrid.innerHTML = filtered.map(p => `
-          <a href="project.html?slug=${p.slug}" class="group project-card flex flex-col h-full rounded-xl border border-zinc-200 bg-white p-5 shadow-sm focus:outline-2 focus:outline-accent transition-transform duration-200 hover:-translate-y-0.5" aria-label="View ${p.title} project details">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-${p.color}-400 inline-block flex-shrink-0"></span>
-              <h3 class="font-semibold text-lg text-zinc-900 group-hover:text-emerald-600 transition-colors">${p.title}</h3>
-            </div>
-            <p class="text-xs font-medium text-zinc-600 mb-2">Role: ${p.role}</p>
-            <p class="text-sm text-zinc-700 leading-relaxed mb-4 flex-grow">
-              ${p.shortDescription}
-            </p>
-            <div class="flex items-center justify-between mt-auto pt-4 border-t border-zinc-50">
-              <div class="flex flex-wrap gap-1.5">
-                ${(p.techStack || []).slice(0, 2).map(tech => `<span class="text-xs px-2 py-0.5 rounded bg-zinc-100 text-zinc-600">${tech}</span>`).join('')}
-                ${(p.techStack && p.techStack.length > 2) ? `<span class="text-xs px-1.5 py-0.5 rounded text-zinc-400">+${p.techStack.length - 2}</span>` : ''}
-              </div>
-              <span class="text-xs font-semibold text-zinc-500 flex items-center gap-1 group-hover:text-emerald-600 transition-colors">
-                View Details <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-              </span>
-            </div>
-          </a>
-        `).join('');
-      }
-
-      // Filter interactions
-      filterBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          // Remove active styles
-          filterBtns.forEach(b => {
-            b.classList.remove('active', 'bg-zinc-800', 'text-white', 'border-zinc-800');
-            b.classList.add('bg-zinc-100', 'text-zinc-700', 'border-zinc-200', 'hover:bg-stone-200');
-          });
-
-          // Set active styles
-          const target = e.target;
-          target.classList.add('active', 'bg-zinc-800', 'text-white', 'border-zinc-800');
-          target.classList.remove('bg-zinc-100', 'text-zinc-700', 'border-zinc-200', 'hover:bg-stone-200');
-
-          renderProjects(target.dataset.filter);
-        });
-      });
-
-      renderProjects('All'); // Initial load
-
-
-      // --- GitHub Stats ---
-      (async function loadGitHubStats() {
-        const username = 'Floridae242';
-        try {
-          const [userRes, reposRes] = await Promise.all([
-            fetch(`https://api.github.com/users/${username}`),
-            fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`)
-          ]);
-
-          if (userRes.ok) {
-            const user = await userRes.json();
-            const el = document.getElementById('stat-repos');
-            if (el) el.textContent = user.public_repos ?? '—';
-          }
-
-          if (reposRes.ok) {
-            const repos = await reposRes.json();
-
-            const starsEl = document.getElementById('stat-stars');
-            const langsCountEl = document.getElementById('stat-langs');
-            const topLangsEl = document.getElementById('top-languages');
-
-            const totalStars = repos.reduce((s, r) => s + (r.stargazers_count || 0), 0);
-            if (starsEl) starsEl.textContent = totalStars;
-
-            const langMap = {};
-            repos.forEach(r => {
-              if (r.language) langMap[r.language] = (langMap[r.language] || 0) + 1;
-            });
-            const sortedLangs = Object.entries(langMap).sort(([, a], [, b]) => b - a);
-
-            if (langsCountEl) langsCountEl.textContent = sortedLangs.length || '—';
-
-            if (topLangsEl && sortedLangs.length > 0) {
-              topLangsEl.innerHTML = sortedLangs.slice(0, 10).map(([lang, count]) =>
-                `<span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 font-medium">
-                  ${lang}<span class="text-zinc-400 font-normal">${count}</span>
-                </span>`
-              ).join('');
-            } else if (topLangsEl) {
-              topLangsEl.innerHTML = '<span class="text-xs text-zinc-400 italic">No data available.</span>';
-            }
-          }
-        } catch (e) {
-          console.warn('GitHub stats unavailable:', e);
-          ['stat-repos', 'stat-stars', 'stat-langs'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.textContent = '—';
-          });
-        }
-      })();
-
-
-      // --- Leadership, Volunteer & Part-time ---
-      const activitiesList = document.getElementById('activities-list');
-      if (activitiesList && activitiesData) {
-        if (activitiesData.length === 0) {
-          activitiesList.innerHTML = '<p class="text-sm text-zinc-500 italic">No activities added yet.</p>';
-        } else {
-          activitiesList.innerHTML = activitiesData.map(act => `
-            <div class="flex gap-4 items-start">
-              ${act.imageUrl
-              ? `<img src="${act.imageUrl}" class="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-zinc-200" alt="${act.activityName}">`
-              : `<div class="w-12 h-12 rounded-lg bg-zinc-100 flex items-center justify-center flex-shrink-0 border border-zinc-200"><span class="text-zinc-400 font-bold">${act.activityName.charAt(0)}</span></div>`
-            }
-              <div>
-                <p class="text-sm font-semibold">${act.activityName}</p>
-                <p class="text-xs text-zinc-600 font-mono tracking-tight">${act.role}${act.period ? ` · ${act.period}` : ''}</p>
-                ${act.description ? `<p class="text-sm text-zinc-600 mt-1 leading-relaxed">${act.description}</p>` : ''}
-                <div class="flex flex-wrap gap-1.5 mt-2">
-                  ${(act.softSkills || []).map(skill => `<span class="text-xs px-2 py-0.5 rounded bg-zinc-100 text-zinc-700">${skill}</span>`).join('')}
-                </div>
-              </div>
-            </div>
-          `).join('');
-        }
-      }
-
-
-      // --- Awards & Achievements ---
-      const awardsList = document.getElementById('awards-list');
-      if (awardsList && awardsData) {
-        if (awardsData.length === 0) {
-          awardsList.innerHTML = '<p class="text-sm text-zinc-500 italic">No awards added yet.</p>';
-        } else {
-          awardsList.innerHTML = awardsData
-            .map(award => {
-              const date = new Date(award.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-              return `
-                <div>
-                  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 mb-1">
-                    <p class="text-sm font-semibold text-zinc-800">${award.title}</p>
-                    <span class="text-xs text-zinc-600 font-mono tracking-tight font-medium">${date}</span>
-                  </div>
-                  <p class="text-xs text-zinc-600 font-medium mb-1.5">${award.organization} — <span class="text-zinc-400">${award.category}</span></p>
-                  <p class="text-sm text-zinc-700 leading-relaxed">${award.description || ''}</p>
-                </div>
-              `;
-            }).join('');
-        }
-      }
-
-
-      // --- Self-Development ---
-      const developmentList = document.getElementById('self-development-list');
-      if (developmentList && selfDevelopmentData) {
-        if (selfDevelopmentData.length === 0) {
-          developmentList.innerHTML = '<p class="text-sm text-zinc-500 italic">No certificates added yet.</p>';
-        } else {
-          developmentList.innerHTML = selfDevelopmentData
-            .map(item => {
-              const date = new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-              return `
-                <div class="flex flex-col sm:flex-row sm:items-start gap-3 py-3 border-b border-zinc-100 last:border-0 hover:bg-zinc-50 px-2 -mx-2 rounded transition-colors duration-150">
-                  ${item.imageUrl
-                  ? `<a href="${item.imageUrl}" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 block group" title="Click to view full certificate">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-lg border border-zinc-200 shadow-sm bg-zinc-100 overflow-hidden flex items-center justify-center relative">
-                          <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-xs text-zinc-400 text-center px-1\\'>No<br>Image</span>'">
-                        </div>
-                      </a>`
-                  : ''
-                }
-                  <div class="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between w-full h-full">
-                    <div class="flex-1 self-start sm:self-center">
-                      <p class="text-sm font-medium text-zinc-800">${item.title}</p>
-                      <div class="flex flex-wrap items-center gap-2 mt-1 text-xs text-zinc-600">
-                        <span class="bg-zinc-100 px-1.5 rounded text-zinc-600">${item.type}</span>
-                        <span>${item.institution}</span>
-                      </div>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-3 mt-2 sm:mt-0 self-start sm:self-center">
-                      <span class="text-xs text-zinc-600 font-mono tracking-tight whitespace-nowrap">${date}</span>
-                      ${item.imageUrl ? `<a href="${item.imageUrl}" target="_blank" rel="noopener noreferrer" class="text-xs text-emerald-600 hover:text-emerald-500 font-medium whitespace-nowrap flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>View</a>` : ''}
-                      ${item.credentialUrl ? `<a href="${item.credentialUrl}" target="_blank" rel="noopener noreferrer" class="text-xs text-accent hover:opacity-70 underline whitespace-nowrap">Verify</a>` : ''}
-                    </div>
-                  </div>
-                </div>
-              `;
-            }).join('');
-        }
-      }
-
+    // ── Nav scroll shadow ──
+    window.addEventListener('scroll', () => {
+      document.getElementById('site-nav').classList.toggle('scrolled', window.scrollY > 10);
     });
+
+    // ── Supabase config ──
+    const SB_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
+    const H = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Accept: 'application/json' };
+
+    let projectsData = [], activitiesData = [], awardsData = [], selfDevData = [];
+
+    try {
+      const [pR, aR, awR, cR] = await Promise.all([
+        fetch(`${SB_URL}/projects?select=*&order=created_at.asc`, { headers: H }),
+        fetch(`${SB_URL}/activities?select=*&order=created_at.asc`, { headers: H }),
+        fetch(`${SB_URL}/awards?select=*&order=date.desc`, { headers: H }),
+        fetch(`${SB_URL}/certificates?select=*&order=date_issued.desc`, { headers: H })
+      ]);
+      if (pR.ok) {
+        const d = await pR.json();
+        projectsData = d.map(p => ({ ...p, shortDescription: p.short_description, techStack: p.tech_stack, imageUrl: p.image_url, githubUrl: p.github_url, liveUrl: p.live_url, canvaUrl: p.canva_url }));
+      }
+      if (aR.ok) {
+        const d = await aR.json();
+        activitiesData = d.map(a => ({ ...a, activityName: a.activity_name, imageUrl: a.image_url, softSkills: a.soft_skills }));
+      }
+      if (awR.ok) awardsData = await awR.json();
+      if (cR.ok) {
+        const d = await cR.json();
+        selfDevData = d.map(c => ({ ...c, date: c.date_issued, imageUrl: c.image_url, credentialUrl: c.credential_url }));
+      }
+    } catch(e) { console.warn('Supabase fetch error:', e); }
+
+    // ── Color map for project accent ──
+    const CMAP = {
+      emerald: '#34d399', violet: '#a78bfa', amber: '#fbbf24',
+      sky: '#38bdf8', rose: '#fb7185', orange: '#fb923c', teal: '#2dd4bf', blue: '#60a5fa'
+    };
+
+    // ── Projects ──
+    const grid = document.getElementById('projects-grid');
+    const filters = document.querySelectorAll('.filter-btn');
+
+    function renderProjects(cat = 'All') {
+      if (!projectsData.length) {
+        grid.innerHTML = '<p class="text-sm text-zinc-400 col-span-2">Loading projects…</p>';
+        return;
+      }
+      const list = cat === 'All' ? projectsData : projectsData.filter(p => p.categories && p.categories.includes(cat));
+      if (!list.length) {
+        grid.innerHTML = '<p class="text-sm text-zinc-400 col-span-2">No projects in this category yet.</p>';
+        return;
+      }
+      const accent = CMAP;
+      grid.innerHTML = list.map(p => {
+        const color = accent[p.color] || '#a1a1aa';
+        const tech = (p.techStack || []);
+        const shown = tech.slice(0, 3);
+        const rest = tech.length > 3 ? tech.length - 3 : 0;
+        return `
+          <a href="project.html?slug=${p.slug}"
+            class="group project-card flex flex-col h-full rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm hover:shadow-md hover:border-zinc-300 transition-all duration-200"
+            style="--card-accent:${color}"
+            aria-label="View ${p.title} project details">
+            ${p.imageUrl
+              ? `<div class="overflow-hidden h-40 flex-shrink-0 bg-zinc-100">
+                   <img src="${p.imageUrl}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500">
+                 </div>`
+              : `<div class="h-2 flex-shrink-0" style="background:${color}20">
+                   <div class="h-full w-full" style="background:linear-gradient(90deg,${color}60,${color}20)"></div>
+                 </div>`}
+            <div class="flex flex-col flex-1 p-5">
+              <div class="flex items-center gap-2.5 mb-2">
+                <span class="w-2 h-2 rounded-full flex-shrink-0" style="background:${color}"></span>
+                <h3 class="font-semibold text-base text-zinc-900 leading-snug group-hover:text-accent transition-colors">${p.title}</h3>
+              </div>
+              <p class="text-xs font-mono text-zinc-400 mb-2.5">${p.role || ''}</p>
+              <p class="text-sm text-zinc-600 leading-relaxed flex-grow mb-4">${p.shortDescription || ''}</p>
+              <div class="flex items-center justify-between pt-3 border-t border-zinc-100 mt-auto">
+                <div class="flex flex-wrap gap-1.5">
+                  ${shown.map(t => `<span class="text-[11px] px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-500">${t}</span>`).join('')}
+                  ${rest ? `<span class="text-[11px] px-1.5 py-0.5 text-zinc-400">+${rest}</span>` : ''}
+                </div>
+                <span class="text-xs font-semibold text-zinc-400 flex items-center gap-1 group-hover:text-accent transition-colors whitespace-nowrap ml-2">
+                  Case Study <span class="group-hover:translate-x-0.5 transition-transform inline-block">→</span>
+                </span>
+              </div>
+            </div>
+          </a>`;
+      }).join('');
+    }
+
+    filters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filters.forEach(b => {
+          b.classList.remove('bg-zinc-900', 'text-white', 'border-zinc-900');
+          b.classList.add('bg-white', 'text-zinc-600', 'border-zinc-200');
+        });
+        btn.classList.add('bg-zinc-900', 'text-white', 'border-zinc-900');
+        btn.classList.remove('bg-white', 'text-zinc-600', 'border-zinc-200');
+        renderProjects(btn.dataset.filter);
+      });
+    });
+    renderProjects();
+
+    // ── Activities ──
+    const actList = document.getElementById('activities-list');
+    if (actList) {
+      if (!activitiesData.length) {
+        actList.innerHTML = '<p class="text-sm text-zinc-400 italic">No activities added yet.</p>';
+      } else {
+        actList.innerHTML = activitiesData.map(a => `
+          <div class="flex gap-4 items-start">
+            ${a.imageUrl
+              ? `<img src="${a.imageUrl}" class="w-12 h-12 rounded-xl object-cover flex-shrink-0 border border-zinc-200 shadow-sm" alt="${a.activityName}">`
+              : `<div class="w-12 h-12 rounded-xl bg-zinc-100 flex items-center justify-center flex-shrink-0 border border-zinc-200 text-sm font-bold text-zinc-300">${(a.activityName||'?').charAt(0)}</div>`}
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-zinc-900">${a.activityName || ''}</p>
+              <p class="text-xs font-mono text-zinc-400 mt-0.5">${a.role || ''}${a.period ? ' · ' + a.period : ''}</p>
+              ${a.description ? `<p class="text-sm text-zinc-600 mt-1.5 leading-relaxed">${a.description}</p>` : ''}
+              <div class="flex flex-wrap gap-1.5 mt-2">
+                ${(a.softSkills || []).map(s => `<span class="text-[11px] px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600">${s}</span>`).join('')}
+              </div>
+            </div>
+          </div>`).join('');
+      }
+    }
+
+    // ── Awards ──
+    const awList = document.getElementById('awards-list');
+    if (awList) {
+      if (!awardsData.length) {
+        awList.innerHTML = '<p class="text-sm text-zinc-400 italic">No awards added yet.</p>';
+      } else {
+        awList.innerHTML = awardsData.map(aw => {
+          const date = new Date(aw.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+          return `
+            <div class="flex gap-4 items-start">
+              <div class="flex-shrink-0 mt-0.5">
+                <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1">
+                  <p class="text-sm font-semibold text-zinc-900">${aw.title || ''}</p>
+                  <span class="text-xs font-mono text-zinc-400 flex-shrink-0">${date}</span>
+                </div>
+                <p class="text-xs text-zinc-500 mt-0.5">${aw.organization || ''} · <span class="text-zinc-400">${aw.category || ''}</span></p>
+                ${aw.description ? `<p class="text-sm text-zinc-600 mt-1.5 leading-relaxed">${aw.description}</p>` : ''}
+              </div>
+            </div>`;
+        }).join('');
+      }
+    }
+
+    // ── Self-Development ──
+    const devList = document.getElementById('self-development-list');
+    if (devList) {
+      if (!selfDevData.length) {
+        devList.innerHTML = '<p class="text-sm text-zinc-400 italic">No certificates added yet.</p>';
+      } else {
+        devList.innerHTML = selfDevData.map(item => {
+          const date = new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+          return `
+            <div class="flex flex-col sm:flex-row sm:items-center gap-3 py-3.5 border-b border-zinc-100 last:border-0 rounded-lg hover:bg-zinc-50/60 px-2 -mx-2 transition-colors">
+              ${item.imageUrl
+                ? `<a href="${item.imageUrl}" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 group">
+                    <div class="w-16 h-16 rounded-xl border border-zinc-200 shadow-sm bg-zinc-100 overflow-hidden">
+                      <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity" onerror="this.closest('a').style.display='none'">
+                    </div>
+                  </a>`
+                : ''}
+              <div class="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-2">
+                <div>
+                  <p class="text-sm font-medium text-zinc-800">${item.title || ''}</p>
+                  <div class="flex flex-wrap items-center gap-2 mt-1">
+                    <span class="text-[11px] bg-zinc-100 px-2 py-0.5 rounded text-zinc-500">${item.type || ''}</span>
+                    <span class="text-xs text-zinc-500">${item.institution || ''}</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 flex-shrink-0">
+                  <span class="text-xs font-mono text-zinc-400">${date}</span>
+                  ${item.imageUrl ? `<a href="${item.imageUrl}" target="_blank" rel="noopener noreferrer" class="text-xs text-accent hover:opacity-70 font-medium flex items-center gap-1"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>View</a>` : ''}
+                  ${item.credentialUrl ? `<a href="${item.credentialUrl}" target="_blank" rel="noopener noreferrer" class="text-xs text-accent hover:opacity-70 underline underline-offset-2">Verify</a>` : ''}
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+      }
+    }
+
+    // ── GitHub Stats ──
+    (async function loadGitHubStats() {
+      try {
+        const [uR, rR] = await Promise.all([
+          fetch('https://api.github.com/users/Floridae242'),
+          fetch('https://api.github.com/users/Floridae242/repos?per_page=100&sort=updated')
+        ]);
+        if (uR.ok) {
+          const u = await uR.json();
+          const el = document.getElementById('stat-repos');
+          if (el) el.textContent = u.public_repos ?? '—';
+        }
+        if (rR.ok) {
+          const repos = await rR.json();
+          const stars = repos.reduce((s, r) => s + (r.stargazers_count || 0), 0);
+          const langMap = {};
+          repos.forEach(r => { if (r.language) langMap[r.language] = (langMap[r.language] || 0) + 1; });
+          const sorted = Object.entries(langMap).sort(([,a],[,b]) => b - a);
+
+          const se = document.getElementById('stat-stars');
+          const le = document.getElementById('stat-langs');
+          const tl = document.getElementById('top-languages');
+
+          if (se) se.textContent = stars;
+          if (le) le.textContent = sorted.length || '—';
+          if (tl && sorted.length) {
+            tl.innerHTML = sorted.slice(0, 10).map(([lang, count]) =>
+              `<span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-white text-zinc-700 border border-zinc-200 font-medium shadow-sm">${lang}<span class="text-zinc-400 font-normal">${count}</span></span>`
+            ).join('');
+          } else if (tl) {
+            tl.innerHTML = '<span class="text-xs text-zinc-400 italic">No data available.</span>';
+          }
+        }
+      } catch(e) {
+        ['stat-repos','stat-stars','stat-langs'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = '—';
+        });
+      }
+    })();
+
+  });
   </script>
 
 </body>
-
 </html>

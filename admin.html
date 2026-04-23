@@ -3,608 +3,758 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio CMS — Naruephon</title>
+  <title>Portfolio CMS</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="tailwind.config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .tab-btn.active { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.08); color: #18181b; }
-    input, textarea, select {
-      width: 100%; padding: 10px 12px; border: 1px solid #e4e4e7; border-radius: 10px;
-      font-size: 14px; background: white; color: #18181b; outline: none; transition: box-shadow .15s;
-      font-family: inherit;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #f4f4f5; color: #18181b; min-height: 100vh; }
+    /* Form controls */
+    .f-input {
+      width: 100%; padding: 9px 12px; border: 1.5px solid #e4e4e7; border-radius: 10px;
+      font-size: 13.5px; background: #fff; color: #18181b; outline: none;
+      transition: border-color .15s, box-shadow .15s; font-family: inherit; line-height: 1.4;
     }
-    input:focus, textarea:focus, select:focus { box-shadow: 0 0 0 2px #d4d4d8; }
-    textarea { resize: vertical; font-family: 'JetBrains Mono', monospace; }
-    label { display: block; font-size: 11px; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
-    .field { margin-bottom: 0; }
-    .modal-scroll { max-height: calc(90vh - 140px); overflow-y: auto; }
+    .f-input:focus { border-color: #a1a1aa; box-shadow: 0 0 0 3px rgba(161,161,170,.15); }
+    .f-input.mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+    textarea.f-input { resize: vertical; }
+    select.f-input { cursor: pointer; }
+    .f-label { display: block; font-size: 11px; font-weight: 700; color: #71717a; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+    .f-hint { font-size: 11.5px; color: #a1a1aa; margin-bottom: 6px; line-height: 1.5; }
+    .f-group { display: flex; flex-direction: column; gap: 0; }
+    /* Tab active */
+    .tab-btn.active { background: white; box-shadow: 0 1px 4px rgba(0,0,0,.08); color: #18181b; font-weight: 600; }
+    /* Scrollbar */
+    .modal-body::-webkit-scrollbar { width: 5px; }
+    .modal-body::-webkit-scrollbar-track { background: transparent; }
+    .modal-body::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 10px; }
+    /* Pulse */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin .8s linear infinite; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+    .fade-in { animation: fadeIn .2s ease; }
+    /* Image drag highlight */
+    .img-drop-zone.drag-over { border-color: #059669; background: #f0fdf4; }
   </style>
 </head>
-<body class="bg-zinc-50 text-zinc-900 min-h-screen">
+<body>
 
-  <!-- Top Bar -->
-  <nav class="sticky top-0 z-40 bg-white border-b border-zinc-200">
-    <div class="max-w-5xl mx-auto px-5 h-13 flex items-center justify-between" style="height:52px">
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-1 text-zinc-400 hover:text-zinc-700 transition-colors px-2 py-1 rounded-lg hover:bg-zinc-100 text-sm">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
-          Portfolio
-        </a>
-        <span class="text-zinc-200">|</span>
-        <span class="font-semibold text-sm">Portfolio CMS</span>
-        <span class="text-[11px] font-mono bg-zinc-100 text-zinc-400 px-2 py-0.5 rounded-md">admin</span>
-      </div>
-      <div id="sync-wrap" class="flex items-center gap-2 text-xs font-mono text-zinc-400">
-        <span id="sync-dot" class="w-1.5 h-1.5 rounded-full bg-zinc-300 inline-block"></span>
-        <span id="sync-text">Idle</span>
-      </div>
+<!-- ─── TOP NAV ─── -->
+<nav style="position:sticky;top:0;z-index:40;background:white;border-bottom:1px solid #e4e4e7;">
+  <div style="max-width:1100px;margin:0 auto;padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html" style="display:flex;align-items:center;gap:5px;color:#a1a1aa;font-size:13px;text-decoration:none;padding:5px 8px;border-radius:8px;transition:all .15s;" onmouseover="this.style.background='#f4f4f5';this.style.color='#3f3f46'" onmouseout="this.style.background='transparent';this.style.color='#a1a1aa'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+        Portfolio
+      </a>
+      <span style="color:#e4e4e7">|</span>
+      <span style="font-weight:700;font-size:14px;">Portfolio CMS</span>
+      <span style="font-size:10px;font-family:'JetBrains Mono',monospace;background:#f4f4f5;color:#a1a1aa;padding:2px 8px;border-radius:6px;">admin</span>
     </div>
-  </nav>
-
-  <main class="max-w-5xl mx-auto px-5 py-7">
-
-    <!-- Tab Nav -->
-    <div class="flex gap-1 bg-zinc-100 p-1 rounded-xl w-fit mb-7">
-      <button class="tab-btn active text-sm font-medium px-4 py-2 rounded-lg transition-all text-zinc-900" data-tab="projects">Projects</button>
-      <button class="tab-btn text-sm font-medium px-4 py-2 rounded-lg transition-all text-zinc-500 hover:text-zinc-700" data-tab="activities">Activities</button>
-      <button class="tab-btn text-sm font-medium px-4 py-2 rounded-lg transition-all text-zinc-500 hover:text-zinc-700" data-tab="certificates">Certificates</button>
-      <button class="tab-btn text-sm font-medium px-4 py-2 rounded-lg transition-all text-zinc-500 hover:text-zinc-700" data-tab="awards">Awards</button>
+    <!-- Connection status -->
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="db-status" style="display:flex;align-items:center;gap:6px;font-size:12px;font-family:'JetBrains Mono',monospace;color:#a1a1aa;">
+        <span id="db-dot" style="width:7px;height:7px;border-radius:50%;background:#d4d4d8;display:inline-block;"></span>
+        <span id="db-text">Connecting…</span>
+      </div>
+      <button id="refresh-btn" onclick="refreshTab()" title="Refresh" style="padding:6px;border:1px solid #e4e4e7;border-radius:8px;background:white;cursor:pointer;color:#71717a;display:flex;align-items:center;transition:all .15s;" onmouseover="this.style.background='#f4f4f5'" onmouseout="this.style.background='white'">
+        <svg id="refresh-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+      </button>
     </div>
+  </div>
+</nav>
 
-    <!-- Projects Tab -->
-    <div class="tab-content" id="tab-projects">
-      <div class="flex items-start justify-between mb-5">
-        <div><h1 class="text-lg font-bold">Projects</h1><p class="text-sm text-zinc-500 mt-0.5">Portfolio projects with full case-study details</p></div>
-        <button onclick="openModal('project')" class="inline-flex items-center gap-1.5 text-sm font-semibold px-3.5 py-2 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-          Add Project
-        </button>
-      </div>
-      <div id="list-projects" class="grid gap-3 sm:grid-cols-2"><div class="col-span-2 h-20 bg-zinc-100 rounded-xl animate-pulse"></div></div>
+<!-- ─── MAIN ─── -->
+<main style="max-width:1100px;margin:0 auto;padding:24px 20px;">
+
+  <!-- Connection error banner -->
+  <div id="conn-banner" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#b91c1c;">
+    <strong>⚠️ Cannot write to Supabase.</strong> Make sure your tables exist and the service key is correct.
+    Run <code style="background:#fee2e2;padding:1px 5px;border-radius:4px;">init-db.sql</code> in your Supabase SQL editor first.
+  </div>
+
+  <!-- Stats Row -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
+    <div class="stat-card" data-tab="projects" style="background:white;border:1.5px solid #e4e4e7;border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
+      <p style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Projects</p>
+      <p id="count-projects" style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;">—</p>
     </div>
-
-    <!-- Activities Tab -->
-    <div class="tab-content hidden" id="tab-activities">
-      <div class="flex items-start justify-between mb-5">
-        <div><h1 class="text-lg font-bold">Activities</h1><p class="text-sm text-zinc-500 mt-0.5">Leadership, clubs, and extracurriculars</p></div>
-        <button onclick="openModal('activity')" class="inline-flex items-center gap-1.5 text-sm font-semibold px-3.5 py-2 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-          Add Activity
-        </button>
-      </div>
-      <div id="list-activities" class="space-y-3"><div class="h-16 bg-zinc-100 rounded-xl animate-pulse"></div></div>
+    <div class="stat-card" data-tab="activities" style="background:white;border:1.5px solid #e4e4e7;border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
+      <p style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Activities</p>
+      <p id="count-activities" style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;">—</p>
     </div>
-
-    <!-- Certificates Tab -->
-    <div class="tab-content hidden" id="tab-certificates">
-      <div class="flex items-start justify-between mb-5">
-        <div><h1 class="text-lg font-bold">Certificates</h1><p class="text-sm text-zinc-500 mt-0.5">Courses, workshops, hackathons, and competitions</p></div>
-        <button onclick="openModal('certificate')" class="inline-flex items-center gap-1.5 text-sm font-semibold px-3.5 py-2 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-          Add Certificate
-        </button>
-      </div>
-      <div id="list-certificates" class="space-y-3"><div class="h-16 bg-zinc-100 rounded-xl animate-pulse"></div></div>
+    <div class="stat-card" data-tab="certificates" style="background:white;border:1.5px solid #e4e4e7;border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
+      <p style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Certificates</p>
+      <p id="count-certificates" style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;">—</p>
     </div>
-
-    <!-- Awards Tab -->
-    <div class="tab-content hidden" id="tab-awards">
-      <div class="flex items-start justify-between mb-5">
-        <div><h1 class="text-lg font-bold">Awards & Achievements</h1><p class="text-sm text-zinc-500 mt-0.5">Competitions, honors, and recognitions</p></div>
-        <button onclick="openModal('award')" class="inline-flex items-center gap-1.5 text-sm font-semibold px-3.5 py-2 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-          Add Award
-        </button>
-      </div>
-      <div id="list-awards" class="space-y-3"><div class="h-16 bg-zinc-100 rounded-xl animate-pulse"></div></div>
-    </div>
-
-  </main>
-
-  <!-- Edit/Add Modal -->
-  <div id="modal" class="hidden fixed inset-0 z-50 flex items-start justify-center pt-6 px-4 pb-4">
-    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col" style="max-height:92vh">
-      <div class="flex items-center justify-between px-6 py-4 border-b border-zinc-100 flex-shrink-0">
-        <h2 id="modal-title" class="text-base font-bold"></h2>
-        <button onclick="closeModal()" class="text-zinc-400 hover:text-zinc-700 transition-colors p-1.5 rounded-lg hover:bg-zinc-100">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
-      </div>
-      <div id="modal-body" class="modal-scroll px-6 py-5 space-y-4 flex-1"></div>
-      <div class="flex gap-3 px-6 py-4 border-t border-zinc-100 flex-shrink-0">
-        <button onclick="closeModal()" class="flex-1 text-sm font-medium px-4 py-2.5 border border-zinc-200 rounded-xl hover:bg-zinc-50 transition-colors">Cancel</button>
-        <button id="modal-save-btn" class="flex-1 text-sm font-semibold px-4 py-2.5 bg-zinc-900 text-white rounded-xl hover:bg-zinc-700 transition-colors">Save</button>
-      </div>
+    <div class="stat-card" data-tab="awards" style="background:white;border:1.5px solid #e4e4e7;border-radius:14px;padding:16px 18px;cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
+      <p style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Awards</p>
+      <p id="count-awards" style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;">—</p>
     </div>
   </div>
 
-  <!-- Delete Confirm -->
-  <div id="del-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-xs p-6 text-center">
-      <div class="w-11 h-11 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2"/></svg>
-      </div>
-      <h3 class="font-bold text-zinc-900 mb-1.5">Delete this item?</h3>
-      <p class="text-sm text-zinc-500 mb-5">This cannot be undone.</p>
-      <div class="flex gap-3">
-        <button onclick="document.getElementById('del-modal').classList.add('hidden')" class="flex-1 text-sm font-medium px-4 py-2.5 border border-zinc-200 rounded-xl hover:bg-zinc-50">Cancel</button>
-        <button id="del-confirm-btn" class="flex-1 text-sm font-semibold px-4 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700">Delete</button>
-      </div>
-    </div>
+  <!-- Tab Nav -->
+  <div style="background:#f4f4f5;padding:4px;border-radius:12px;width:fit-content;display:flex;gap:2px;margin-bottom:20px;">
+    <button class="tab-btn active" data-tab="projects" style="font-size:13.5px;font-weight:500;padding:7px 18px;border-radius:9px;border:none;cursor:pointer;transition:all .15s;background:white;box-shadow:0 1px 4px rgba(0,0,0,.08);color:#18181b;">Projects</button>
+    <button class="tab-btn" data-tab="activities" style="font-size:13.5px;font-weight:500;padding:7px 18px;border-radius:9px;border:none;cursor:pointer;transition:all .15s;background:transparent;color:#71717a;">Activities</button>
+    <button class="tab-btn" data-tab="certificates" style="font-size:13.5px;font-weight:500;padding:7px 18px;border-radius:9px;border:none;cursor:pointer;transition:all .15s;background:transparent;color:#71717a;">Certificates</button>
+    <button class="tab-btn" data-tab="awards" style="font-size:13.5px;font-weight:500;padding:7px 18px;border-radius:9px;border:none;cursor:pointer;transition:all .15s;background:transparent;color:#71717a;">Awards</button>
   </div>
 
-  <!-- Toast -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 z-[100]">
-    <div class="bg-zinc-900 text-white text-sm px-4 py-3 rounded-xl shadow-xl flex items-center gap-2.5 min-w-[220px]">
-      <span id="toast-icon" class="flex-shrink-0"></span>
-      <span id="toast-text"></span>
+  <!-- ── Projects ── -->
+  <div class="tab-pane" id="pane-projects">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div><h2 style="font-size:16px;font-weight:700;">Projects</h2><p style="font-size:12.5px;color:#71717a;margin-top:2px;">Full case-study details for each project</p></div>
+      <button onclick="openModal('project')" class="btn-primary">+ Add Project</button>
     </div>
+    <div id="list-projects" style="display:grid;gap:10px;grid-template-columns:1fr 1fr;"></div>
   </div>
 
-  <script>
-  const SB_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
-  const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
-  const RH = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Accept: 'application/json' };
-  const WH = { ...RH, 'Content-Type': 'application/json', Prefer: 'return=representation' };
+  <!-- ── Activities ── -->
+  <div class="tab-pane" id="pane-activities" style="display:none;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div><h2 style="font-size:16px;font-weight:700;">Activities</h2><p style="font-size:12.5px;color:#71717a;margin-top:2px;">Leadership, clubs, and extracurriculars</p></div>
+      <button onclick="openModal('activity')" class="btn-primary">+ Add Activity</button>
+    </div>
+    <div id="list-activities" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
 
-  let currentTab = 'projects';
-  let currentType = null;
-  let editingId = null;
-  const allData = { projects: [], activities: [], certificates: [], awards: [] };
-  const TABLE = { project: 'projects', activity: 'activities', certificate: 'certificates', award: 'awards' };
-  const TABKEY = { projects: 'project', activities: 'activity', certificates: 'certificate', awards: 'award' };
+  <!-- ── Certificates ── -->
+  <div class="tab-pane" id="pane-certificates" style="display:none;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div><h2 style="font-size:16px;font-weight:700;">Certificates</h2><p style="font-size:12.5px;color:#71717a;margin-top:2px;">Courses, workshops, hackathons, competitions</p></div>
+      <button onclick="openModal('certificate')" class="btn-primary">+ Add Certificate</button>
+    </div>
+    <div id="list-certificates" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
 
-  // ── Tabs ──
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentTab = btn.dataset.tab;
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.toggle('active', b === btn);
-        b.classList.toggle('text-zinc-900', b === btn);
-        b.classList.toggle('text-zinc-500', b !== btn);
-      });
-      document.querySelectorAll('.tab-content').forEach(c => {
-        c.classList.toggle('hidden', !c.id.endsWith(currentTab));
-      });
-      loadTab(currentTab);
-    });
+  <!-- ── Awards ── -->
+  <div class="tab-pane" id="pane-awards" style="display:none;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div><h2 style="font-size:16px;font-weight:700;">Awards & Achievements</h2><p style="font-size:12.5px;color:#71717a;margin-top:2px;">Competitions, honors, and recognitions</p></div>
+      <button onclick="openModal('award')" class="btn-primary">+ Add Award</button>
+    </div>
+    <div id="list-awards" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+
+</main>
+
+<!-- ─── ADD / EDIT MODAL ─── -->
+<div id="modal" style="display:none;position:fixed;inset:0;z-index:50;overflow-y:auto;padding:20px;">
+  <div onclick="closeModal()" style="position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);"></div>
+  <div style="position:relative;background:white;border-radius:20px;box-shadow:0 25px 60px rgba(0,0,0,.18);width:100%;max-width:680px;margin:0 auto;display:flex;flex-direction:column;max-height:90vh;">
+    <!-- Modal header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid #f4f4f5;flex-shrink:0;">
+      <h3 id="modal-title" style="font-size:15px;font-weight:700;"></h3>
+      <button onclick="closeModal()" style="padding:6px;border:none;background:transparent;cursor:pointer;color:#a1a1aa;border-radius:8px;display:flex;align-items:center;transition:.15s;" onmouseover="this.style.background='#f4f4f5';this.style.color='#3f3f46'" onmouseout="this.style.background='transparent';this.style.color='#a1a1aa'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <!-- Modal body -->
+    <div id="modal-body" class="modal-body" style="padding:22px 24px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:16px;"></div>
+    <!-- Modal footer -->
+    <div style="display:flex;gap:10px;padding:16px 24px 20px;border-top:1px solid #f4f4f5;flex-shrink:0;">
+      <button onclick="closeModal()" style="flex:1;padding:10px;border:1.5px solid #e4e4e7;border-radius:11px;background:white;font-size:13.5px;font-weight:500;cursor:pointer;transition:.15s;font-family:inherit;" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='white'">Cancel</button>
+      <button id="save-btn" onclick="saveItem()" style="flex:2;padding:10px;border:none;border-radius:11px;background:#18181b;color:white;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;" onmouseover="this.style.background='#27272a'" onmouseout="this.style.background='#18181b'">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── DELETE CONFIRM ─── -->
+<div id="del-modal" style="display:none;position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:20px;">
+  <div onclick="document.getElementById('del-modal').style.display='none'" style="position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);"></div>
+  <div style="position:relative;background:white;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.2);width:100%;max-width:320px;padding:28px 24px;text-align:center;">
+    <div style="width:48px;height:48px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="m19 6-.867 12.142A2 2 0 0 1 16.138 20H7.862a2 2 0 0 1-1.995-1.858L5 6m5 0V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2"/></svg>
+    </div>
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:6px;">Delete this item?</h3>
+    <p style="font-size:13px;color:#71717a;margin-bottom:20px;">This action cannot be undone.</p>
+    <div style="display:flex;gap:10px;">
+      <button onclick="document.getElementById('del-modal').style.display='none'" style="flex:1;padding:10px;border:1.5px solid #e4e4e7;border-radius:10px;background:white;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">Cancel</button>
+      <button id="del-confirm" style="flex:1;padding:10px;border:none;border-radius:10px;background:#ef4444;color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST ─── -->
+<div id="toast" style="display:none;position:fixed;bottom:24px;right:24px;z-index:100;">
+  <div style="background:#18181b;color:white;font-size:13px;padding:12px 16px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px;min-width:220px;max-width:360px;">
+    <span id="toast-icon" style="flex-shrink:0;display:flex;"></span>
+    <span id="toast-msg" style="line-height:1.4;"></span>
+  </div>
+</div>
+
+<!-- ─── BUTTON STYLES via JS ─── -->
+<style>
+  .btn-primary { display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#18181b;color:white;border:none;border-radius:11px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit; }
+  .btn-primary:hover { background:#27272a; }
+  .btn-edit { font-size:12px;padding:5px 12px;border:1.5px solid #e4e4e7;border-radius:8px;background:white;cursor:pointer;color:#52525b;font-family:inherit;transition:.15s; }
+  .btn-edit:hover { background:#f4f4f5; }
+  .btn-del { font-size:12px;padding:5px 12px;border:1.5px solid #fee2e2;border-radius:8px;background:white;cursor:pointer;color:#ef4444;font-family:inherit;transition:.15s; }
+  .btn-del:hover { background:#fef2f2; }
+  .section-divider { font-size:10.5px;font-weight:700;color:#a1a1aa;text-transform:uppercase;letter-spacing:.08em;padding:10px 0 6px;border-top:1px solid #f4f4f5;margin-top:4px; }
+  code { background:#f4f4f5;padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px; }
+  @media (max-width:640px) {
+    #list-projects { grid-template-columns:1fr !important; }
+  }
+</style>
+
+<script>
+// ─── CONFIG ───
+const SB   = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
+const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
+const SVC  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjY5NTE0OCwiZXhwIjoyMDkyMjcxMTQ4fQ.tOap3UMeUzmpy--Gwa_AJ7ZiYc96JoidQ6mOztYETDw";
+
+const RH = { apikey: ANON, Authorization: `Bearer ${ANON}`, Accept: 'application/json' };
+const WH = { apikey: SVC,  Authorization: `Bearer ${SVC}`,  'Content-Type': 'application/json', Prefer: 'return=representation', Accept: 'application/json' };
+
+// ─── STATE ───
+let currentTab = 'projects';
+let editingId  = null;
+let editingType = null;
+const store = { projects:[], activities:[], certificates:[], awards:[] };
+
+const TABLES = { project:'projects', activity:'activities', certificate:'certificates', award:'awards' };
+const PANE_OF = { projects:'pane-projects', activities:'pane-activities', certificates:'pane-certificates', awards:'pane-awards' };
+const COLOR_HEX = { emerald:'#34d399', violet:'#a78bfa', amber:'#fbbf24', sky:'#38bdf8', rose:'#fb7185', orange:'#fb923c', teal:'#2dd4bf', blue:'#60a5fa' };
+
+// ─── INIT ───
+(async function init() {
+  setDB('loading');
+  await loadAllCounts();
+  await loadTab('projects');
+  // Test write ability
+  try {
+    const r = await fetch(`${SB}/projects?select=id&limit=0`, { headers: RH });
+    setDB(r.ok ? 'ok' : 'error');
+  } catch { setDB('error'); }
+})();
+
+// Stat cards click
+document.querySelectorAll('.stat-card').forEach(c => {
+  c.addEventListener('click', () => switchTab(c.dataset.tab));
+});
+// Tab buttons click
+document.querySelectorAll('.tab-btn').forEach(b => {
+  b.addEventListener('click', () => switchTab(b.dataset.tab));
+});
+
+function setDB(state) {
+  const dot = document.getElementById('db-dot');
+  const txt = document.getElementById('db-text');
+  const map = { ok:['#22c55e','Connected'], loading:['#facc15','Connecting…'], error:['#ef4444','Error'], saving:['#60a5fa','Saving…'] };
+  dot.style.background = map[state][0];
+  txt.textContent      = map[state][1];
+  document.getElementById('conn-banner').style.display = state === 'error' ? 'block' : 'none';
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const active = b.dataset.tab === tab;
+    b.style.background   = active ? 'white' : 'transparent';
+    b.style.color        = active ? '#18181b' : '#71717a';
+    b.style.fontWeight   = active ? '600' : '500';
+    b.style.boxShadow    = active ? '0 1px 4px rgba(0,0,0,.08)' : 'none';
   });
+  document.querySelectorAll('.tab-pane').forEach(p => p.style.display = 'none');
+  document.getElementById(PANE_OF[tab]).style.display = 'block';
+  loadTab(tab);
+}
 
-  // ── Supabase helpers ──
-  async function sbGet(path) {
-    const r = await fetch(`${SB_URL}/${path}`, { headers: RH });
-    if (!r.ok) throw new Error(`GET ${r.status}`);
-    return r.json();
-  }
-  async function sbPost(table, body) {
-    const r = await fetch(`${SB_URL}/${table}`, { method: 'POST', headers: WH, body: JSON.stringify(body) });
-    if (!r.ok) { const t = await r.text(); throw new Error(`POST ${r.status}: ${t}`); }
-    return r.json();
-  }
-  async function sbPatch(table, id, body) {
-    const r = await fetch(`${SB_URL}/${table}?id=eq.${id}`, { method: 'PATCH', headers: WH, body: JSON.stringify(body) });
-    if (!r.ok) { const t = await r.text(); throw new Error(`PATCH ${r.status}: ${t}`); }
-    return r.json();
-  }
-  async function sbDelete(table, id) {
-    const r = await fetch(`${SB_URL}/${table}?id=eq.${id}`, { method: 'DELETE', headers: WH });
-    if (!r.ok) { const t = await r.text(); throw new Error(`DELETE ${r.status}: ${t}`); }
-  }
-
-  function sync(s) {
-    const dot = document.getElementById('sync-dot');
-    const txt = document.getElementById('sync-text');
-    const m = { idle:['bg-zinc-300','Idle'], loading:['bg-yellow-400','Loading…'], saving:['bg-blue-400','Saving…'], ready:['bg-emerald-400','Synced'], error:['bg-red-400','Error'] };
-    dot.className = `w-1.5 h-1.5 rounded-full ${m[s][0]} inline-block`;
-    txt.textContent = m[s][1];
-  }
-
-  // ── Load Tab ──
-  async function loadTab(tab) {
-    sync('loading');
-    const queries = {
-      projects: 'projects?select=*&order=created_at.asc',
-      activities: 'activities?select=*&order=created_at.asc',
-      certificates: 'certificates?select=*&order=date_issued.desc',
-      awards: 'awards?select=*&order=date.desc'
-    };
+async function loadAllCounts() {
+  const tabs = ['projects','activities','certificates','awards'];
+  await Promise.all(tabs.map(async t => {
     try {
-      const data = await sbGet(queries[tab]);
-      allData[tab] = data;
-      renderList(tab, data);
-      sync('ready');
-    } catch(e) {
-      sync('error');
-      document.getElementById(`list-${tab}`).innerHTML = `<div class="text-center py-10 text-red-400 text-sm">Failed to load. ${e.message}</div>`;
-      showToast('Could not connect to Supabase.', 'error');
-    }
+      const r = await fetch(`${SB}/${t}?select=id`, { headers: { ...RH, 'Prefer':'count=exact', 'Range':'0-0' } });
+      const count = r.headers.get('Content-Range')?.split('/')[1] ?? '—';
+      document.getElementById(`count-${t}`).textContent = count;
+    } catch { document.getElementById(`count-${t}`).textContent = '—'; }
+  }));
+}
+
+function refreshTab() {
+  const icon = document.getElementById('refresh-icon');
+  icon.classList.add('spinner');
+  loadTab(currentTab).finally(() => icon.classList.remove('spinner'));
+}
+
+// ─── LOAD TAB ───
+async function loadTab(tab) {
+  const listEl = document.getElementById(`list-${tab}`);
+  listEl.innerHTML = skeletonRows(tab === 'projects' ? 4 : 3);
+  const q = {
+    projects:    `projects?select=*&order=created_at.asc`,
+    activities:  `activities?select=*&order=created_at.asc`,
+    certificates:`certificates?select=*&order=date_issued.desc`,
+    awards:      `awards?select=*&order=date.desc`,
+  };
+  try {
+    const r = await fetch(`${SB}/${q[tab]}`, { headers: RH });
+    if (!r.ok) throw new Error(await r.text());
+    const data = await r.json();
+    store[tab] = data;
+    renderList(tab, data);
+    document.getElementById(`count-${tab}`).textContent = data.length;
+    setDB('ok');
+  } catch(e) {
+    listEl.innerHTML = errRow(`Failed to load: ${e.message}`);
+    setDB('error');
   }
+}
 
-  // ── Render Lists ──
-  function renderList(tab, items) {
-    const el = document.getElementById(`list-${tab}`);
-    if (!items.length) {
-      el.innerHTML = `<div class="text-center py-12 text-zinc-400 text-sm">No items yet. Click "Add" to get started.</div>`;
-      return;
-    }
-    el.className = tab === 'projects' ? 'grid gap-3 sm:grid-cols-2' : 'space-y-3';
-    el.innerHTML = items.map(item => {
-      switch(tab) {
-        case 'projects': return tplProject(item);
-        case 'activities': return tplActivity(item);
-        case 'certificates': return tplCert(item);
-        case 'awards': return tplAward(item);
-      }
-    }).join('');
-    el.querySelectorAll('[data-edit]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const item = allData[tab].find(i => String(i.id) === btn.dataset.edit);
-        openModal(TABKEY[tab], item);
-      });
-    });
-    el.querySelectorAll('[data-del]').forEach(btn => {
-      btn.addEventListener('click', () => confirmDelete(tab, btn.dataset.del));
-    });
+function skeletonRows(n) {
+  return Array(n).fill(0).map(()=>`<div style="height:64px;background:#f4f4f5;border-radius:12px;animation:pulse 1.5s ease infinite;"></div>`).join('');
+}
+function errRow(msg) {
+  return `<div style="padding:24px;text-align:center;color:#ef4444;font-size:13px;background:#fef2f2;border-radius:12px;">${msg}</div>`;
+}
+
+// ─── RENDER LISTS ───
+function renderList(tab, items) {
+  const el = document.getElementById(`list-${tab}`);
+  el.style.animation = 'fadeIn .2s ease';
+  if (!items.length) {
+    el.innerHTML = `<div style="padding:40px 20px;text-align:center;background:white;border-radius:14px;border:1.5px dashed #e4e4e7;color:#a1a1aa;font-size:13px;">No items yet. Click "+ Add" to create your first one.</div>`;
+    return;
   }
+  el.innerHTML = items.map(i => {
+    switch(tab) {
+      case 'projects':    return cardProject(i);
+      case 'activities':  return cardActivity(i);
+      case 'certificates':return cardCert(i);
+      case 'awards':      return cardAward(i);
+    }
+  }).join('');
+  el.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => {
+    const item = store[tab].find(x => String(x.id) === btn.dataset.edit);
+    openModal({ projects:'project', activities:'activity', certificates:'certificate', awards:'award' }[tab], item);
+  }));
+  el.querySelectorAll('[data-del]').forEach(btn => btn.addEventListener('click', () => confirmDel(tab, btn.dataset.del)));
+}
 
-  const COLORS = { emerald:'bg-emerald-400', violet:'bg-violet-400', amber:'bg-amber-400', sky:'bg-sky-400', rose:'bg-rose-400', orange:'bg-orange-400', teal:'bg-teal-400', blue:'bg-blue-400' };
-
-  function tplProject(p) {
-    return `<div class="bg-white border border-zinc-200 rounded-xl p-4 hover:border-zinc-300 transition-colors flex flex-col gap-2">
-      <div class="flex items-start justify-between gap-2">
-        <div class="flex items-center gap-2 min-w-0">
-          <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 ${COLORS[p.color]||'bg-zinc-400'}"></span>
-          <span class="font-semibold text-sm truncate">${h(p.title)}</span>
+function cardProject(p) {
+  const dot = COLOR_HEX[p.color] || '#a1a1aa';
+  const cats = (p.categories||[]).map(c=>`<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#f4f4f5;color:#71717a;">${esc(c)}</span>`).join('');
+  const tech = (p.tech_stack||[]).slice(0,3).map(t=>`<span style="font-size:11px;padding:2px 8px;border-radius:6px;background:#f4f4f5;color:#52525b;font-family:'JetBrains Mono',monospace;">${esc(t)}</span>`).join('');
+  const img  = p.image_url ? `<img src="${esc(p.image_url)}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;border:1px solid #e4e4e7;flex-shrink:0;" onerror="this.style.display='none'">` : '';
+  return `<div style="background:white;border:1.5px solid #e4e4e7;border-left:3px solid ${dot};border-radius:13px;padding:14px 16px;transition:.15s;" onmouseover="this.style.borderColor='#a1a1aa';this.style.borderLeftColor='${dot}'" onmouseout="this.style.borderColor='#e4e4e7';this.style.borderLeftColor='${dot}'">
+    <div style="display:flex;gap:10px;align-items:flex-start;">
+      ${img}
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;">
+          <span style="font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.title)}</span>
+          <div style="display:flex;gap:6px;flex-shrink:0;">
+            <button class="btn-edit" data-edit="${p.id}">Edit</button>
+            <button class="btn-del" data-del="${p.id}">Delete</button>
+          </div>
         </div>
-        <div class="flex gap-1.5 flex-shrink-0">
-          <button data-edit="${p.id}" class="text-xs px-2.5 py-1 border border-zinc-200 rounded-lg hover:bg-zinc-50 text-zinc-600">Edit</button>
-          <button data-del="${p.id}" class="text-xs px-2.5 py-1 border border-red-100 rounded-lg hover:bg-red-50 text-red-500">Delete</button>
+        <p style="font-size:12px;color:#71717a;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.short_description||'')}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;">${cats}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;">${tech}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function cardActivity(a) {
+  const thumb = a.image_url
+    ? `<img src="${esc(a.image_url)}" style="width:44px;height:44px;border-radius:10px;object-fit:cover;border:1px solid #e4e4e7;flex-shrink:0;" onerror="this.style.display='none'">`
+    : `<div style="width:44px;height:44px;border-radius:10px;background:#f4f4f5;border:1px solid #e4e4e7;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#d4d4d8;">${esc((a.activity_name||'?').charAt(0))}</div>`;
+  const skills = (a.soft_skills||[]).map(s=>`<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#f4f4f5;color:#71717a;">${esc(s)}</span>`).join('');
+  return `<div style="background:white;border:1.5px solid #e4e4e7;border-radius:13px;padding:12px 16px;display:flex;gap:12px;align-items:center;transition:.15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
+    ${thumb}
+    <div style="flex:1;min-width:0;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div style="min-width:0;">
+          <p style="font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(a.activity_name||'')}</p>
+          <p style="font-size:12px;color:#a1a1aa;font-family:'JetBrains Mono',monospace;margin-top:2px;">${esc(a.role||'')}${a.period ? ' · '+esc(a.period) : ''}</p>
+          ${skills ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${skills}</div>` : ''}
         </div>
-      </div>
-      <p class="text-xs text-zinc-500 line-clamp-2">${h(p.short_description||'')}</p>
-      <div class="flex flex-wrap gap-1.5">
-        ${(p.categories||[]).map(c=>`<span class="text-[11px] px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-500">${h(c)}</span>`).join('')}
-      </div>
-    </div>`;
-  }
-
-  function tplActivity(a) {
-    const thumb = a.image_url
-      ? `<img src="${h(a.image_url)}" class="w-10 h-10 rounded-lg object-cover border border-zinc-200 flex-shrink-0" onerror="this.style.display='none'">`
-      : `<div class="w-10 h-10 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center flex-shrink-0 text-sm font-bold text-zinc-300">${h((a.activity_name||'?').charAt(0))}</div>`;
-    return `<div class="bg-white border border-zinc-200 rounded-xl p-4 flex items-center gap-3 hover:border-zinc-300 transition-colors">
-      ${thumb}
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold truncate">${h(a.activity_name||'')}</p>
-        <p class="text-xs text-zinc-500 font-mono truncate">${h(a.role||'')} · ${h(a.period||'')}</p>
-      </div>
-      <div class="flex gap-1.5 flex-shrink-0">
-        <button data-edit="${a.id}" class="text-xs px-2.5 py-1 border border-zinc-200 rounded-lg hover:bg-zinc-50 text-zinc-600">Edit</button>
-        <button data-del="${a.id}" class="text-xs px-2.5 py-1 border border-red-100 rounded-lg hover:bg-red-50 text-red-500">Delete</button>
-      </div>
-    </div>`;
-  }
-
-  function tplCert(c) {
-    const date = fmtDate(c.date_issued);
-    const thumb = c.image_url
-      ? `<img src="${h(c.image_url)}" class="w-12 h-12 rounded-lg object-cover border border-zinc-200 flex-shrink-0" onerror="this.style.display='none'">`
-      : `<div class="w-12 h-12 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center flex-shrink-0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></div>`;
-    return `<div class="bg-white border border-zinc-200 rounded-xl p-4 flex items-center gap-3 hover:border-zinc-300 transition-colors">
-      ${thumb}
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold truncate">${h(c.title||'')}</p>
-        <p class="text-xs text-zinc-500 truncate">${h(c.institution||'')}</p>
-        <p class="text-xs font-mono text-zinc-400">${h(c.type||'')} · ${date}</p>
-      </div>
-      <div class="flex gap-1.5 flex-shrink-0">
-        <button data-edit="${c.id}" class="text-xs px-2.5 py-1 border border-zinc-200 rounded-lg hover:bg-zinc-50 text-zinc-600">Edit</button>
-        <button data-del="${c.id}" class="text-xs px-2.5 py-1 border border-red-100 rounded-lg hover:bg-red-50 text-red-500">Delete</button>
-      </div>
-    </div>`;
-  }
-
-  function tplAward(a) {
-    const date = fmtDate(a.date);
-    return `<div class="bg-white border border-zinc-200 rounded-xl p-4 flex items-center gap-3 hover:border-zinc-300 transition-colors">
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold truncate">${h(a.title||'')}</p>
-        <p class="text-xs text-zinc-500">${h(a.organization||'')}</p>
-        <p class="text-xs font-mono text-zinc-400">${h(a.category||'')} · ${date}</p>
-      </div>
-      <div class="flex gap-1.5 flex-shrink-0">
-        <button data-edit="${a.id}" class="text-xs px-2.5 py-1 border border-zinc-200 rounded-lg hover:bg-zinc-50 text-zinc-600">Edit</button>
-        <button data-del="${a.id}" class="text-xs px-2.5 py-1 border border-red-100 rounded-lg hover:bg-red-50 text-red-500">Delete</button>
-      </div>
-    </div>`;
-  }
-
-  // ── Modal ──
-  function openModal(type, item = null) {
-    currentType = type;
-    editingId = item ? item.id : null;
-    document.getElementById('modal-title').textContent = `${item ? 'Edit' : 'Add'} ${cap(type)}`;
-    document.getElementById('modal-body').innerHTML = buildForm(type, item);
-    document.getElementById('modal-save-btn').onclick = () => saveItem();
-    setupImgPreview();
-    if (type === 'project' && !item) setupSlug();
-    document.getElementById('modal').classList.remove('hidden');
-  }
-
-  function closeModal() {
-    document.getElementById('modal').classList.add('hidden');
-    currentType = null; editingId = null;
-  }
-
-  function setupImgPreview() {
-    const inp = document.getElementById('f-imageUrl');
-    const pre = document.getElementById('img-preview');
-    if (!inp || !pre) return;
-    function update() {
-      const v = inp.value.trim();
-      if (v) { pre.src = v; pre.style.display = 'block'; } else { pre.style.display = 'none'; }
-    }
-    inp.addEventListener('input', update);
-    update();
-  }
-
-  function setupSlug() {
-    const t = document.getElementById('f-title');
-    const s = document.getElementById('f-slug');
-    if (!t || !s) return;
-    t.addEventListener('input', () => {
-      if (s.dataset.manual) return;
-      s.value = t.value.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
-    });
-    s.addEventListener('input', () => { s.dataset.manual = '1'; });
-  }
-
-  // ── Form builders ──
-  function fi(id, label, val='', opts={}) {
-    const { type='text', placeholder='', required=false, hint='' } = opts;
-    const req = required ? '<span style="color:#f87171">*</span>' : '';
-    const ra = required ? 'required' : '';
-    return `<div class="field">
-      <label for="${id}">${label} ${req}</label>
-      ${hint ? `<p style="font-size:11px;color:#a1a1aa;margin-bottom:6px">${hint}</p>` : ''}
-      <input type="${type}" id="${id}" value="${h(val)}" placeholder="${placeholder}" ${ra}>
-    </div>`;
-  }
-
-  function ft(id, label, val='', opts={}) {
-    const { rows=3, placeholder='', required=false, hint='', mono=false } = opts;
-    const req = required ? '<span style="color:#f87171">*</span>' : '';
-    const ra = required ? 'required' : '';
-    const style = mono ? '' : 'style="font-family:inherit"';
-    return `<div class="field">
-      <label for="${id}">${label} ${req}</label>
-      ${hint ? `<p style="font-size:11px;color:#a1a1aa;margin-bottom:6px">${hint}</p>` : ''}
-      <textarea id="${id}" rows="${rows}" placeholder="${placeholder}" ${ra} ${style}>${h(val)}</textarea>
-    </div>`;
-  }
-
-  function fs(id, label, val='', options=[]) {
-    return `<div class="field">
-      <label for="${id}">${label}</label>
-      <select id="${id}">${options.map(o=>`<option value="${h(o)}" ${val===o?'selected':''}>${h(o)}</option>`).join('')}</select>
-    </div>`;
-  }
-
-  function fImg(val='') {
-    return `<div class="field">
-      <label>Image</label>
-      <p style="font-size:11px;color:#a1a1aa;margin-bottom:6px">Paste an external URL or a local path like <code style="background:#f4f4f5;padding:1px 4px;border-radius:4px">pic/filename.jpg</code></p>
-      <input type="text" id="f-imageUrl" value="${h(val)}" placeholder="https://... or pic/filename.jpg">
-      <img id="img-preview" src="${h(val)}" alt="Preview" style="margin-top:10px;width:120px;height:90px;object-fit:cover;border-radius:10px;border:1px solid #e4e4e7;display:${val?'block':'none'}">
-    </div>`;
-  }
-
-  function buildForm(type, item) {
-    switch(type) {
-      case 'project': return buildProjectForm(item);
-      case 'activity': return buildActivityForm(item);
-      case 'certificate': return buildCertForm(item);
-      case 'award': return buildAwardForm(item);
-    }
-  }
-
-  function buildProjectForm(p) {
-    const cats = ['Production','Competition','Academic','Personal','Open Source'];
-    const colors = ['emerald','violet','amber','sky','rose','orange','teal','blue'];
-    const sel = p ? (p.categories||[]) : [];
-    return `
-      ${fi('f-title','Title',p?.title||'',{required:true,placeholder:'e.g. Smart Flema'})}
-      <div class="field">
-        <label for="f-slug">Slug <span style="color:#f87171">*</span></label>
-        <p style="font-size:11px;color:#a1a1aa;margin-bottom:6px">Auto-generated from title. Must be unique and URL-safe.</p>
-        <input type="text" id="f-slug" value="${h(p?.slug||'')}" placeholder="my-project-name" style="font-family:monospace">
-      </div>
-      <div class="field">
-        <label>Categories</label>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px">
-          ${cats.map(c=>`<label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;text-transform:none;letter-spacing:0;color:#3f3f46;font-weight:500;cursor:pointer">
-            <input type="checkbox" class="cat-chk" value="${c}" ${sel.includes(c)?'checked':''} style="width:auto;padding:0;border:0;box-shadow:none"> ${c}
-          </label>`).join('')}
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="btn-edit" data-edit="${a.id}">Edit</button>
+          <button class="btn-del" data-del="${a.id}">Delete</button>
         </div>
       </div>
-      ${fs('f-color','Accent Color',p?.color||'emerald',colors)}
-      ${fImg(p?.image_url||'')}
-      ${fi('f-shortDesc','Short Description',p?.short_description||'',{required:true,placeholder:'One-line summary shown on project cards'})}
-      ${ft('f-fullDesc','Full Description (What I Built)',p?.full_description||'',{rows:5,placeholder:'Detailed story — separate paragraphs with a blank line'})}
-      ${ft('f-problem','The Problem',p?.problem_solved||'',{rows:2,placeholder:'What real-world problem does this solve?'})}
-      ${ft('f-learnings','Key Learnings',( p?.key_learnings||[]).join('\n'),{rows:3,hint:'One learning per line',placeholder:'Learning 1\nLearning 2'})}
-      ${fi('f-tech','Tech Stack',(p?.tech_stack||[]).join(', '),{placeholder:'JavaScript, React, Python — comma separated'})}
-      ${fi('f-role','Role',p?.role||'',{required:true,placeholder:'e.g. Lead Developer · Project Manager'})}
-      ${fi('f-context','Context',p?.context||'',{placeholder:'e.g. Hylife Hackathon 2025 — CAMT CMU'})}
-      ${ft('f-result','Result',p?.result||'',{rows:2,placeholder:'What was the outcome or impact?'})}
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-        ${fi('f-github','GitHub URL',p?.github_url||'',{type:'url',placeholder:'https://github.com/...'})}
-        ${fi('f-live','Live URL',p?.live_url||'',{type:'url',placeholder:'https://...'})}
-        ${fi('f-canva','Presentation URL',p?.canva_url||'',{type:'url',placeholder:'https://canva.link/...'})}
-      </div>`;
-  }
+    </div>
+  </div>`;
+}
 
-  function buildActivityForm(a) {
-    return `
-      ${fi('f-actName','Activity / Organization Name',a?.activity_name||'',{required:true})}
-      ${fi('f-role','Role',a?.role||'',{required:true,placeholder:'e.g. Developer · Demo Presenter'})}
-      ${fi('f-period','Period',a?.period||'',{placeholder:'e.g. 2025 or Academic Year 2025'})}
-      ${ft('f-desc','Description',a?.description||'',{rows:3,placeholder:'Brief description of what you did and what you learned'})}
-      ${fImg(a?.image_url||'')}
-      ${fi('f-skills','Soft Skills',(a?.soft_skills||[]).join(', '),{placeholder:'Teamwork, Communication, Problem-solving'})}`;
-  }
+function cardCert(c) {
+  const date  = fmt(c.date_issued);
+  const thumb = c.image_url
+    ? `<img src="${esc(c.image_url)}" style="width:52px;height:52px;border-radius:10px;object-fit:cover;border:1px solid #e4e4e7;flex-shrink:0;" onerror="this.style.display='none'">`
+    : `<div style="width:52px;height:52px;border-radius:10px;background:#f4f4f5;border:1px solid #e4e4e7;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4d4d8" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+       </div>`;
+  return `<div style="background:white;border:1.5px solid #e4e4e7;border-radius:13px;padding:12px 16px;display:flex;gap:12px;align-items:center;transition:.15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
+    ${thumb}
+    <div style="flex:1;min-width:0;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div style="min-width:0;">
+          <p style="font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.title||'')}</p>
+          <p style="font-size:12px;color:#71717a;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.institution||'')}</p>
+          <p style="font-size:11.5px;color:#a1a1aa;font-family:'JetBrains Mono',monospace;margin-top:2px;">${esc(c.type||'')} · ${date}</p>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="btn-edit" data-edit="${c.id}">Edit</button>
+          <button class="btn-del" data-del="${c.id}">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
 
-  function buildCertForm(c) {
-    const types = ['Certification','Workshop/Seminar','Hackathon','Competition','Competition/Workshop','Camp','Course'];
-    return `
-      ${fs('f-type','Type',c?.type||'Certification',types)}
-      ${fi('f-title','Title',c?.title||'',{required:true})}
-      ${fi('f-inst','Institution / Issuer',c?.institution||'',{required:true})}
-      ${fi('f-date','Date',c?.date_issued||'',{type:'date',required:true})}
-      ${fImg(c?.image_url||'')}
-      ${fi('f-credUrl','Credential / Verify URL',c?.credential_url||'',{type:'url',placeholder:'https://...'})}`;
-  }
+function cardAward(a) {
+  const date = fmt(a.date);
+  return `<div style="background:white;border:1.5px solid #e4e4e7;border-radius:13px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:.15s;" onmouseover="this.style.borderColor='#a1a1aa'" onmouseout="this.style.borderColor='#e4e4e7'">
+    <div style="width:38px;height:38px;border-radius:10px;background:#fffbeb;border:1px solid #fde68a;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div style="min-width:0;">
+          <p style="font-weight:600;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(a.title||'')}</p>
+          <p style="font-size:12px;color:#71717a;margin-top:2px;">${esc(a.organization||'')} · <span style="color:#a1a1aa;">${esc(a.category||'')}</span></p>
+          <p style="font-size:11.5px;color:#a1a1aa;font-family:'JetBrains Mono',monospace;margin-top:1px;">${date}</p>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="btn-edit" data-edit="${a.id}">Edit</button>
+          <button class="btn-del" data-del="${a.id}">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
 
-  function buildAwardForm(a) {
-    const cats = ['Competition','Honor/Scholarship','Recognition'];
-    return `
-      ${fs('f-category','Category',a?.category||'Competition',cats)}
-      ${fi('f-title','Title',a?.title||'',{required:true,placeholder:'e.g. Gold Medalist: C Programming'})}
-      ${fi('f-org','Organization',a?.organization||'',{required:true})}
-      ${fi('f-date','Date',a?.date||'',{type:'date',required:true})}
-      ${ft('f-desc','Description',a?.description||'',{rows:2})}`;
-  }
+// ─── MODAL ───
+function openModal(type, item = null) {
+  editingId   = item?.id ?? null;
+  editingType = type;
+  document.getElementById('modal-title').textContent = `${item ? 'Edit' : 'Add'} ${cap(type)}`;
+  document.getElementById('save-btn').textContent    = item ? 'Save Changes' : `Add ${cap(type)}`;
+  document.getElementById('modal-body').innerHTML    = buildForm(type, item);
+  document.getElementById('modal').style.display     = 'block';
+  document.body.style.overflow = 'hidden';
+  // wire up image preview + slug generator
+  wireImgPreview();
+  if (type === 'project' && !item) wireSlug();
+  // wire file picker
+  const picker = document.getElementById('f-img-file');
+  if (picker) picker.addEventListener('change', handleFilePick);
+}
 
-  // ── Save ──
-  async function saveItem() {
-    sync('saving');
-    document.getElementById('modal-save-btn').textContent = 'Saving…';
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+  document.body.style.overflow = '';
+  editingId = null; editingType = null;
+}
+
+function wireImgPreview() {
+  const inp = document.getElementById('f-imgUrl');
+  const pre = document.getElementById('img-pre');
+  if (!inp || !pre) return;
+  const update = () => {
+    const v = inp.value.trim();
+    pre.src = v; pre.style.display = v ? 'block' : 'none';
+  };
+  inp.addEventListener('input', update);
+  update();
+}
+
+function wireSlug() {
+  const title = document.getElementById('f-title');
+  const slug  = document.getElementById('f-slug');
+  if (!title || !slug) return;
+  title.addEventListener('input', () => {
+    if (slug.dataset.touched) return;
+    slug.value = title.value.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  });
+  slug.addEventListener('input', () => { slug.dataset.touched = '1'; });
+}
+
+function handleFilePick(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const inp = document.getElementById('f-imgUrl');
+  const pre = document.getElementById('img-pre');
+  const reader = new FileReader();
+  reader.onload = ev => {
+    if (inp) inp.value = ev.target.result;
+    if (pre) { pre.src = ev.target.result; pre.style.display = 'block'; }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── FORM BUILDERS ───
+function field(id, label, val='', opts={}) {
+  const { type='text', placeholder='', required=false, hint='', mono=false, rows=0 } = opts;
+  const req = required ? ' <span style="color:#f87171">*</span>' : '';
+  const ra  = required ? 'required' : '';
+  const mc  = mono ? ' mono' : '';
+  if (rows > 0) return `<div class="f-group">
+    <label class="f-label" for="${id}">${label}${req}</label>
+    ${hint ? `<p class="f-hint">${hint}</p>` : ''}
+    <textarea id="${id}" rows="${rows}" placeholder="${placeholder}" ${ra} class="f-input${mono?' mono':''}">${esc(val)}</textarea>
+  </div>`;
+  return `<div class="f-group">
+    <label class="f-label" for="${id}">${label}${req}</label>
+    ${hint ? `<p class="f-hint">${hint}</p>` : ''}
+    <input type="${type}" id="${id}" value="${esc(val)}" placeholder="${placeholder}" ${ra} class="f-input${mc}">
+  </div>`;
+}
+
+function select(id, label, val='', opts=[]) {
+  return `<div class="f-group">
+    <label class="f-label" for="${id}">${label}</label>
+    <select id="${id}" class="f-input">${opts.map(o=>`<option value="${esc(o)}" ${val===o?'selected':''}>${esc(o)}</option>`).join('')}</select>
+  </div>`;
+}
+
+function imgField(val='') {
+  return `<div class="f-group">
+    <label class="f-label">Image</label>
+    <p class="f-hint">Paste a URL <strong>or</strong> pick a local file (will be encoded as base64). For best results host on <a href="https://imgur.com" target="_blank" style="color:#059669;">Imgur</a> and paste the link.</p>
+    <input type="text" id="f-imgUrl" value="${esc(val)}" placeholder="https://... or pic/filename.jpg" class="f-input" style="margin-bottom:6px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#71717a;cursor:pointer;padding:6px 12px;border:1.5px solid #e4e4e7;border-radius:8px;background:white;transition:.15s;" onmouseover="this.style.background='#f4f4f5'" onmouseout="this.style.background='white'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload File
+        <input type="file" id="f-img-file" accept="image/*" style="display:none;">
+      </label>
+      <span style="font-size:11px;color:#a1a1aa;">Converts to base64 automatically</span>
+    </div>
+    <img id="img-pre" src="${esc(val)}" alt="Preview" style="display:${val?'block':'none'};margin-top:10px;max-width:200px;max-height:130px;object-fit:contain;border-radius:10px;border:1px solid #e4e4e7;" onerror="this.style.display='none'">
+  </div>`;
+}
+
+function divider(label) {
+  return `<div class="section-divider">${label}</div>`;
+}
+
+function buildForm(type, p) {
+  switch(type) {
+    case 'project': {
+      const cats    = ['Production','Competition','Academic','Personal','Open Source'];
+      const colors  = ['emerald','violet','amber','sky','rose','orange','teal','blue'];
+      const selCats = p?.categories || [];
+      return `
+        ${divider('Basic Info')}
+        ${field('f-title','Title',p?.title||'',{required:true,placeholder:'e.g. Smart Flema Dashboard'})}
+        <div class="f-group">
+          <label class="f-label" for="f-slug">Slug <span style="color:#f87171">*</span></label>
+          <p class="f-hint">URL path — auto-generated from title. Must be unique (e.g. <code>smart-flema</code>).</p>
+          <input type="text" id="f-slug" value="${esc(p?.slug||'')}" placeholder="my-project-name" class="f-input mono">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Categories</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+            ${cats.map(c=>`<label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;color:#3f3f46;user-select:none;">
+              <input type="checkbox" class="cat-chk" value="${c}" ${selCats.includes(c)?'checked':''} style="accent-color:#18181b;width:14px;height:14px;cursor:pointer;"> ${c}
+            </label>`).join('')}
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          ${select('f-color','Accent Color',p?.color||'emerald',colors)}
+          ${field('f-role','Role',p?.role||'',{required:true,placeholder:'Lead Developer · PM'})}
+        </div>
+
+        ${divider('Media')}
+        ${imgField(p?.image_url||'')}
+
+        ${divider('Content')}
+        ${field('f-shortDesc','Short Description',p?.short_description||'',{required:true,placeholder:'One-line summary shown on project cards'})}
+        ${field('f-fullDesc','Full Description',p?.full_description||'',{rows:5,placeholder:'Tell the full story. Separate paragraphs with a blank line.'})}
+
+        ${divider('Case Study')}
+        ${field('f-problem','The Problem',p?.problem_solved||'',{rows:2,placeholder:'What real problem does this solve?'})}
+        ${field('f-learnings','Key Learnings',( p?.key_learnings||[]).join('\n'),{rows:3,hint:'One learning per line.',placeholder:'Learning 1\nLearning 2',mono:true})}
+        ${field('f-result','Result / Outcome',p?.result||'',{rows:2,placeholder:'What happened? Any metrics or awards?'})}
+
+        ${divider('Details')}
+        ${field('f-context','Context',p?.context||'',{placeholder:'e.g. Hylife Hackathon 2025 — CAMT CMU'})}
+        ${field('f-tech','Tech Stack',(p?.tech_stack||[]).join(', '),{placeholder:'JavaScript, React, Tailwind, Python — comma separated'})}
+
+        ${divider('Links')}
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+          ${field('f-github','GitHub URL',p?.github_url||'',{type:'url',placeholder:'https://github.com/...'})}
+          ${field('f-live','Live URL',p?.live_url||'',{type:'url',placeholder:'https://...'})}
+          ${field('f-canva','Presentation',p?.canva_url||'',{type:'url',placeholder:'https://canva.link/...'})}
+        </div>`;
+    }
+    case 'activity': return `
+      ${divider('Info')}
+      ${field('f-actName','Activity / Organization Name',p?.activity_name||'',{required:true})}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        ${field('f-role','Role',p?.role||'',{required:true,placeholder:'Developer · Demo Presenter'})}
+        ${field('f-period','Period',p?.period||'',{placeholder:'2025 or Academic Year 2025'})}
+      </div>
+      ${field('f-desc','Description',p?.description||'',{rows:3,placeholder:'What did you do? What did you learn?'})}
+      ${divider('Media')}
+      ${imgField(p?.image_url||'')}
+      ${divider('Skills')}
+      ${field('f-skills','Soft Skills',(p?.soft_skills||[]).join(', '),{placeholder:'Teamwork, Communication, Problem-solving'})}`;
+
+    case 'certificate': {
+      const types = ['Certification','Workshop/Seminar','Hackathon','Competition','Competition/Workshop','Camp','Course'];
+      return `
+        ${divider('Details')}
+        ${select('f-certType','Type',p?.type||'Certification',types)}
+        ${field('f-title','Title',p?.title||'',{required:true})}
+        ${field('f-inst','Institution / Issuer',p?.institution||'',{required:true})}
+        ${field('f-date','Date Issued',p?.date_issued||'',{type:'date',required:true})}
+        ${divider('Media')}
+        ${imgField(p?.image_url||'')}
+        ${divider('Verification')}
+        ${field('f-credUrl','Credential URL',p?.credential_url||'',{type:'url',placeholder:'https://credential.link/...'})}`;
+    }
+    case 'award': {
+      const cats = ['Competition','Honor/Scholarship','Recognition'];
+      return `
+        ${divider('Details')}
+        ${select('f-cat','Category',p?.category||'Competition',cats)}
+        ${field('f-title','Title',p?.title||'',{required:true,placeholder:'e.g. Gold Medalist: C Programming'})}
+        ${field('f-org','Organization',p?.organization||'',{required:true})}
+        ${field('f-date','Date',p?.date||'',{type:'date',required:true})}
+        ${divider('Description')}
+        ${field('f-desc','Description',p?.description||'',{rows:2,placeholder:'Brief context about this award'})}`;
+    }
+  }
+}
+
+// ─── SAVE ───
+async function saveItem() {
+  const btn = document.getElementById('save-btn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  setDB('saving');
+
+  let table, payload;
+  const type = editingType;
+
+  try {
+    if (type === 'project') {
+      table = 'projects';
+      const slug = gv('f-slug'), title = gv('f-title'), role = gv('f-role'), sd = gv('f-shortDesc');
+      if (!slug || !title || !role || !sd) throw new Error('Title, Slug, Role, and Short Description are required.');
+      payload = {
+        slug, title, role,
+        categories:      [...document.querySelectorAll('.cat-chk:checked')].map(c=>c.value),
+        color:           gv('f-color') || 'emerald',
+        image_url:       gv('f-imgUrl') || null,
+        short_description: sd,
+        full_description:  gv('f-fullDesc') || null,
+        problem_solved:    gv('f-problem') || null,
+        key_learnings:     gv('f-learnings').split('\n').map(s=>s.trim()).filter(Boolean),
+        tech_stack:        gv('f-tech').split(',').map(s=>s.trim()).filter(Boolean),
+        context:           gv('f-context') || null,
+        result:            gv('f-result') || null,
+        github_url:        gv('f-github') || null,
+        live_url:          gv('f-live') || null,
+        canva_url:         gv('f-canva') || null,
+      };
+    } else if (type === 'activity') {
+      table = 'activities';
+      const activity_name = gv('f-actName'), role = gv('f-role');
+      if (!activity_name || !role) throw new Error('Activity name and role are required.');
+      payload = {
+        activity_name, role,
+        period:      gv('f-period') || null,
+        description: gv('f-desc') || null,
+        image_url:   gv('f-imgUrl') || null,
+        soft_skills: gv('f-skills').split(',').map(s=>s.trim()).filter(Boolean),
+      };
+    } else if (type === 'certificate') {
+      table = 'certificates';
+      const title = gv('f-title'), institution = gv('f-inst'), date_issued = gv('f-date');
+      if (!title || !institution || !date_issued) throw new Error('Title, institution, and date are required.');
+      payload = {
+        type:           gv('f-certType') || 'Certification',
+        title, institution, date_issued,
+        image_url:      gv('f-imgUrl') || null,
+        credential_url: gv('f-credUrl') || null,
+      };
+    } else if (type === 'award') {
+      table = 'awards';
+      const title = gv('f-title'), organization = gv('f-org'), date = gv('f-date');
+      if (!title || !organization || !date) throw new Error('Title, organization, and date are required.');
+      payload = {
+        category:    gv('f-cat') || 'Competition',
+        title, organization, date,
+        description: gv('f-desc') || null,
+      };
+    }
+
+    let res;
+    if (editingId) {
+      res = await fetch(`${SB}/${table}?id=eq.${editingId}`, { method:'PATCH', headers:WH, body:JSON.stringify(payload) });
+    } else {
+      res = await fetch(`${SB}/${table}`, { method:'POST', headers:WH, body:JSON.stringify(payload) });
+    }
+
+    if (!res.ok) {
+      const body = await res.text();
+      let msg = `HTTP ${res.status}`;
+      try { const j = JSON.parse(body); msg = j.message || j.hint || msg; } catch {}
+      throw new Error(msg);
+    }
+
+    toast(`${cap(type)} ${editingId ? 'updated' : 'added'} successfully!`, 'ok');
+    closeModal();
+    await loadAllCounts();
+    await loadTab(currentTab);
+    setDB('ok');
+  } catch(e) {
+    toast(e.message, 'err');
+    setDB('error');
+  } finally {
+    btn.textContent = 'Save Changes'; btn.disabled = false;
+  }
+}
+
+// ─── DELETE ───
+function confirmDel(tab, id) {
+  const delModal = document.getElementById('del-modal');
+  delModal.style.display = 'flex';
+  document.getElementById('del-confirm').onclick = async () => {
+    delModal.style.display = 'none';
+    setDB('saving');
     try {
-      let payload, table;
-      const type = currentType;
-
-      if (type === 'project') {
-        table = 'projects';
-        const slug = gv('f-slug');
-        const title = gv('f-title');
-        const role = gv('f-role');
-        const shortDesc = gv('f-shortDesc');
-        if (!slug || !title || !role || !shortDesc) { showToast('Fill in required fields (Title, Slug, Role, Short Description).','error'); sync('ready'); document.getElementById('modal-save-btn').textContent='Save'; return; }
-        payload = {
-          slug, title,
-          categories: [...document.querySelectorAll('.cat-chk:checked')].map(c=>c.value),
-          color: gv('f-color'),
-          image_url: gv('f-imageUrl')||null,
-          short_description: shortDesc,
-          full_description: gv('f-fullDesc')||null,
-          problem_solved: gv('f-problem')||null,
-          key_learnings: gv('f-learnings').split('\n').map(s=>s.trim()).filter(Boolean),
-          tech_stack: gv('f-tech').split(',').map(s=>s.trim()).filter(Boolean),
-          role, context: gv('f-context')||null,
-          result: gv('f-result')||null,
-          github_url: gv('f-github')||null,
-          live_url: gv('f-live')||null,
-          canva_url: gv('f-canva')||null,
-        };
-      } else if (type === 'activity') {
-        table = 'activities';
-        const activity_name = gv('f-actName');
-        const role = gv('f-role');
-        if (!activity_name || !role) { showToast('Activity name and role are required.','error'); sync('ready'); document.getElementById('modal-save-btn').textContent='Save'; return; }
-        payload = {
-          activity_name, role,
-          period: gv('f-period')||null,
-          description: gv('f-desc')||null,
-          image_url: gv('f-imageUrl')||null,
-          soft_skills: gv('f-skills').split(',').map(s=>s.trim()).filter(Boolean),
-        };
-      } else if (type === 'certificate') {
-        table = 'certificates';
-        const title = gv('f-title');
-        const institution = gv('f-inst');
-        const date_issued = gv('f-date');
-        if (!title || !institution || !date_issued) { showToast('Title, institution, and date are required.','error'); sync('ready'); document.getElementById('modal-save-btn').textContent='Save'; return; }
-        payload = {
-          type: gv('f-type'), title, institution,
-          date_issued,
-          image_url: gv('f-imageUrl')||null,
-          credential_url: gv('f-credUrl')||null,
-        };
-      } else if (type === 'award') {
-        table = 'awards';
-        const title = gv('f-title');
-        const organization = gv('f-org');
-        const date = gv('f-date');
-        if (!title || !organization || !date) { showToast('Title, organization, and date are required.','error'); sync('ready'); document.getElementById('modal-save-btn').textContent='Save'; return; }
-        payload = {
-          category: gv('f-category'), title, organization, date,
-          description: gv('f-desc')||null,
-        };
-      }
-
-      if (editingId) {
-        await sbPatch(table, editingId, payload);
-        showToast(`${cap(type)} updated!`, 'success');
-      } else {
-        await sbPost(table, payload);
-        showToast(`${cap(type)} added!`, 'success');
-      }
-
-      closeModal();
-      loadTab(currentTab);
+      const table = TABLES[{ projects:'project', activities:'activity', certificates:'certificate', awards:'award' }[tab]];
+      const res = await fetch(`${SB}/${table}?id=eq.${id}`, { method:'DELETE', headers:WH });
+      if (!res.ok) throw new Error(await res.text());
+      toast('Item deleted.', 'ok');
+      await loadAllCounts();
+      await loadTab(currentTab);
+      setDB('ok');
     } catch(e) {
-      console.error(e);
-      sync('error');
-      showToast(`Save failed: ${e.message}. Check Supabase RLS policies allow INSERT/UPDATE for anon.`, 'error');
-    } finally {
-      document.getElementById('modal-save-btn').textContent = 'Save';
+      toast(`Delete failed: ${e.message}`, 'err');
+      setDB('error');
     }
-  }
+  };
+}
 
-  // ── Delete ──
-  function confirmDelete(tab, id) {
-    const table = TABLE[TABKEY[tab]];
-    document.getElementById('del-confirm-btn').onclick = async () => {
-      document.getElementById('del-modal').classList.add('hidden');
-      sync('saving');
-      try {
-        await sbDelete(table, id);
-        showToast('Item deleted.', 'success');
-        loadTab(currentTab);
-      } catch(e) {
-        sync('error');
-        showToast(`Delete failed: ${e.message}`, 'error');
-      }
-    };
-    document.getElementById('del-modal').classList.remove('hidden');
-  }
+// ─── TOAST ───
+let _toastT;
+function toast(msg, state='ok') {
+  const icons = {
+    ok: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
+    err:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+  };
+  document.getElementById('toast-icon').innerHTML = icons[state] || '';
+  document.getElementById('toast-msg').textContent = msg;
+  const el = document.getElementById('toast');
+  el.style.display = 'block';
+  clearTimeout(_toastT);
+  _toastT = setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
 
-  // ── Toast ──
-  function showToast(msg, type='success') {
-    document.getElementById('toast-text').textContent = msg;
-    document.getElementById('toast-icon').innerHTML = type === 'success'
-      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
-      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
-    const el = document.getElementById('toast');
-    el.classList.remove('hidden');
-    clearTimeout(window._toast);
-    window._toast = setTimeout(() => el.classList.add('hidden'), 5000);
-  }
-
-  // ── Utils ──
-  function gv(id) { return (document.getElementById(id)?.value||'').trim(); }
-  function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function cap(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
-  function fmtDate(d) { return d ? new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short'}) : ''; }
-
-  // ── Init ──
-  loadTab('projects');
-  </script>
+// ─── UTILS ───
+function gv(id) { return (document.getElementById(id)?.value || '').trim(); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function fmt(d) { return d ? new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '—'; }
+</script>
 </body>
 </html>

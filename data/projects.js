@@ -30,7 +30,7 @@ I took the camera-based heatmap approach from the Smart City work and refined it
     categories: ["Production", "Academic"],
     title: "Smart City Management Platform",
     color: "violet",
-    imageUrl: "",
+    imageUrl: "pic/Screenshot 2569-04-22 at 22.10.12.png",
     shortDescription: "Real-world city management platform built for Lampang Municipality using CCTV, AI, and environmental data.",
     fullDescription: `This is a production platform built for Lampang Municipality in collaboration with Pyramid Solution — not a classroom simulation, but a real system with real stakeholders.
 
@@ -57,7 +57,7 @@ This was my first time managing a project of this scale, and honestly, I struggl
     categories: ["Competition", "Academic"],
     title: "AgriLink Agriculture Platform",
     color: "amber",
-    imageUrl: "",
+    imageUrl: "pic/Screenshot 2569-04-22 at 22.10.46.png",
     shortDescription: "Hackathon prototype connecting farmers directly with buyers via AI, IoT, and QR Code traceability.",
     fullDescription: `AgriLink was born during the Hylife Hackathon 2025 at CAMT. In a team of five, I proposed the core idea and then built the entire working prototype myself — frontend, backend integration, and the QR code tracing flow.
 
@@ -83,7 +83,7 @@ This was my first time building a complete prototype from scratch on my own, and
     categories: ["Open Source", "Academic"],
     title: "Decentralized IoT Communication System",
     color: "sky",
-    imageUrl: "",
+    imageUrl: "pic/Screenshot 2569-04-22 at 22.11.33.png",
     shortDescription: "Local peer-to-peer communication system for disaster scenarios using ESP32 mesh networking.",
     fullDescription: `Built as part of the WEB3 Student Club at CAMT, this project creates a communication system that works without internet — designed for scenarios like natural disasters where centralized infrastructure collapses.
 
@@ -109,7 +109,7 @@ I worked with both Arduino IDE and PlatformIO, and was responsible for building 
     categories: ["Academic", "Personal"],
     title: "Library Management System",
     color: "rose",
-    imageUrl: "",
+    imageUrl: "pic/Screenshot 2569-04-22 at 22.11.56.png",
     shortDescription: "Java OOP system with full CRUD, CSV persistence, and polymorphic late-fee calculation.",
     fullDescription: `A library management system built in Java as a post-midterm coursework project. While it was a team assignment, I personally wrote approximately 80% of the codebase.
 

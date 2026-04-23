@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migrate Projects → Supabase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { animation: spin .7s linear infinite; }
+  </style>
+</head>
+<body class="bg-zinc-50 min-h-screen flex items-center justify-center p-6">
+
+  <div class="w-full max-w-xl">
+
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <p class="mono text-xs text-zinc-400 mb-2">portfolio / migrate</p>
+      <h1 class="text-2xl font-bold text-zinc-900">Migrate Projects to Supabase</h1>
+      <p class="text-sm text-zinc-500 mt-1.5">Reads <code class="bg-zinc-100 px-1.5 py-0.5 rounded text-xs">data/projects.js</code> and upserts all projects into your database.</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+
+      <!-- Project list preview -->
+      <div class="p-5 border-b border-zinc-100">
+        <p class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-3">Projects to migrate</p>
+        <div id="preview-list" class="space-y-2 text-sm text-zinc-700"></div>
+      </div>
+
+      <!-- Log -->
+      <div class="p-5 border-b border-zinc-100">
+        <p class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-3">Log</p>
+        <div id="log" class="mono text-xs space-y-1.5 text-zinc-500 min-h-[60px]">
+          <span class="text-zinc-400 italic">Ready. Press "Run Migration" to start.</span>
+        </div>
+      </div>
+
+      <!-- Footer actions -->
+      <div class="p-5 flex gap-3">
+        <button id="run-btn" onclick="runMigration()"
+          class="flex-1 flex items-center justify-center gap-2 bg-zinc-900 text-white font-semibold text-sm py-2.5 px-4 rounded-xl hover:bg-zinc-700 transition-colors">
+          <svg id="btn-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span id="btn-label">Run Migration</span>
+        </button>
+        <a href="index.html"
+          class="flex items-center gap-1.5 text-sm font-medium text-zinc-500 border border-zinc-200 px-4 py-2.5 rounded-xl hover:bg-zinc-50 transition-colors">
+          ← Portfolio
+        </a>
+      </div>
+    </div>
+
+    <!-- Result summary -->
+    <div id="result" class="hidden mt-5 rounded-2xl p-5 border text-sm"></div>
+
+  </div>
+
+  <!-- Load local project data -->
+  <script src="data/projects.js"></script>
+
+  <script>
+    const SB  = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
+    const SVC = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NjY5NTE0OCwiZXhwIjoyMDkyMjcxMTQ4fQ.tOap3UMeUzmpy--Gwa_AJ7ZiYc96JoidQ6mOztYETDw";
+
+    const WH = {
+      apikey: SVC,
+      Authorization: `Bearer ${SVC}`,
+      'Content-Type': 'application/json',
+      Prefer: 'resolution=merge-duplicates,return=representation',
+      Accept: 'application/json'
+    };
+
+    // Render preview list
+    const previewEl = document.getElementById('preview-list');
+    previewEl.innerHTML = (projectsData || []).map(p => `
+      <div class="flex items-center gap-2.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-zinc-300 flex-shrink-0"></span>
+        <span class="font-medium text-zinc-800">${p.title}</span>
+        <span class="mono text-[11px] text-zinc-400">${p.slug}</span>
+        <span class="ml-auto text-[11px] text-zinc-400">${p.imageUrl || '—'}</span>
+      </div>`).join('');
+
+    function log(msg, type = 'info') {
+      const logEl = document.getElementById('log');
+      if (logEl.querySelector('.italic')) logEl.innerHTML = '';
+      const colors = { info: 'text-zinc-500', ok: 'text-emerald-600', err: 'text-red-500', head: 'text-zinc-700 font-semibold' };
+      const prefix = { info: '›', ok: '✓', err: '✗', head: '▸' };
+      const div = document.createElement('div');
+      div.className = colors[type] || 'text-zinc-500';
+      div.textContent = `${prefix[type] || '›'} ${msg}`;
+      logEl.appendChild(div);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    async function runMigration() {
+      const btn   = document.getElementById('run-btn');
+      const icon  = document.getElementById('btn-icon');
+      const label = document.getElementById('btn-label');
+      btn.disabled = true;
+      icon.innerHTML = '<circle cx="12" cy="12" r="10" stroke-opacity=".3"/><path d="M12 2a10 10 0 0 1 10 10"/>';
+      icon.classList.add('spin');
+      label.textContent = 'Migrating…';
+
+      const projects = projectsData || [];
+      log(`Starting migration — ${projects.length} project(s)`, 'head');
+
+      let ok = 0, fail = 0;
+      const errors = [];
+
+      for (const p of projects) {
+        log(`Upserting "${p.title}" (${p.slug})…`);
+
+        const payload = {
+          slug:              p.slug,
+          title:             p.title,
+          categories:        p.categories  || [],
+          color:             p.color       || 'emerald',
+          image_url:         p.imageUrl    || null,
+          short_description: p.shortDescription || '',
+          full_description:  p.fullDescription  || '',
+          problem_solved:    p.problemSolved    || null,
+          key_learnings:     p.keyLearnings     || [],
+          tech_stack:        p.techStack        || [],
+          role:              p.role             || null,
+          context:           p.context          || null,
+          result:            p.result           || null,
+          github_url:        p.githubUrl        || null,
+          live_url:          p.liveUrl          || null,
+          canva_url:         p.canvaUrl         || null,
+        };
+
+        try {
+          const res = await fetch(`${SB}/projects?on_conflict=slug`, {
+            method: 'POST',
+            headers: WH,
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            const body = await res.text();
+            let msg = `HTTP ${res.status}`;
+            try { const j = JSON.parse(body); msg = j.message || j.hint || msg; } catch {}
+            throw new Error(msg);
+          }
+
+          log(`"${p.title}" — saved`, 'ok');
+          ok++;
+        } catch (e) {
+          log(`"${p.title}" — FAILED: ${e.message}`, 'err');
+          errors.push({ title: p.title, error: e.message });
+          fail++;
+        }
+      }
+
+      log(`Done — ${ok} succeeded, ${fail} failed`, 'head');
+
+      // Show result banner
+      const resultEl = document.getElementById('result');
+      resultEl.classList.remove('hidden');
+      if (fail === 0) {
+        resultEl.className = 'mt-5 rounded-2xl p-5 border text-sm bg-emerald-50 border-emerald-200 text-emerald-800';
+        resultEl.innerHTML = `
+          <p class="font-semibold mb-1">✓ All ${ok} projects migrated successfully!</p>
+          <p class="text-emerald-700 text-xs">Your portfolio will now show all projects with their images. <a href="index.html" class="underline font-medium">View portfolio →</a></p>`;
+      } else {
+        resultEl.className = 'mt-5 rounded-2xl p-5 border text-sm bg-red-50 border-red-200 text-red-800';
+        resultEl.innerHTML = `
+          <p class="font-semibold mb-1">${ok} succeeded · ${fail} failed</p>
+          <ul class="text-xs space-y-1 text-red-700 mt-2">${errors.map(e => `<li>• ${e.title}: ${e.error}</li>`).join('')}</ul>`;
+      }
+
+      btn.disabled = false;
+      icon.classList.remove('spin');
+      icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+      label.textContent = 'Run Again';
+    }
+  </script>
+
+</body>
+</html>
