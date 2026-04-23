@@ -5,250 +5,273 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project — Naruephon Yotmao</title>
-  <meta name="description" content="Project details — Naruephon Yotmao's portfolio.">
+  <meta name="description" content="Project case study — Naruephon Yotmao's portfolio.">
 
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="tailwind.config.js"></script>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-  <!-- Custom Styles -->
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .label { font-size: 11px; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; }
+    .prose-block p { color: #3f3f46; line-height: 1.75; font-size: 15px; }
+    .prose-block p + p { margin-top: 1em; }
+  </style>
 </head>
 
 <body>
-  <main class="max-w-2xl mx-auto px-6 py-20 md:py-24">
 
-    <!-- Top nav -->
-    <div class="flex items-center justify-between mb-10">
-      <a href="index.html" id="back-link"
-        class="inline-flex items-center gap-1.5 text-sm text-zinc-600 font-mono tracking-tight hover:text-zinc-900:text-zinc-100 transition-colors group focus-visible:outline-none focus:ring-2 focus-visible:ring-zinc-400:ring-zinc-500 rounded px-2 -ml-2 py-1">
-        <span class="transition-transform group-hover:-translate-x-0.5">&larr;</span>
-        Back to Home
+  <!-- ── Sticky back nav ── -->
+  <nav class="sticky top-0 z-50 bg-zinc-50/95 backdrop-blur-md border-b border-zinc-200/70">
+    <div class="max-w-2xl mx-auto px-6 h-13 flex items-center justify-between" style="height:52px">
+      <a href="index.html"
+        class="inline-flex items-center gap-1.5 text-sm text-zinc-500 font-medium hover:text-zinc-900 transition-colors group">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="group-hover:-translate-x-0.5 transition-transform"><path d="m15 18-6-6 6-6"/></svg>
+        Back to Portfolio
       </a>
+      <span id="nav-title" class="text-sm font-medium text-zinc-400 truncate max-w-[200px] hidden sm:block"></span>
+    </div>
+  </nav>
+
+  <main class="max-w-2xl mx-auto px-6 py-12">
+
+    <!-- Loading skeleton -->
+    <div id="skeleton" class="space-y-4 animate-pulse">
+      <div class="h-8 bg-zinc-100 rounded-xl w-3/4"></div>
+      <div class="h-4 bg-zinc-100 rounded-xl w-1/2"></div>
+      <div class="flex gap-2 mt-4">
+        <div class="h-7 w-20 bg-zinc-100 rounded-full"></div>
+        <div class="h-7 w-20 bg-zinc-100 rounded-full"></div>
+      </div>
+      <div class="h-48 bg-zinc-100 rounded-xl mt-6"></div>
     </div>
 
-    <!-- Project content (populated by JS) -->
+    <!-- Project content -->
     <article id="project-content" class="hidden">
 
-      <!-- Title -->
-      <h1 id="project-title" class="text-2xl sm:text-3xl font-bold tracking-tight"></h1>
-
-      <!-- Role & Context -->
-      <p id="project-context" class="text-sm text-zinc-600 font-mono tracking-tight mt-2"></p>
-
-      <!-- Tech stack badges -->
-      <div id="project-tech" class="flex flex-wrap gap-2 mt-4"></div>
-
-      <!-- Project image (shown if available) -->
-      <div id="project-image-wrapper" class="hidden mt-8">
-        <img id="project-image" src="" alt="" class="w-full rounded-xl border border-zinc-200 shadow-sm">
-      </div>
-
-      <hr class="border-zinc-200 my-8">
-
-      <!-- The Problem -->
-      <div id="project-problem-wrapper" class="hidden mb-8">
-        <h2 class="text-sm font-bold text-zinc-900 uppercase tracking-wider mb-2">The Problem</h2>
-        <p id="project-problem" class="text-base leading-relaxed text-zinc-700 max-w-prose"></p>
-      </div>
-
-      <!-- Full description (The Solution) -->
+      <!-- Header -->
       <div class="mb-8">
-        <h2 class="text-sm font-bold text-zinc-900 uppercase tracking-wider mb-2">What I Built</h2>
-        <div id="project-description" class="prose-custom space-y-4"></div>
+        <div class="flex flex-wrap items-center gap-2 mb-4" id="project-cats"></div>
+        <h1 id="project-title" class="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 leading-snug mb-2"></h1>
+        <p id="project-context" class="text-sm text-zinc-500 font-mono tracking-tight"></p>
+
+        <!-- Tech stack -->
+        <div id="project-tech" class="flex flex-wrap gap-2 mt-4"></div>
       </div>
 
-      <!-- Key Learnings -->
-      <div id="project-learnings-wrapper" class="hidden mb-8">
-        <h2 class="text-sm font-bold text-zinc-900 uppercase tracking-wider mb-2">Key Learnings</h2>
-        <ul id="project-learnings" class="space-y-2"></ul>
+      <!-- Project image -->
+      <div id="project-image-wrapper" class="hidden mb-10">
+        <img id="project-image" src="" alt="" class="w-full rounded-2xl border border-zinc-200 shadow-sm">
       </div>
 
-      <!-- Result -->
-      <div id="project-result-wrapper" class="hidden mb-8">
-        <h2 class="text-sm font-bold text-zinc-900 uppercase tracking-wider mb-2">Result</h2>
-        <p id="project-result" class="text-base leading-relaxed text-zinc-700 max-w-prose"></p>
-      </div>
+      <!-- Main content -->
+      <div class="space-y-10">
 
-      <hr class="border-zinc-200 my-8">
+        <!-- The Problem -->
+        <div id="project-problem-wrapper" class="hidden">
+          <p class="label">The Problem</p>
+          <div class="bg-amber-50/60 border border-amber-100 rounded-xl p-5">
+            <p id="project-problem" class="text-sm leading-relaxed text-zinc-700"></p>
+          </div>
+        </div>
+
+        <!-- What I Built -->
+        <div>
+          <p class="label">What I Built</p>
+          <div id="project-description" class="prose-block"></div>
+        </div>
+
+        <!-- Key Learnings -->
+        <div id="project-learnings-wrapper" class="hidden">
+          <p class="label">Key Learnings</p>
+          <ul id="project-learnings" class="space-y-2.5"></ul>
+        </div>
+
+        <!-- Result -->
+        <div id="project-result-wrapper" class="hidden">
+          <p class="label">Result</p>
+          <div class="bg-emerald-50/60 border border-emerald-100 rounded-xl p-5">
+            <p id="project-result" class="text-sm leading-relaxed text-zinc-700"></p>
+          </div>
+        </div>
+
+      </div>
 
       <!-- Links -->
-      <div id="project-links" class="flex flex-wrap gap-4"></div>
+      <div id="project-links-wrapper" class="mt-10 pt-8 border-t border-zinc-100">
+        <p class="label mb-4">Links</p>
+        <div id="project-links" class="flex flex-wrap gap-3"></div>
+      </div>
 
     </article>
 
-    <!-- Not found state -->
+    <!-- Not found -->
     <div id="not-found" class="hidden text-center py-20">
-      <p class="text-lg text-zinc-600">Project not found.</p>
-      <a href="index.html" class="text-accent underline underline-offset-2 text-sm mt-2 inline-block">Go back
-        home</a>
+      <p class="text-zinc-400 text-base mb-3">Project not found.</p>
+      <a href="index.html" class="text-accent underline underline-offset-2 text-sm">Go back to portfolio</a>
     </div>
 
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-zinc-200 py-10 mt-10 text-center flex flex-col items-center justify-center gap-2">
-    <p class="text-sm font-mono tracking-tight text-zinc-700 opacity-90"><span class="italic font-sans">Handcrafted by</span> Naruephon Yotmao</p>
-    <p class="text-xs text-zinc-600 font-mono tracking-tight opacity-75">Last Updated: April 2026</p>
+  <footer class="border-t border-zinc-100 py-8 mt-8">
+    <div class="max-w-2xl mx-auto px-6 flex items-center justify-between">
+      <p class="text-xs font-mono text-zinc-400"><span class="italic font-sans">Crafted by</span> Naruephon Yotmao</p>
+      <a href="index.html" class="text-xs font-mono text-zinc-400 hover:text-zinc-700 transition-colors">← Portfolio</a>
+    </div>
   </footer>
 
-  <!-- Data & Rendering -->
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get("slug");
+  document.addEventListener('DOMContentLoaded', async () => {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('slug');
 
-      if (!slug) {
-        document.getElementById("not-found").classList.remove("hidden");
-        return;
-      }
+    if (!slug) {
+      document.getElementById('skeleton').classList.add('hidden');
+      document.getElementById('not-found').classList.remove('hidden');
+      return;
+    }
 
-      const SUPABASE_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
-      const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
-      const headers = { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}`, 'Accept': 'application/json' };
+    const SB_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
+    const H = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Accept: 'application/json' };
 
-      let project = null;
+    let project = null;
 
-      try {
-        const response = await fetch(`${SUPABASE_URL}/projects?slug=eq.${slug}&select=*`, { headers });
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.length > 0) {
-            const p = data[0];
-            project = {
-              ...p,
-              imageUrl: p.image_url,
-              shortDescription: p.short_description,
-              fullDescription: p.full_description,
-              problemSolved: p.problem_solved,
-              keyLearnings: p.key_learnings,
-              techStack: p.tech_stack,
-              githubUrl: p.github_url,
-              liveUrl: p.live_url,
-              canvaUrl: p.canva_url
-            };
-          }
+    try {
+      const res = await fetch(`${SB_URL}/projects?slug=eq.${slug}&select=*`, { headers: H });
+      if (res.ok) {
+        const d = await res.json();
+        if (d?.length) {
+          const p = d[0];
+          project = {
+            ...p,
+            imageUrl: p.image_url,
+            shortDescription: p.short_description,
+            fullDescription: p.full_description,
+            problemSolved: p.problem_solved,
+            keyLearnings: p.key_learnings,
+            techStack: p.tech_stack,
+            githubUrl: p.github_url,
+            liveUrl: p.live_url,
+            canvaUrl: p.canva_url
+          };
         }
-      } catch (error) {
-        console.error("Error fetching project from Supabase:", error);
       }
+    } catch(e) { console.error(e); }
 
-      if (!project) {
-        document.getElementById("not-found").classList.remove("hidden");
-        return;
-      }
+    document.getElementById('skeleton').classList.add('hidden');
 
-      // Update page title
-      document.title = `${project.title} — Naruephon Yotmao`;
+    if (!project) {
+      document.getElementById('not-found').classList.remove('hidden');
+      return;
+    }
 
-      // Title
-      document.getElementById("project-title").textContent = project.title;
+    document.title = `${project.title} — Naruephon Yotmao`;
 
-      // Context & role
-      const contextEl = document.getElementById("project-context");
-      contextEl.textContent = `${project.role} · ${project.context}`;
+    // Color map
+    const CMAP = { emerald:'#059669', violet:'#7c3aed', amber:'#d97706', sky:'#0284c7', rose:'#e11d48', orange:'#ea580c', teal:'#0d9488', blue:'#2563eb' };
+    const color = CMAP[project.color] || '#71717a';
 
-      // Tech stack
-      const techEl = document.getElementById("project-tech");
-      (project.techStack || []).forEach((tech) => {
-        const span = document.createElement("span");
-        span.className = "skill-tag px-3 py-1.5 text-sm font-medium rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200";
-        span.textContent = tech;
-        techEl.appendChild(span);
-      });
+    // Nav title
+    document.getElementById('nav-title').textContent = project.title;
 
-      // Project image
-      const imgWrapper = document.getElementById("project-image-wrapper");
-      const imgEl = document.getElementById("project-image");
-      if (project.imageUrl) {
-        imgEl.src = project.imageUrl;
-        imgEl.alt = `${project.title} poster`;
-        imgWrapper.classList.remove("hidden");
-      }
-
-      // The Problem
-      if (project.problemSolved) {
-        const problemWrapper = document.getElementById("project-problem-wrapper");
-        document.getElementById("project-problem").textContent = project.problemSolved;
-        problemWrapper.classList.remove("hidden");
-      }
-
-      // Description paragraphs (What I Built)
-      const descEl = document.getElementById("project-description");
-      if (project.fullDescription) {
-        project.fullDescription.split("\n\n").forEach((para) => {
-          const p = document.createElement("p");
-          p.className = "text-base leading-relaxed text-zinc-700 max-w-prose";
-          p.textContent = para.trim();
-          descEl.appendChild(p);
-        });
-      }
-
-      // Key Learnings
-      if (project.keyLearnings && project.keyLearnings.length > 0) {
-        const learningsWrapper = document.getElementById("project-learnings-wrapper");
-        const learningsEl = document.getElementById("project-learnings");
-        project.keyLearnings.forEach((lesson) => {
-          const li = document.createElement("li");
-          li.className = "flex items-start gap-2 text-sm text-zinc-700 leading-relaxed";
-          li.innerHTML = `<span class="text-accent mt-0.5 flex-shrink-0">›</span> ${lesson}`;
-          learningsEl.appendChild(li);
-        });
-        learningsWrapper.classList.remove("hidden");
-      }
-
-      // Result
-      if (project.result) {
-        const resultWrapper = document.getElementById("project-result-wrapper");
-        document.getElementById("project-result").textContent = project.result;
-        resultWrapper.classList.remove("hidden");
-      }
-
-      // Links
-      const linksEl = document.getElementById("project-links");
-      if (project.githubUrl) {
-        const a = document.createElement("a");
-        a.href = project.githubUrl;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.className = "text-sm text-accent hover:opacity-70 underline underline-offset-2 flex items-center gap-1";
-        a.innerHTML = "Source Code &nearr;";
-        linksEl.appendChild(a);
-      }
-      if (project.liveUrl) {
-        const a = document.createElement("a");
-        a.href = project.liveUrl;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.className = "text-sm text-accent hover:opacity-70 underline underline-offset-2 flex items-center gap-1";
-        a.innerHTML = "Live Site &nearr;";
-        linksEl.appendChild(a);
-      }
-      if (project.canvaUrl) {
-        const a = document.createElement("a");
-        a.href = project.canvaUrl;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.className = "text-sm text-accent hover:opacity-70 underline underline-offset-2 flex items-center gap-1";
-        a.innerHTML = "Presentation &nearr;";
-        linksEl.appendChild(a);
-      }
-
-      // If no links at all, hide the links section
-      if (!project.githubUrl && !project.liveUrl && !project.canvaUrl && linksEl.previousElementSibling) {
-        linksEl.previousElementSibling.remove();
-        linksEl.remove();
-      }
-
-      // Show content
-      document.getElementById("project-content").classList.remove("hidden");
+    // Category badges
+    const catsEl = document.getElementById('project-cats');
+    (project.categories || []).forEach(cat => {
+      const sp = document.createElement('span');
+      sp.className = 'text-xs font-semibold px-2.5 py-1 rounded-full border';
+      sp.style.color = color;
+      sp.style.borderColor = color + '40';
+      sp.style.background = color + '0d';
+      sp.textContent = cat;
+      catsEl.appendChild(sp);
     });
-  </script>
-</body>
 
+    // Title
+    document.getElementById('project-title').textContent = project.title;
+
+    // Context
+    document.getElementById('project-context').textContent = [project.role, project.context].filter(Boolean).join(' · ');
+
+    // Tech
+    const techEl = document.getElementById('project-tech');
+    (project.techStack || []).forEach(t => {
+      const sp = document.createElement('span');
+      sp.className = 'px-3 py-1 text-xs font-medium rounded-full bg-white border border-zinc-200 text-zinc-600 shadow-sm';
+      sp.textContent = t;
+      techEl.appendChild(sp);
+    });
+
+    // Image
+    if (project.imageUrl) {
+      document.getElementById('project-image').src = project.imageUrl;
+      document.getElementById('project-image').alt = `${project.title} screenshot`;
+      document.getElementById('project-image-wrapper').classList.remove('hidden');
+    }
+
+    // Problem
+    if (project.problemSolved) {
+      document.getElementById('project-problem').textContent = project.problemSolved;
+      document.getElementById('project-problem-wrapper').classList.remove('hidden');
+    }
+
+    // Description
+    const descEl = document.getElementById('project-description');
+    if (project.fullDescription) {
+      project.fullDescription.split('\n\n').forEach(para => {
+        if (!para.trim()) return;
+        const p = document.createElement('p');
+        p.textContent = para.trim();
+        descEl.appendChild(p);
+      });
+    }
+
+    // Learnings
+    if (project.keyLearnings?.length) {
+      const ul = document.getElementById('project-learnings');
+      project.keyLearnings.forEach(lesson => {
+        const li = document.createElement('li');
+        li.className = 'flex items-start gap-3 text-sm text-zinc-700 leading-relaxed';
+        li.innerHTML = `<span class="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0" style="background:${color}"></span>${lesson}`;
+        ul.appendChild(li);
+      });
+      document.getElementById('project-learnings-wrapper').classList.remove('hidden');
+    }
+
+    // Result
+    if (project.result) {
+      document.getElementById('project-result').textContent = project.result;
+      document.getElementById('project-result-wrapper').classList.remove('hidden');
+    }
+
+    // Links
+    const linksEl = document.getElementById('project-links');
+    const linkData = [
+      { url: project.githubUrl, label: 'Source Code', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>' },
+      { url: project.liveUrl, label: 'Live Site', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' },
+      { url: project.canvaUrl, label: 'Presentation', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="14" x="3" y="5" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="19" x2="12" y2="21"/></svg>' },
+    ];
+
+    let hasLinks = false;
+    linkData.forEach(({ url, label, icon }) => {
+      if (!url) return;
+      hasLinks = true;
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.className = 'inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-colors shadow-sm';
+      a.innerHTML = `${icon} ${label} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M7 7h10v10"/></svg>`;
+      linksEl.appendChild(a);
+    });
+    if (!hasLinks) document.getElementById('project-links-wrapper').classList.add('hidden');
+
+    document.getElementById('project-content').classList.remove('hidden');
+  });
+  </script>
+
+</body>
 </html>
