@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project — Naruephon Yotmao</title>
-  <meta name="description" content="Project case study — Naruephon Yotmao's portfolio.">
+  <meta name="description" content="Project case study — the purpose, the technical hurdles, and what was learned.">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="tailwind.config.js"></script>
@@ -16,107 +16,302 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    .label { font-size: 11px; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; }
-    .prose-block p { color: #3f3f46; line-height: 1.75; font-size: 15px; }
-    .prose-block p + p { margin-top: 1em; }
+    :root { --accent: #059669; --accent-soft: #0596691a; }
+
+    /* ── Reading progress bar (top) ── */
+    #read-progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0;
+      background: var(--accent); z-index: 100;
+      transition: width .1s linear;
+    }
+
+    /* ── Section labels ── */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 500; color: #a1a1aa;
+      text-transform: uppercase; letter-spacing: .12em;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .section-label::before {
+      content: ''; display: inline-block;
+      width: 20px; height: 1px; background: #d4d4d8;
+    }
+
+    /* ── Prose reader typography ── */
+    .narrative p {
+      color: #27272a; line-height: 1.8; font-size: 16px;
+      font-weight: 400; letter-spacing: -.005em;
+    }
+    .narrative p + p { margin-top: 1.1em; }
+    .narrative p::first-letter { font-weight: 500; }
+
+    /* ── Scroll-reveal frames ── */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* Staggered children */
+    .reveal-stagger > * {
+      opacity: 0; transform: translateY(18px);
+      transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal-stagger.in > *:nth-child(1) { transition-delay: .05s; opacity: 1; transform: none; }
+    .reveal-stagger.in > *:nth-child(2) { transition-delay: .15s; opacity: 1; transform: none; }
+    .reveal-stagger.in > *:nth-child(3) { transition-delay: .25s; opacity: 1; transform: none; }
+    .reveal-stagger.in > *:nth-child(4) { transition-delay: .35s; opacity: 1; transform: none; }
+    .reveal-stagger.in > *:nth-child(5) { transition-delay: .45s; opacity: 1; transform: none; }
+    .reveal-stagger.in > *:nth-child(6) { transition-delay: .55s; opacity: 1; transform: none; }
+
+    /* ── Frame dividers (vertical line) ── */
+    .frame {
+      position: relative; padding-left: 24px;
+      border-left: 1px solid #e4e4e7;
+    }
+    .frame::before {
+      content: ''; position: absolute; left: -5px; top: 0;
+      width: 9px; height: 9px; border-radius: 50%;
+      background: white; border: 2px solid var(--accent);
+    }
+
+    /* ── Learning list: numbered with accent ── */
+    .learning-item {
+      display: grid; grid-template-columns: 28px 1fr; gap: 14px;
+      padding: 14px 0; border-top: 1px solid #f4f4f5;
+    }
+    .learning-item:first-child { border-top: 0; }
+    .learning-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      padding-top: 2px;
+    }
+
+    /* ── Tech pill ── */
+    .tech-pill {
+      display: inline-flex; align-items: center;
+      padding: 6px 12px; font-size: 12.5px; font-weight: 500;
+      color: #3f3f46; background: white;
+      border: 1px solid #e4e4e7; border-radius: 999px;
+      transition: border-color .15s, transform .15s;
+    }
+    .tech-pill:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+    /* ── Link card (CTA) ── */
+    .link-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 18px; background: white;
+      border: 1px solid #e4e4e7; border-radius: 12px;
+      text-decoration: none; color: #18181b;
+      font-size: 14px; font-weight: 600;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .link-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(5,150,105,.12);
+    }
+    .link-card svg.ext {
+      margin-left: auto; opacity: .4;
+      transition: opacity .2s, transform .2s;
+    }
+    .link-card:hover svg.ext { opacity: 1; transform: translate(2px, -2px); }
+
+    /* ── Image frame (full-bleed, no crop) ── */
+    .img-frame {
+      background: #fafafa;
+      border: 1px solid #e4e4e7;
+      border-radius: 20px; padding: 8px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    .img-frame img {
+      display: block; width: 100%;
+      border-radius: 14px;
+    }
+
+    /* ── Section jump nav (desktop only) ── */
+    #section-nav {
+      position: fixed; right: 32px; top: 50%;
+      transform: translateY(-50%); z-index: 30;
+      display: none;
+    }
+    @media (min-width: 1200px) { #section-nav { display: flex; flex-direction: column; gap: 12px; } }
+    .jump-link {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: #a1a1aa; text-decoration: none;
+      transition: color .2s;
+    }
+    .jump-link::before {
+      content: ''; width: 18px; height: 1px; background: #d4d4d8;
+      transition: width .25s, background .25s;
+    }
+    .jump-link:hover, .jump-link.active { color: #18181b; }
+    .jump-link.active::before { width: 32px; background: var(--accent); }
+
+    /* ── Accessibility: reduce motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-stagger > *, .link-card, .tech-pill {
+        opacity: 1 !important; transform: none !important; transition: none !important;
+      }
+    }
+    body.no-motion .reveal,
+    body.no-motion .reveal-stagger > * {
+      opacity: 1 !important; transform: none !important; transition: none !important;
+    }
+
+    /* ── Skeleton ── */
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+    .skel { animation: pulse 1.6s ease-in-out infinite; background: #f4f4f5; border-radius: 12px; }
   </style>
 </head>
 
 <body>
 
-  <!-- ── Sticky back nav ── -->
-  <nav class="sticky top-0 z-50 bg-zinc-50/95 backdrop-blur-md border-b border-zinc-200/70">
-    <div class="max-w-2xl mx-auto px-6 h-13 flex items-center justify-between" style="height:52px">
+  <!-- Reading progress indicator -->
+  <div id="read-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Section jump nav (desktop) -->
+  <aside id="section-nav" aria-label="Section navigation">
+    <a href="#overview"  class="jump-link" data-target="overview">Overview</a>
+    <a href="#purpose"   class="jump-link" data-target="purpose">The Purpose</a>
+    <a href="#hurdles"   class="jump-link" data-target="hurdles">The Hurdles</a>
+    <a href="#lessons"   class="jump-link" data-target="lessons">The Lessons</a>
+    <a href="#outcome"   class="jump-link" data-target="outcome">The Outcome</a>
+  </aside>
+
+  <!-- Sticky back nav -->
+  <nav class="sticky top-0 z-50 bg-zinc-50/90 backdrop-blur-md border-b border-zinc-200/70" aria-label="Primary">
+    <div class="max-w-2xl mx-auto px-6 flex items-center justify-between" style="height:56px">
       <a href="index.html"
-        class="inline-flex items-center gap-1.5 text-sm text-zinc-500 font-medium hover:text-zinc-900 transition-colors group">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="group-hover:-translate-x-0.5 transition-transform"><path d="m15 18-6-6 6-6"/></svg>
-        Back to Portfolio
+        class="group inline-flex items-center gap-2 text-sm text-zinc-500 font-medium hover:text-zinc-900 transition-colors"
+        aria-label="Back to portfolio">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="group-hover:-translate-x-0.5 transition-transform" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Portfolio</span>
       </a>
-      <span id="nav-title" class="text-sm font-medium text-zinc-400 truncate max-w-[200px] hidden sm:block"></span>
+      <div class="flex items-center gap-3">
+        <span id="nav-title" class="text-sm font-medium text-zinc-400 truncate max-w-[260px] hidden sm:block"></span>
+        <button id="motion-toggle" type="button" class="text-xs font-mono text-zinc-400 hover:text-zinc-900 transition-colors px-2 py-1 rounded-md border border-transparent hover:border-zinc-200" aria-pressed="false" title="Toggle animations">
+          motion: on
+        </button>
+      </div>
     </div>
   </nav>
 
-  <main class="max-w-2xl mx-auto px-6 py-12">
+  <main class="max-w-2xl mx-auto px-6 pt-12 pb-24" id="main">
 
     <!-- Loading skeleton -->
-    <div id="skeleton" class="space-y-4 animate-pulse">
-      <div class="h-8 bg-zinc-100 rounded-xl w-3/4"></div>
-      <div class="h-4 bg-zinc-100 rounded-xl w-1/2"></div>
+    <div id="skeleton" class="space-y-5" aria-live="polite" aria-busy="true">
+      <div class="skel h-5 w-24"></div>
+      <div class="skel h-10 w-4/5"></div>
+      <div class="skel h-5 w-2/3"></div>
       <div class="flex gap-2 mt-4">
-        <div class="h-7 w-20 bg-zinc-100 rounded-full"></div>
-        <div class="h-7 w-20 bg-zinc-100 rounded-full"></div>
+        <div class="skel h-7 w-20 rounded-full"></div>
+        <div class="skel h-7 w-20 rounded-full"></div>
       </div>
-      <div class="h-48 bg-zinc-100 rounded-xl mt-6"></div>
+      <div class="skel h-64 mt-8"></div>
     </div>
 
     <!-- Project content -->
     <article id="project-content" class="hidden">
 
-      <!-- Header -->
-      <div class="mb-8">
-        <div class="flex flex-wrap items-center gap-2 mb-4" id="project-cats"></div>
-        <h1 id="project-title" class="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 leading-snug mb-2"></h1>
-        <p id="project-context" class="text-sm text-zinc-500 font-mono tracking-tight"></p>
+      <!-- ═══ FRAME 1 — OVERVIEW (Who, What, Why) ═══ -->
+      <header id="overview" class="reveal-stagger mb-16" aria-labelledby="project-title">
+        <p class="section-label mb-5">Case Study</p>
+
+        <div class="flex flex-wrap items-center gap-2 mb-5" id="project-cats" role="list"></div>
+
+        <h1 id="project-title" class="text-3xl sm:text-[40px] font-bold tracking-tight text-zinc-900 leading-[1.1] mb-4"></h1>
+
+        <p id="project-tagline" class="text-lg sm:text-xl leading-relaxed text-zinc-600 font-normal max-w-xl"></p>
+
+        <div id="project-meta" class="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-6 text-sm text-zinc-500 font-mono tracking-tight"></div>
 
         <!-- Tech stack -->
-        <div id="project-tech" class="flex flex-wrap gap-2 mt-4"></div>
-      </div>
+        <div id="project-tech" class="flex flex-wrap gap-2 mt-6"></div>
+      </header>
 
-      <!-- Project image -->
-      <div id="project-image-wrapper" class="hidden mb-10">
-        <img id="project-image" src="" alt="" class="w-full rounded-2xl border border-zinc-200 shadow-sm">
-      </div>
+      <!-- ═══ HERO IMAGE (full natural height) ═══ -->
+      <figure id="project-image-wrapper" class="hidden mb-20 reveal">
+        <div class="img-frame">
+          <img id="project-image" src="" alt="">
+        </div>
+        <figcaption id="project-image-cap" class="text-xs font-mono text-zinc-400 text-center mt-3"></figcaption>
+      </figure>
 
-      <!-- Main content -->
-      <div class="space-y-10">
+      <!-- ═══ FRAME 2 — THE PURPOSE ═══ -->
+      <section id="purpose" class="mb-20 reveal" aria-labelledby="purpose-heading">
+        <p class="section-label mb-5">01 — The Purpose</p>
+        <h2 id="purpose-heading" class="text-2xl font-bold text-zinc-900 leading-snug mb-6">Why this exists.</h2>
 
-        <!-- The Problem -->
-        <div id="project-problem-wrapper" class="hidden">
-          <p class="label">The Problem</p>
-          <div class="bg-amber-50/60 border border-amber-100 rounded-xl p-5">
-            <p id="project-problem" class="text-sm leading-relaxed text-zinc-700"></p>
+        <div id="project-problem-wrapper" class="hidden mb-8">
+          <div class="frame">
+            <p class="text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">The problem</p>
+            <p id="project-problem" class="text-[15px] leading-relaxed text-zinc-700"></p>
           </div>
         </div>
 
-        <!-- What I Built -->
-        <div>
-          <p class="label">What I Built</p>
-          <div id="project-description" class="prose-block"></div>
-        </div>
+        <div id="project-description" class="narrative"></div>
+      </section>
 
-        <!-- Key Learnings -->
-        <div id="project-learnings-wrapper" class="hidden">
-          <p class="label">Key Learnings</p>
-          <ul id="project-learnings" class="space-y-2.5"></ul>
-        </div>
+      <!-- ═══ FRAME 3 — THE TECHNICAL HURDLES ═══ -->
+      <section id="hurdles" class="mb-20 reveal" aria-labelledby="hurdles-heading">
+        <p class="section-label mb-5">02 — The Hurdles</p>
+        <h2 id="hurdles-heading" class="text-2xl font-bold text-zinc-900 leading-snug mb-6">What made it hard.</h2>
 
-        <!-- Result -->
+        <div id="project-role-context" class="text-sm text-zinc-600 leading-relaxed"></div>
+      </section>
+
+      <!-- ═══ FRAME 4 — THE LESSONS ═══ -->
+      <section id="lessons" class="mb-20 reveal" aria-labelledby="lessons-heading">
+        <p class="section-label mb-5">03 — What I Learned</p>
+        <h2 id="lessons-heading" class="text-2xl font-bold text-zinc-900 leading-snug mb-6">Lessons, not brags.</h2>
+
+        <ol id="project-learnings" class="mt-2" role="list"></ol>
+      </section>
+
+      <!-- ═══ FRAME 5 — THE OUTCOME ═══ -->
+      <section id="outcome" class="mb-20 reveal" aria-labelledby="outcome-heading">
+        <p class="section-label mb-5">04 — The Outcome</p>
+        <h2 id="outcome-heading" class="text-2xl font-bold text-zinc-900 leading-snug mb-6">Where it ended up.</h2>
+
         <div id="project-result-wrapper" class="hidden">
-          <p class="label">Result</p>
-          <div class="bg-emerald-50/60 border border-emerald-100 rounded-xl p-5">
-            <p id="project-result" class="text-sm leading-relaxed text-zinc-700"></p>
-          </div>
+          <blockquote class="relative pl-6 border-l-2 border-emerald-500">
+            <p id="project-result" class="text-[17px] leading-relaxed text-zinc-800 font-medium italic"></p>
+          </blockquote>
         </div>
+      </section>
 
-      </div>
+      <!-- ═══ LINKS ═══ -->
+      <section id="project-links-wrapper" class="mt-16 pt-10 border-t border-zinc-200 reveal" aria-labelledby="links-heading">
+        <p class="section-label mb-5">05 — Explore</p>
+        <h2 id="links-heading" class="text-lg font-bold text-zinc-900 mb-6">See it for yourself.</h2>
+        <div id="project-links" class="grid gap-3 sm:grid-cols-2"></div>
+      </section>
 
-      <!-- Links -->
-      <div id="project-links-wrapper" class="mt-10 pt-8 border-t border-zinc-100">
-        <p class="label mb-4">Links</p>
-        <div id="project-links" class="flex flex-wrap gap-3"></div>
-      </div>
+      <!-- Closing CTA -->
+      <section class="mt-20 pt-10 border-t border-zinc-200 text-center reveal">
+        <p class="text-sm font-mono text-zinc-400 mb-4">/* end of case study */</p>
+        <p class="text-zinc-600 mb-6">Want to work on something like this together?</p>
+        <a href="mailto:naruephonyotmao@gmail.com"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white rounded-xl text-sm font-semibold hover:bg-zinc-700 transition-colors">
+          Let's talk
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </section>
 
     </article>
 
     <!-- Not found -->
-    <div id="not-found" class="hidden text-center py-20">
-      <p class="text-zinc-400 text-base mb-3">Project not found.</p>
-      <a href="index.html" class="text-accent underline underline-offset-2 text-sm">Go back to portfolio</a>
+    <div id="not-found" class="hidden text-center py-24" role="alert">
+      <p class="text-6xl mb-4">¯\_(ツ)_/¯</p>
+      <p class="text-zinc-500 text-base mb-4">Project not found.</p>
+      <a href="index.html" class="text-accent underline underline-offset-2 text-sm font-medium">Back to portfolio →</a>
     </div>
 
   </main>
 
-  <footer class="border-t border-zinc-100 py-8 mt-8">
+  <footer class="border-t border-zinc-100 py-8">
     <div class="max-w-2xl mx-auto px-6 flex items-center justify-between">
       <p class="text-xs font-mono text-zinc-400"><span class="italic font-sans">Crafted by</span> Naruephon Yotmao</p>
       <a href="index.html" class="text-xs font-mono text-zinc-400 hover:text-zinc-700 transition-colors">← Portfolio</a>
@@ -128,20 +323,35 @@
     const params = new URLSearchParams(window.location.search);
     const slug = params.get('slug');
 
+    // ── Motion toggle ──
+    const motionBtn = document.getElementById('motion-toggle');
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced || localStorage.getItem('no-motion') === '1') {
+      document.body.classList.add('no-motion');
+      motionBtn.textContent = 'motion: off';
+      motionBtn.setAttribute('aria-pressed', 'true');
+    }
+    motionBtn.addEventListener('click', () => {
+      const off = document.body.classList.toggle('no-motion');
+      motionBtn.textContent = off ? 'motion: off' : 'motion: on';
+      motionBtn.setAttribute('aria-pressed', String(off));
+      localStorage.setItem('no-motion', off ? '1' : '0');
+    });
+
     if (!slug) {
       document.getElementById('skeleton').classList.add('hidden');
       document.getElementById('not-found').classList.remove('hidden');
       return;
     }
 
+    // ── Fetch project ──
     const SB_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
     const H = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Accept: 'application/json' };
 
     let project = null;
-
     try {
-      const res = await fetch(`${SB_URL}/projects?slug=eq.${slug}&select=*`, { headers: H });
+      const res = await fetch(`${SB_URL}/projects?slug=eq.${encodeURIComponent(slug)}&select=*`, { headers: H });
       if (res.ok) {
         const d = await res.json();
         if (d?.length) {
@@ -160,7 +370,7 @@
           };
         }
       }
-    } catch(e) { console.error(e); }
+    } catch (e) { console.error(e); }
 
     document.getElementById('skeleton').classList.add('hidden');
 
@@ -171,14 +381,16 @@
 
     document.title = `${project.title} — Naruephon Yotmao`;
 
-    // Color map
+    // ── Color map (per-project accent) ──
     const CMAP = { emerald:'#059669', violet:'#7c3aed', amber:'#d97706', sky:'#0284c7', rose:'#e11d48', orange:'#ea580c', teal:'#0d9488', blue:'#2563eb' };
-    const color = CMAP[project.color] || '#71717a';
+    const color = CMAP[project.color] || '#059669';
+    document.documentElement.style.setProperty('--accent', color);
+    document.documentElement.style.setProperty('--accent-soft', color + '1a');
 
-    // Nav title
+    // ── Nav title ──
     document.getElementById('nav-title').textContent = project.title;
 
-    // Category badges
+    // ── Categories ──
     const catsEl = document.getElementById('project-cats');
     (project.categories || []).forEach(cat => {
       const sp = document.createElement('span');
@@ -187,41 +399,51 @@
       sp.style.borderColor = color + '40';
       sp.style.background = color + '0d';
       sp.textContent = cat;
+      sp.setAttribute('role', 'listitem');
       catsEl.appendChild(sp);
     });
 
-    // Title
+    // ── Title & tagline ──
     document.getElementById('project-title').textContent = project.title;
+    document.getElementById('project-tagline').textContent = project.shortDescription || '';
 
-    // Context
-    document.getElementById('project-context').textContent = [project.role, project.context].filter(Boolean).join(' · ');
+    // ── Meta (role · context) ──
+    const metaEl = document.getElementById('project-meta');
+    const metaItems = [];
+    if (project.role)    metaItems.push({ label: 'Role',    value: project.role });
+    if (project.context) metaItems.push({ label: 'Context', value: project.context });
+    metaEl.innerHTML = metaItems.map(m =>
+      `<span><span class="text-zinc-400">${m.label}</span> · <span class="text-zinc-700">${m.value}</span></span>`
+    ).join('');
 
-    // Tech
+    // ── Tech stack ──
     const techEl = document.getElementById('project-tech');
     (project.techStack || []).forEach(t => {
       const sp = document.createElement('span');
-      sp.className = 'px-3 py-1 text-xs font-medium rounded-full bg-white border border-zinc-200 text-zinc-600 shadow-sm';
+      sp.className = 'tech-pill';
       sp.textContent = t;
       techEl.appendChild(sp);
     });
 
-    // Image
+    // ── Image (full natural height, no crop) ──
     if (project.imageUrl) {
-      document.getElementById('project-image').src = project.imageUrl;
-      document.getElementById('project-image').alt = `${project.title} screenshot`;
+      const img = document.getElementById('project-image');
+      img.src = project.imageUrl;
+      img.alt = `${project.title} — visual overview`;
       document.getElementById('project-image-wrapper').classList.remove('hidden');
+      document.getElementById('project-image-cap').textContent = `Fig. 01 — ${project.title}`;
     }
 
-    // Problem
+    // ── The Problem ──
     if (project.problemSolved) {
       document.getElementById('project-problem').textContent = project.problemSolved;
       document.getElementById('project-problem-wrapper').classList.remove('hidden');
     }
 
-    // Description
+    // ── Full description (Purpose narrative) ──
     const descEl = document.getElementById('project-description');
     if (project.fullDescription) {
-      project.fullDescription.split('\n\n').forEach(para => {
+      project.fullDescription.split(/\n\n+/).forEach(para => {
         if (!para.trim()) return;
         const p = document.createElement('p');
         p.textContent = para.trim();
@@ -229,47 +451,139 @@
       });
     }
 
-    // Learnings
-    if (project.keyLearnings?.length) {
-      const ul = document.getElementById('project-learnings');
-      project.keyLearnings.forEach(lesson => {
-        const li = document.createElement('li');
-        li.className = 'flex items-start gap-3 text-sm text-zinc-700 leading-relaxed';
-        li.innerHTML = `<span class="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0" style="background:${color}"></span>${lesson}`;
-        ul.appendChild(li);
-      });
-      document.getElementById('project-learnings-wrapper').classList.remove('hidden');
+    // ── Role context (hurdles section) ──
+    const roleCtx = document.getElementById('project-role-context');
+    if (project.role || project.context) {
+      roleCtx.innerHTML = `
+        <div class="grid sm:grid-cols-2 gap-5">
+          ${project.role ? `<div class="frame">
+            <p class="text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">My Role</p>
+            <p class="text-[15px] text-zinc-700">${project.role}</p>
+          </div>` : ''}
+          ${project.context ? `<div class="frame">
+            <p class="text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">Context</p>
+            <p class="text-[15px] text-zinc-700">${project.context}</p>
+          </div>` : ''}
+        </div>
+      `;
     }
 
-    // Result
+    // ── Key Learnings (numbered) ──
+    if (project.keyLearnings?.length) {
+      const ol = document.getElementById('project-learnings');
+      project.keyLearnings.forEach((lesson, i) => {
+        const li = document.createElement('li');
+        li.className = 'learning-item';
+        li.setAttribute('role', 'listitem');
+        li.innerHTML = `
+          <span class="learning-num">${String(i + 1).padStart(2, '0')}</span>
+          <span class="text-[15px] text-zinc-700 leading-relaxed">${lesson}</span>
+        `;
+        ol.appendChild(li);
+      });
+    } else {
+      document.getElementById('lessons').style.display = 'none';
+    }
+
+    // ── Result ──
     if (project.result) {
       document.getElementById('project-result').textContent = project.result;
       document.getElementById('project-result-wrapper').classList.remove('hidden');
+    } else {
+      document.getElementById('outcome').style.display = 'none';
     }
 
-    // Links
+    // ── Links ──
     const linksEl = document.getElementById('project-links');
     const linkData = [
-      { url: project.githubUrl, label: 'Source Code', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>' },
-      { url: project.liveUrl, label: 'Live Site', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' },
-      { url: project.canvaUrl, label: 'Presentation', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="14" x="3" y="5" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="19" x2="12" y2="21"/></svg>' },
+      {
+        url: project.githubUrl, label: 'Source Code', sub: 'View on GitHub',
+        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>'
+      },
+      {
+        url: project.liveUrl, label: 'Live Demo', sub: 'Open the live site',
+        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
+      },
+      {
+        url: project.canvaUrl, label: 'Presentation', sub: 'View the slides',
+        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="18" height="14" x="3" y="5" rx="2"/><path d="M8 21h8M12 19v2"/></svg>'
+      }
     ];
 
     let hasLinks = false;
-    linkData.forEach(({ url, label, icon }) => {
+    linkData.forEach(({ url, label, sub, icon }) => {
       if (!url) return;
       hasLinks = true;
       const a = document.createElement('a');
       a.href = url;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
-      a.className = 'inline-flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-colors shadow-sm';
-      a.innerHTML = `${icon} ${label} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M7 7h10v10"/></svg>`;
+      a.className = 'link-card';
+      a.setAttribute('aria-label', `${label} — opens in a new tab`);
+      a.innerHTML = `
+        <span style="color:${color}">${icon}</span>
+        <span class="flex flex-col">
+          <span>${label}</span>
+          <span class="text-[11px] font-normal text-zinc-400 font-mono">${sub}</span>
+        </span>
+        <svg class="ext" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
+      `;
       linksEl.appendChild(a);
     });
-    if (!hasLinks) document.getElementById('project-links-wrapper').classList.add('hidden');
+    if (!hasLinks) document.getElementById('project-links-wrapper').style.display = 'none';
 
     document.getElementById('project-content').classList.remove('hidden');
+
+    // ══════════════════════════════════════════
+    //  Scroll-reveal + reading progress + jump nav
+    // ══════════════════════════════════════════
+
+    // Reveal on scroll
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObs.observe(el));
+
+    // Reading progress
+    const progressBar = document.getElementById('read-progress');
+    function updateProgress() {
+      const scrollTop   = window.scrollY;
+      const docHeight   = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+      progressBar.style.width = pct + '%';
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    // Active section in jump nav
+    const jumpLinks = document.querySelectorAll('.jump-link');
+    const sections  = ['overview','purpose','hurdles','lessons','outcome']
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    const sectionObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          jumpLinks.forEach(l => l.classList.toggle('active', l.dataset.target === id));
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    sections.forEach(s => sectionObs.observe(s));
+
+    // Smooth scroll for jump links
+    jumpLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.getElementById(link.dataset.target);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
   });
   </script>
 

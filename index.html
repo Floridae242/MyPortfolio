@@ -24,6 +24,15 @@
     .pulse-dot { animation: blink 2.4s ease-in-out infinite; }
     #site-nav { transition: box-shadow .2s; }
     #site-nav.scrolled { box-shadow: 0 1px 12px rgba(0,0,0,0.06); }
+
+    /* ── Hero stagger reveal ── */
+    @keyframes heroUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+    .hero-reveal { opacity: 0; animation: heroUp .7s cubic-bezier(.22,1,.36,1) forwards; }
+
+    /* ── Scroll reveal (sections & cards) ── */
+    @keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+    .scroll-reveal { opacity: 0; }
+    .scroll-reveal.in-view { animation: slideUp .6s cubic-bezier(.22,1,.36,1) forwards; }
   </style>
 </head>
 
@@ -53,7 +62,7 @@
     <img src="pic/IMG_3880 3.jpg" alt="Banner" class="h-44 sm:h-52 w-full object-cover object-center">
     <div class="max-w-3xl mx-auto px-6 relative">
       <div class="absolute -top-14 sm:-top-16">
-        <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full ring-4 ring-zinc-50 shadow-lg overflow-hidden">
+        <div id="profile-photo" class="w-28 h-28 sm:w-32 sm:h-32 rounded-full ring-4 ring-zinc-50 shadow-lg overflow-hidden">
           <img src="pic/IMG_4219.JPG" alt="Naruephon Yotmao" class="w-full h-full object-cover">
         </div>
       </div>
@@ -66,28 +75,28 @@
     <section class="pt-20 sm:pt-22 pb-14" id="about">
 
       <!-- Availability badge -->
-      <div class="inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/80 rounded-full px-3 py-1.5 mb-4 select-none">
+      <div class="hero-reveal inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/80 rounded-full px-3 py-1.5 mb-4 select-none" style="animation-delay:.05s">
         <span class="pulse-dot w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
         Open to Internship Opportunities
       </div>
 
-      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Naruephon Yotmao</h1>
-      <p class="text-zinc-500 font-mono tracking-tight text-sm mt-1 font-medium">@tle · Digital Industry Integration · CMU</p>
+      <h1 class="hero-reveal text-2xl sm:text-3xl font-bold tracking-tight" style="animation-delay:.15s">Naruephon Yotmao</h1>
+      <p class="hero-reveal text-zinc-500 font-mono tracking-tight text-sm mt-1 font-medium" style="animation-delay:.22s">@tle · Digital Industry Integration · CMU</p>
 
-      <p class="mt-4 text-base leading-relaxed text-zinc-700 max-w-prose">
+      <p class="hero-reveal mt-4 text-base leading-relaxed text-zinc-700 max-w-prose" style="animation-delay:.3s">
         I'm Tle — a first-year student at the College of Arts, Media and Technology, Chiang Mai University.
         When I focus on something, I go deep. Whether it's building a city management dashboard for
         a real municipality or teaching elementary school kids to write their first lines of code at
         Deepa Coding Thailand, I bring the same intensity and curiosity.
       </p>
-      <p class="mt-3 text-base leading-relaxed text-zinc-700 max-w-prose">
+      <p class="hero-reveal mt-3 text-base leading-relaxed text-zinc-700 max-w-prose" style="animation-delay:.38s">
         I've competed in hackathons, managed projects with real clients, and built prototypes solo
         under pressure. I don't claim to know everything — I'm the kind of person who asks questions,
         learns fast, and ships working code while figuring out the rest along the way.
       </p>
 
       <!-- Terminal snippet -->
-      <div class="mt-6 font-mono text-[13px] bg-zinc-900 text-zinc-100 rounded-xl p-4 max-w-lg border border-zinc-700/30 shadow-inner select-none">
+      <div class="hero-reveal mt-6 font-mono text-[13px] bg-zinc-900 text-zinc-100 rounded-xl p-4 max-w-lg border border-zinc-700/30 shadow-inner select-none" style="animation-delay:.46s">
         <div class="flex gap-1.5 mb-3">
           <div class="w-2.5 h-2.5 rounded-full bg-red-400/80"></div>
           <div class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></div>
@@ -104,7 +113,7 @@
     <hr class="border-zinc-100">
 
     <!-- ── Skills ── -->
-    <section class="py-14" id="skills">
+    <section class="py-14 scroll-reveal" id="skills">
       <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Core Competencies</h2>
       <p class="text-sm text-zinc-500 max-w-prose mb-5">Languages and tools I use across production, research, and competition work.</p>
       <div class="flex flex-wrap gap-2">
@@ -126,7 +135,7 @@
     <hr class="border-zinc-100">
 
     <!-- ── GitHub Activity ── -->
-    <section class="py-14" id="github-stats">
+    <section class="py-14 scroll-reveal" id="github-stats">
       <div class="flex items-baseline justify-between mb-1.5">
         <h2 class="text-xl font-bold text-zinc-900">GitHub Activity</h2>
         <a href="https://github.com/Floridae242" target="_blank" rel="noopener noreferrer"
@@ -201,7 +210,7 @@
     <hr class="border-zinc-100">
 
     <!-- ── Leadership ── -->
-    <section class="py-14" id="leadership">
+    <section class="py-14 scroll-reveal" id="leadership">
       <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Leadership & Extracurriculars</h2>
       <p class="text-sm text-zinc-500 max-w-prose mb-6">Clubs, teaching roles, and team contributions outside the classroom.</p>
       <div class="space-y-5" id="activities-list">
@@ -212,7 +221,7 @@
     <hr class="border-zinc-100">
 
     <!-- ── Awards ── -->
-    <section class="py-14" id="awards">
+    <section class="py-14 scroll-reveal" id="awards">
       <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Awards & Achievements</h2>
       <p class="text-sm text-zinc-500 max-w-prose mb-6">Competition results and notable recognitions.</p>
       <div class="space-y-5" id="awards-list">
@@ -223,7 +232,7 @@
     <hr class="border-zinc-100">
 
     <!-- ── Self-Development ── -->
-    <section class="py-14" id="self-development">
+    <section class="py-14 scroll-reveal" id="self-development">
       <h2 class="text-xl font-bold text-zinc-900 mb-1.5">Self-Development</h2>
       <p class="text-sm text-zinc-500 max-w-prose mb-6">Certifications, workshops, camps, and competitions that shaped my thinking.</p>
       <div class="space-y-2" id="self-development-list">
@@ -541,6 +550,54 @@
     })();
 
   });
+
+  // ═══════════════════════════════════════════
+  // INTERACTIVE ENHANCEMENTS
+  // ═══════════════════════════════════════════
+
+  // ── Scroll reveal for sections ──
+  (function () {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
+  })();
+
+  // ── GitHub stat counter animation ──
+  function animateCount(el, target) {
+    if (!el || isNaN(target)) return;
+    let current = 0;
+    const step = Math.ceil(target / 40);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current;
+      if (current >= target) clearInterval(timer);
+    }, 30);
+  }
+
+  // Patch GitHub stat display to use animated counters
+  const _origRepos = document.getElementById('stat-repos');
+  const _origStars = document.getElementById('stat-stars');
+  const _origLangs = document.getElementById('stat-langs');
+  const _statObs = new MutationObserver(() => {
+    ['stat-repos', 'stat-stars', 'stat-langs'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.textContent !== '—' && !el.dataset.animated) {
+        el.dataset.animated = '1';
+        animateCount(el, parseInt(el.textContent, 10));
+      }
+    });
+  });
+  ['stat-repos','stat-stars','stat-langs'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) _statObs.observe(el, { childList: true, characterData: true, subtree: true });
+  });
+
   </script>
 
 </body>
