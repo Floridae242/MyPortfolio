@@ -770,7 +770,14 @@
     }
 
     const c = slug && CASES[slug];
-    if (c) renderCase(c); else renderNotFound();
+    if (c) {
+      renderCase(c);
+    } else if (slug) {
+      // Unknown slug — fall through to the Supabase-driven generic viewer.
+      location.replace(`project.html?slug=${encodeURIComponent(slug)}`);
+    } else {
+      renderNotFound();
+    }
 
     // Reading progress
     const fill = document.getElementById('progress-fill');
