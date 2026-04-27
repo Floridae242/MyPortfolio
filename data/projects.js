@@ -1,5 +1,34 @@
 const projectsData = [
   {
+    slug: "localshop-school",
+    categories: ["Production", "Academic"],
+    title: "LocalShop School",
+    color: "emerald",
+    imageUrl: "pic/localshop.png",
+    shortDescription: "Free e-commerce platform + CSR dashboard connecting small school smart-farms with parents and the community — zero marketplace fees, money flows direct to the school.",
+    fullDescription: `LocalShop School is a group project I worked on with the See Jak Saphan Khwai team. My role was the bridge between the client and the build — I ran the requirements interviews, translated what I heard back to the team, and designed the frontend prototype the parents and teachers would actually use.
+
+The brief came from real, small Northern Thai schools — one of them with only 63 students. They already run "Smart Farm" programmes (vegetables, mushrooms, poultry), but everything is tracked on paper, parents have no visibility into what their kids are growing, and there's no real channel to sell the produce. Teachers were drowning in admin work and the schools were leaving income on the table.
+
+We designed an app and website that connects the school farm directly to the community. Parents browse and order fresh food, pick it up at school, and the money goes 100% back to the school — no Shopee-style 5–10% marketplace fee. School managers and CSR sponsors get a real-time dashboard showing produce data, sales, and impact metrics so they can defend their continued support.
+
+I designed the UI to feel like apps Thai users already trust — Shopee, LINE, banking apps — large buttons, Thai language, warm and clear. Green for the farm, yellow for warmth, grey for legibility. The student flow includes a QR code on each product so parents can scan and see exactly which student grew the vegetables they're buying.`,
+    problemSolved: "Small Northern Thai schools (some with only 63 students) run smart-farm programmes but lack budget, software, and a sales channel. Teachers are buried in paper admin, parents have zero visibility into what their kids are growing, and existing marketplaces like Shopee skim 5–10% off every transaction the school can't afford to lose.",
+    keyLearnings: [
+      "Running requirements interviews with school staff and translating non-technical pain points into product specs the dev team could build against.",
+      "Designing for an audience (parents, rural teachers) where the design language must mimic apps they already trust — Shopee, LINE, banking apps — not chase fashionable startup aesthetics.",
+      "Holding two stakeholder conversations in parallel: parents who buy weekly vs. CSR sponsors who only look at the dashboard. Same data, two completely different framings.",
+      "Setting concrete KPIs upfront (50% reduction in teacher admin time, 20% revenue lift) so the prototype could be evaluated against outcomes, not just screens."
+    ],
+    techStack: ["UX/UI", "Figma", "Prototyping", "Requirements", "Firebase"],
+    role: "Requirements Analyst · UX/UI Designer · Client Liaison",
+    context: "Group Project — See Jak Saphan Khwai team · Small-school smart-farm pilot, Northern Thailand",
+    result: "Delivered a full prototype + CSR dashboard targeting 50% reduction in teacher admin time and 20% school revenue lift. Pilot scope: 3 schools, scaling to 20 schools across Northern Thailand. Funded via CSR programmes and a low-cost dashboard subscription — the storefront stays free for schools forever.",
+    githubUrl: "https://github.com/Floridae242/localshop-shcool.git",
+    liveUrl: "https://localshop-shop.web.app/index.html",
+    canvaUrl: "https://www.canva.com/design/DAG1qlXfbaw/EIpdGwlUm2gvVYKrhkA1Zg/view",
+  },
+  {
     slug: "smart-flema",
     categories: ["Competition", "Production"],
     title: "Smart Flema",
