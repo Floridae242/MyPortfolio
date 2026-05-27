@@ -9,15 +9,15 @@ A living reference for the portfolio site at `/Users/floridae/Portfolio(Tle)/MyP
 | Field | Value |
 |---|---|
 | Name | Naruephon Yotmao (Tle) |
-| Role | Business Analyst · Digital Industry Integration · CAMT |
+| Role | IT Support · Software Developer · Business Analyst · Project Manager |
 | Affiliation | College of Arts, Media and Technology (CAMT) — Chiang Mai University |
 | Year | First-year, Academic Year 2026 |
 | Location | Chiang Mai, Thailand |
 | Email | naruephonyotmao@gmail.com |
 | GitHub | [@Floridae242](https://github.com/Floridae242) |
-| Status | Open to BA · Product · Data internships, 2026 – 2027 |
+| Status | Open to IT Support · Dev · BA · PM internships, 2026 – 2027 |
 
-**Practice:** I work on problems where physical behaviour meets public money — markets, venues, civic spaces — and translate the mess into dashboards, policies, and alerts non-technical stakeholders actually use.
+**Practice:** I work across the full technology lifecycle — from setting up infrastructure and troubleshooting systems, to writing production code, analysing requirements, and keeping projects on track from kickoff to delivery.
 
 ---
 
