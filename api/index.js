@@ -9,6 +9,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const cmsProxy = require('./cmsProxy');
+app.use('/api/cms', cmsProxy);
+
 // Database Connection Pool
 const pool = new Pool({
   host: process.env.DB_HOST,

@@ -12,6 +12,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
+const cmsProxy = require('./api/cmsProxy');
+app.use('/api/cms', cmsProxy);
+
 // Database Connection Pool
 const pool = new Pool({
   host: process.env.DB_HOST,

@@ -419,13 +419,23 @@
   const rmb   = document.getElementById('auth-remember');
   const errEl = document.getElementById('auth-error');
 
+  const TOKEN_KEY = 'cms-admin-token';
+
   // Check existing session
   function isAuthed() {
     try {
       const raw = localStorage.getItem(KEY) || sessionStorage.getItem(KEY);
       if (!raw) return false;
       const { t } = JSON.parse(raw);
-      return t && (Date.now() - t) < TTL;
+      if (!t || (Date.now() - t) >= TTL) return false;
+      // Restore the admin API token for this tab so write requests carry
+      // x-admin-token even after a reload (token itself always lives in
+      // sessionStorage so it never outlives the tab/browser session).
+      if (!sessionStorage.getItem(TOKEN_KEY)) {
+        const savedToken = localStorage.getItem(TOKEN_KEY);
+        if (savedToken) sessionStorage.setItem(TOKEN_KEY, savedToken);
+      }
+      return true;
     } catch { return false; }
   }
 
@@ -455,6 +465,14 @@
     if (u === CRED.user.toLowerCase() && p === CRED.pass) {
       const payload = JSON.stringify({ u, t: Date.now() });
       (rmb.checked ? localStorage : sessionStorage).setItem(KEY, payload);
+      // The CMS password doubles as the admin API token the server-side
+      // write proxy expects in the x-admin-token header (see ADMIN_API_TOKEN
+      // env var). Always readable for the live tab via sessionStorage; when
+      // "keep me signed in" is checked we also mirror it into localStorage
+      // so a reload within the 30-day window can restore it (see isAuthed).
+      sessionStorage.setItem(TOKEN_KEY, p);
+      if (rmb.checked) localStorage.setItem(TOKEN_KEY, p);
+      else localStorage.removeItem(TOKEN_KEY);
       unlock();
     } else {
       errEl.textContent = 'Invalid username or password.';
@@ -473,6 +491,8 @@
   window.studioSignOut = function() {
     localStorage.removeItem(KEY);
     sessionStorage.removeItem(KEY);
+    localStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
     location.reload();
   };
 })();
@@ -657,10 +677,15 @@
 // ─── CONFIG ───
 const SB   = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
 const ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs";
-const SVC  = "REMOVED_SERVICE_ROLE_KEY";
+
+// Writes no longer talk to Supabase directly — they go through the
+// same-origin /api/cms/:table proxy, which holds the service_role key
+// server-side. ADMIN_TOKEN_VALUE is the shared secret captured at login
+// (see the auth gate above) and is checked by the proxy as x-admin-token.
+const ADMIN_TOKEN_VALUE = sessionStorage.getItem('cms-admin-token') || '';
 
 const RH = { apikey: ANON, Authorization: `Bearer ${ANON}`, Accept: 'application/json' };
-const WH = { apikey: SVC, Authorization: `Bearer ${SVC}`, 'Content-Type': 'application/json', Prefer: 'return=representation', Accept: 'application/json' };
+const WH = { 'Content-Type': 'application/json', 'x-admin-token': ADMIN_TOKEN_VALUE };
 
 // ─── STATE ───
 let currentTab = 'projects';
@@ -1140,9 +1165,9 @@ async function saveItem() {
 
     let res;
     if (editingId) {
-      res = await fetch(`${SB}/${table}?id=eq.${editingId}`, { method: 'PATCH', headers: WH, body: JSON.stringify(payload) });
+      res = await fetch(`/api/cms/${table}?id=eq.${editingId}`, { method: 'PATCH', headers: WH, body: JSON.stringify(payload) });
     } else {
-      res = await fetch(`${SB}/${table}`, { method: 'POST', headers: WH, body: JSON.stringify(payload) });
+      res = await fetch(`/api/cms/${table}`, { method: 'POST', headers: WH, body: JSON.stringify(payload) });
     }
 
     if (!res.ok) {
@@ -1174,7 +1199,7 @@ function confirmDel(tab, id) {
     setDB('saving');
     try {
       const table = TABLES[TYPE_OF[tab]];
-      const res = await fetch(`${SB}/${table}?id=eq.${id}`, { method: 'DELETE', headers: WH });
+      const res = await fetch(`/api/cms/${table}?id=eq.${id}`, { method: 'DELETE', headers: WH });
       if (!res.ok) throw new Error(await res.text());
       toast('Item deleted.', 'ok');
       await loadAllCounts();
