@@ -9,9 +9,11 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          gsap: ['gsap'],
+        manualChunks(id: string) {
+          if (id.includes('node_modules')) {
+            if (/react|react-dom|react-router-dom/.test(id)) return 'react-vendor';
+            if (id.includes('gsap')) return 'gsap';
+          }
         },
       },
     },

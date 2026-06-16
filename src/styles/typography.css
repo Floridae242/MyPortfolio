@@ -1,0 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+body { font-family: var(--font-sans); font-size: var(--text-base); }
+h1, h2, h3 { font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; }
+code, .mono { font-family: var(--font-mono); }

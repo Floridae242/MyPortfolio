@@ -1,0 +1,39 @@
+:root {
+  /* surfaces */
+  --color-bg: oklch(14% 0.02 240);
+  --color-bg-elev: oklch(18% 0.025 240);
+  --color-surface: oklch(20% 0.03 240 / 0.55);
+  --color-border: oklch(40% 0.04 220 / 0.35);
+  --color-text: oklch(92% 0.01 220);
+  --color-text-dim: oklch(70% 0.02 220);
+
+  /* accent (Cyber Cyan) */
+  --color-accent: #22d3ee;
+  --color-accent-soft: #7ee7fb;
+  --glow-accent: 0 0 24px rgba(34, 211, 238, 0.45);
+  --glow-accent-strong: 0 0 40px rgba(34, 211, 238, 0.6);
+
+  /* secondary syntax tokens (code snippets only) */
+  --syntax-keyword: #d2a8ff;
+  --syntax-string: #a5d6ff;
+  --syntax-fn: #79c0ff;
+  --syntax-ok: #56d364;
+  --syntax-dim: #5b6675;
+
+  /* type scale */
+  --text-base: clamp(1rem, 0.92rem + 0.4vw, 1.125rem);
+  --text-h2: clamp(1.6rem, 1rem + 2.5vw, 2.75rem);
+  --text-hero: clamp(2.5rem, 1rem + 6vw, 5rem);
+
+  /* rhythm */
+  --space-section: clamp(4rem, 3rem + 5vw, 9rem);
+  --radius: 12px;
+
+  /* motion */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --font-sans: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
