@@ -29,3 +29,6 @@ build/
 
 # Docker
 docker-compose.override.yml
+
+# brainstorming visual companion
+.superpowers/
