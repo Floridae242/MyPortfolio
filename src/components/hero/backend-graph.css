@@ -1,0 +1,7 @@
+.backend-graph { width: 100%; max-width: 460px; }
+.backend-graph .edge { stroke: rgba(34, 211, 238, 0.35); stroke-width: 1.5; }
+.backend-graph .pulse { stroke-dasharray: 4 6; animation: dash 2s linear infinite; }
+.backend-graph .node { fill: #0a0e14; stroke: var(--color-accent); stroke-width: 2; filter: drop-shadow(0 0 6px var(--color-accent)); }
+.backend-graph text { fill: var(--color-accent-soft); font: 9px var(--font-mono); text-anchor: middle; }
+@keyframes dash { to { stroke-dashoffset: -20; } }
+@media (prefers-reduced-motion: reduce) { .backend-graph .pulse { animation: none; } }
