@@ -7,8 +7,8 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
   return (
     <GlassCard className={`project-card ${featured ? 'featured' : ''}`}>
       <Link to={`/case/${project.slug}`} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', height: '100%' }}>
-        <span className="cats">{project.categories.join(' · ')}</span>
-        <h3>{featured ? '★ ' : ''}{project.title}</h3>
+        <span className="cats">// {project.categories.join(' · ')}</span>
+        <h3>{featured ? <span aria-hidden="true">★ </span> : null}<span>{project.title}</span></h3>
         <p className="desc">{project.shortDescription}</p>
         <div className="tags">
           {project.techStack.slice(0, featured ? 6 : 3).map((t) => <span key={t} className="tag">{t}</span>)}
