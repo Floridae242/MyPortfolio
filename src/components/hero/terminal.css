@@ -1,0 +1,13 @@
+.terminal {
+  border: 1px solid rgba(34, 211, 238, 0.25); border-radius: 10px;
+  background: rgba(8, 13, 20, 0.85); box-shadow: var(--glow-accent);
+  font-family: var(--font-mono); max-width: 480px;
+}
+.terminal .bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid rgba(34, 211, 238, 0.15); }
+.terminal .dot { width: 9px; height: 9px; border-radius: 50%; }
+.terminal .body { padding: 1.1rem; line-height: 1.8; font-size: 0.9rem; }
+.terminal .name { font-size: clamp(1.6rem, 1rem + 3vw, 2.4rem); color: var(--color-accent-soft); text-shadow: var(--glow-accent); margin: 0.3rem 0; }
+.terminal .prompt { color: var(--color-accent); }
+.terminal .muted { color: var(--syntax-dim); }
+.caret { animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
