@@ -26,7 +26,7 @@ export function CaseStudy() {
       <h1>{project.title}</h1>
       <div className="context">{project.context} · {project.role}</div>
       <MediaBlock src={project.imageUrl} alt={project.title} />
-      <ProblemSolution problem={project.problemSolved} solution={project.shortDescription} />
+      <ProblemSolution problem={project.problemSolved} solution={project.fullDescription} />
       <h3 style={{ margin: '1.5rem 0 0.5rem' }}>Tech stack</h3>
       <TechTags tags={project.techStack} />
       {project.keyLearnings.length > 0 && (

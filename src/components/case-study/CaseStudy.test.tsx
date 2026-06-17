@@ -10,7 +10,7 @@ describe('CaseStudy', () => {
         <Routes><Route path="/case/:slug" element={<CaseStudy />} /></Routes>
       </MemoryRouter>,
     );
-    expect(screen.getByText(/Smart Flema/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /Smart Flema/ })).toBeInTheDocument();
   });
 
   it('shows a not-found state for an unknown slug', () => {
