@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import './terminal.css';
 
-const LINES = ['whoami', 'Naruephon Yotmao', 'Full-Stack Developer · CAMT, CMU'];
+const LINES = ['whoami', 'Naruephon Yotmao', 'Business Analyst · Project Manager · CAMT, CMU'];
 
 export function TerminalIntro() {
   const reduced = useReducedMotion();
@@ -27,7 +27,7 @@ export function TerminalIntro() {
       <div className="body">
         <div><span className="prompt">$</span> {LINES[0]}</div>
         {shown >= 2 && <div className="name">Naruephon Yotmao<span className="caret">▋</span></div>}
-        {shown >= 3 && <div className="muted">Full-Stack Developer · CAMT, CMU</div>}
+        {shown >= 3 && <div className="muted">Business Analyst · Project Manager · CAMT, CMU</div>}
       </div>
     </div>
   );

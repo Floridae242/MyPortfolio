@@ -23,7 +23,7 @@ I designed the UI to feel like apps Thai users already trust — Shopee, LINE, b
       "Setting concrete KPIs upfront (50% reduction in teacher admin time, 20% revenue lift) so the prototype could be evaluated against outcomes, not just screens."
     ],
     techStack: ["UX/UI", "Figma", "Prototyping", "Requirements", "Firebase"],
-    role: "Requirements Analyst · UX/UI Designer · Client Liaison",
+    role: "Business Analyst · Requirements & Stakeholder Lead",
     context: "Group Project — See Jak Saphan Khwai team · Small-school smart-farm pilot, Northern Thailand",
     result: "Delivered a full prototype + CSR dashboard targeting 50% reduction in teacher admin time and 20% school revenue lift. Pilot scope: 3 schools, scaling to 20 schools across Northern Thailand. Funded via CSR programmes and a low-cost dashboard subscription — the storefront stays free for schools forever.",
     githubUrl: "https://github.com/Floridae242/localshop-shcool.git",
@@ -49,7 +49,7 @@ I took the camera-based heatmap approach from the Smart City work and refined it
       "Research depth matters — some jury questions exposed gaps in our preparation, and that taught me to dig deeper before presenting."
     ],
     techStack: ["AI", "Computer Vision", "Analytics", "Python"],
-    role: "Idea Initiator · Research & Prototype Design",
+    role: "Product Initiator · Research & Pitch",
     context: "3rd ICT Startup Competition 2026 — International College of Technology, Kanazawa",
     result: "Won the Popular Vote award. Learned that while the idea resonated with the audience, deeper research would have strengthened answers to technical jury questions.",
     githubUrl: "",
@@ -76,7 +76,7 @@ This was my first time managing a project of this scale, and honestly, I struggl
       "The People Counting module remained incomplete — a lesson in scoping realistic deliverables."
     ],
     techStack: ["IoT", "AI", "Smart City", "LINE API", "JavaScript"],
-    role: "Project Manager · Frontend Developer",
+    role: "Project Manager · Solution Analysis & Frontend",
     context: "CAMT CMU · with Pyramid Solution · Academic Year 2025",
     result: "Delivered a functional web dashboard with LINE OA integration. The municipality gave positive feedback on the concept, though the People Counting AI module was not fully operational by deadline.",
     githubUrl: "https://github.com/Floridae242/FORLP.git",
@@ -102,7 +102,7 @@ This was my first time building a complete prototype from scratch on my own, and
       "Learned to be honest about projected numbers — our '30% reduction' figure was an aspirational estimate, not measured data."
     ],
     techStack: ["AI", "IoT", "QR Code", "Firebase", "JavaScript"],
-    role: "Idea Proposer · Sole Prototype Developer",
+    role: "Product Analyst · Prototype Developer",
     context: "Hylife Hackathon 2025 — Code For Change, CAMT CMU",
     result: "Delivered a fully functional prototype deployed on Firebase within the hackathon timeframe. First solo prototype and first vibe-coded project.",
     githubUrl: "https://github.com/Floridae242/agrilink.git",
@@ -128,7 +128,7 @@ I worked with both Arduino IDE and PlatformIO, and was responsible for building 
       "Presenting technical concepts to non-technical CAMT FEST visitors clearly."
     ],
     techStack: ["IoT", "ESP32", "C++", "PlatformIO", "Arduino"],
-    role: "Developer · Demo Presenter",
+    role: "Developer · Live Demo Presenter",
     context: "WEB3 Student Club — CAMT CMU · CAMT FEST Exhibition · Academic Year 2025",
     result: "Delivered a working mesh communication system demonstrated live at CAMT FEST. Successfully sent verified messages between ESP32 nodes without internet connectivity.",
     githubUrl: "https://github.com/Floridae242/Web3-Student-Club-Showcase.git",
@@ -157,7 +157,7 @@ The instructor also identified clear areas for improvement: the inheritance hier
       "Taking on 80% of a team project taught me about workload balance and the importance of delegation."
     ],
     techStack: ["Java", "OOP", "Maven", "CSV I/O"],
-    role: "Lead Developer (80% of codebase)",
+    role: "Systems Analyst · Lead Developer",
     context: "OOP Post-Midterm Project — CAMT CMU · Academic Year 2026",
     result: "Received instructor recognition for overloading design, interface comprehensiveness, and input validation architecture. Key improvement areas: deeper inheritance, accurate date persistence, and Javadoc coverage.",
     githubUrl: "https://github.com/Floridae242/OOP-Post-Midterm-Project.git",
