@@ -35,3 +35,12 @@ if (fs.existsSync(dest.pic)) {
 }
 fs.cpSync(src.pic, dest.pic, { recursive: true });
 console.log('[prebuild] copied pic/ → public/pic/');
+
+// Optional: ship a resume PDF if one exists at the repo root (commit resume.pdf).
+const resumeSrc = path.join(root, 'resume.pdf');
+if (fs.existsSync(resumeSrc)) {
+  fs.copyFileSync(resumeSrc, path.join(dest.publicDir, 'resume.pdf'));
+  console.log('[prebuild] copied resume.pdf → public/resume.pdf');
+} else {
+  console.log('[prebuild] no resume.pdf at repo root (skip) — add one to enable the Execute Resume button');
+}

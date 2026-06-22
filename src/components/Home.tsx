@@ -3,6 +3,7 @@ import { Projects } from './Projects';
 import { Awards } from './sections/Awards';
 import { Activities } from './sections/Activities';
 import { SelfDevelopment } from './sections/SelfDevelopment';
+import { PromptBox } from './sections/PromptBox';
 import { Journal } from './sections/Journal';
 import { About } from './sections/About';
 import { Contact } from './sections/Contact';
@@ -21,6 +22,7 @@ export function Home() {
   return (
     <main>
       <Hero />
+      <PromptBox />
       <Projects />
       <Awards awards={awards} />
       <Activities activities={activities} />
