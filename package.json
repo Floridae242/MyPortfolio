@@ -4,23 +4,48 @@
   "description": "Naruephon Yotmao - Developer Portfolio",
   "main": "api/index.js",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js",
+    "server": "node server.js",
+    "dev": "vite",
+    "prebuild": "node scripts/copyStatic.mjs",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "db:up": "docker-compose up -d",
     "db:down": "docker-compose down",
     "db:logs": "docker-compose logs -f postgres"
   },
-  "keywords": ["portfolio", "developer", "tailwind"],
+  "keywords": [
+    "portfolio",
+    "developer",
+    "tailwind"
+  ],
   "author": "Naruephon Yotmao",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "pg": "^8.10.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "cors": "^2.8.5"
+    "express": "^4.18.2",
+    "gsap": "^3.15.0",
+    "pg": "^8.10.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.17.0"
   },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "@playwright/test": "^1.61.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^25.9.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "http-server": "^14.1.1",
+    "jsdom": "^29.1.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.9"
   },
   "engines": {
     "node": "24.x"

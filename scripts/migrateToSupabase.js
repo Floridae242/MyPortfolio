@@ -4,8 +4,12 @@ const awardsData = require('../data/awards.js');
 const activitiesData = require('../data/activities.js');
 
 const SUPABASE_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
-// Using the service_role key provided by the user for the migration
-const SERVICE_KEY = "REMOVED_SERVICE_ROLE_KEY";
+// service_role key MUST come from the environment — never hardcode it.
+// Run with: SUPABASE_SERVICE_ROLE_KEY=... node scripts/migrateToSupabase.js
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!SERVICE_KEY) {
+  throw new Error('SUPABASE_SERVICE_ROLE_KEY not set. Export the service_role key before running this migration.');
+}
 
 async function upsertData(table, data) {
   const response = await fetch(`${SUPABASE_URL}/${table}`, {

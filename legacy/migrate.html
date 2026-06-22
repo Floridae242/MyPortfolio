@@ -65,7 +65,10 @@
 
   <script>
     const SB  = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1";
-    const SVC = "REMOVED_SERVICE_ROLE_KEY";
+    // SECURITY: service_role key removed. This archived one-off migration tool no
+    // longer runs as-is. A service_role key must NEVER live in a browser file —
+    // paste one manually here only if you intentionally re-run this locally.
+    const SVC = "";
 
     const WH = {
       apikey: SVC,

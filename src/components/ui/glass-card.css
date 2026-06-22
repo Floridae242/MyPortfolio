@@ -1,0 +1,17 @@
+.glass-card {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  padding: 1.25rem;
+  transition: transform var(--duration-normal) var(--ease-out-expo),
+              border-color var(--duration-normal), box-shadow var(--duration-normal);
+  will-change: transform;
+}
+.glass-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  box-shadow: var(--glow-accent);
+}
+.glass-card:focus-within { border-color: var(--color-accent); box-shadow: var(--glow-accent); }

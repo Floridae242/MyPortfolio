@@ -1,9 +1,10 @@
+import os
 import urllib.request
 import urllib.error
 import json
 
 SUPABASE_URL = "https://rngeogahhatybnlhmgbz.supabase.co/rest/v1"
-SERVICE_KEY = "REMOVED_SERVICE_ROLE_KEY"
+SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 
 headers = {
     'apikey': SERVICE_KEY,
