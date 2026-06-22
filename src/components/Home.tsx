@@ -10,11 +10,13 @@ import { fetchAwards, fetchActivities, fetchSelfDev } from '@/lib/supabase';
 import { awards as awardsFallback } from '@/data/awards';
 import { activities as activitiesFallback } from '@/data/activities';
 import { selfDevelopment as sdFallback } from '@/data/selfDevelopment';
+import { useScrollReveal } from '@/hooks/useScrollProgress';
 
 export function Home() {
   const { data: awards } = useSupabaseData(fetchAwards, awardsFallback);
   const { data: activities } = useSupabaseData(fetchActivities, activitiesFallback);
   const { data: sd } = useSupabaseData(fetchSelfDev, sdFallback);
+  useScrollReveal();
   return (
     <main>
       <Hero />
