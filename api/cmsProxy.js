@@ -1,6 +1,9 @@
 const express = require('express');
 
-const SUPA_URL = process.env.SUPABASE_URL || 'https://rngeogahhatybnlhmgbz.supabase.co/rest/v1';
+// Normalize to the PostgREST base — tolerant of SUPABASE_URL set with OR without
+// the /rest/v1 suffix (the Supabase dashboard hands out the bare project URL).
+const RAW_SUPA_URL = process.env.SUPABASE_URL || 'https://rngeogahhatybnlhmgbz.supabase.co';
+const SUPA_URL = RAW_SUPA_URL.replace(/\/+$/, '').replace(/\/rest\/v1$/, '') + '/rest/v1';
 const SUPA_SVC = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const ADMIN_TOKEN = process.env.ADMIN_API_TOKEN;
 const ALLOWED_TABLES = new Set(['projects', 'activities', 'awards', 'certificates']);
@@ -24,9 +27,9 @@ async function forward(req, res, method) {
   const qs = id ? `?id=${encodeURIComponent(id)}` : '';
   const url = `${SUPA_URL}/${table}${qs}`;
 
+  // New-style Supabase secret keys are sent via the apikey header only (not Bearer).
   const headers = {
     apikey: SUPA_SVC,
-    Authorization: `Bearer ${SUPA_SVC}`,
     'Content-Type': 'application/json',
     Accept: 'application/json',
     Prefer: 'return=representation',
