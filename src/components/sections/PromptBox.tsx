@@ -3,9 +3,9 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import './prompt-box.css';
 
 const PHRASES = [
-  'Designing digital experiences...',
-  'Building scalable web apps...',
-  'Optimizing performance...',
+  'Turning requirements into roadmaps...',
+  'Aligning stakeholders & scope...',
+  'Shipping outcomes, not just features...',
 ];
 const STACK = ['React', 'TypeScript', 'Node', 'Supabase', 'Figma', 'SQL', 'Agile'];
 
