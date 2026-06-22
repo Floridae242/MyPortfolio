@@ -40,3 +40,6 @@ docker-compose.override.yml
 # Playwright
 test-results/
 playwright-report/
+
+# Claude Code harness
+.claude/
