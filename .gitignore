@@ -21,6 +21,7 @@ Thumbs.db
 # Build
 dist/
 build/
+public/
 .next/
 *.tsbuildinfo
 vite.config.d.ts

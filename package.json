@@ -6,6 +6,7 @@
   "scripts": {
     "server": "node server.js",
     "dev": "vite",
+    "prebuild": "node scripts/copyStatic.mjs",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
