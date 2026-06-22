@@ -378,12 +378,8 @@
 
     <form id="auth-form" style="display:flex;flex-direction:column;gap:14px;">
       <div class="field">
-        <label class="label" for="auth-user">Username</label>
-        <input type="text" id="auth-user" autocomplete="username" required autofocus placeholder="username" class="input" style="font-family:var(--mono), 'JetBrains Mono', monospace;">
-      </div>
-      <div class="field">
-        <label class="label" for="auth-pass">Password</label>
-        <input type="password" id="auth-pass" autocomplete="current-password" required placeholder="••••••••" class="input" style="font-family:var(--mono), 'JetBrains Mono', monospace;">
+        <label class="label" for="auth-pass">Admin token</label>
+        <input type="password" id="auth-pass" autocomplete="current-password" required autofocus placeholder="••••••••" class="input" style="font-family:var(--mono), 'JetBrains Mono', monospace;">
       </div>
 
       <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:4px;cursor:pointer;user-select:none;">
@@ -407,14 +403,17 @@
 
 <script>
 (function() {
-  // ── Credentials (client-side gate) ──
-  const CRED = { user: 'floridae', pass: '0801066891' };
+  // ── Auth gate ──
+  // No credentials are stored client-side. The entered password is stored as
+  // the admin API token (cms-admin-token) and sent to the server as
+  // x-admin-token on every write request. The server validates it against
+  // ADMIN_API_TOKEN. A wrong password causes writes to return 401 — the
+  // server is the sole authority; this gate is only a UI convenience.
   const KEY  = 'studio-auth-v1';
   const TTL  = 30 * 24 * 60 * 60 * 1000; // 30 days
 
   const gate  = document.getElementById('auth-gate');
   const form  = document.getElementById('auth-form');
-  const uIn   = document.getElementById('auth-user');
   const pIn   = document.getElementById('auth-pass');
   const rmb   = document.getElementById('auth-remember');
   const errEl = document.getElementById('auth-error');
@@ -446,7 +445,7 @@
 
   function lock() {
     document.body.style.overflow = 'hidden';
-    setTimeout(() => uIn.focus(), 50);
+    setTimeout(() => pIn.focus(), 50);
   }
 
   if (isAuthed()) {
@@ -459,32 +458,23 @@
     e.preventDefault();
     errEl.style.display = 'none';
 
-    const u = uIn.value.trim().toLowerCase();
     const p = pIn.value;
-
-    if (u === CRED.user.toLowerCase() && p === CRED.pass) {
-      const payload = JSON.stringify({ u, t: Date.now() });
-      (rmb.checked ? localStorage : sessionStorage).setItem(KEY, payload);
-      // The CMS password doubles as the admin API token the server-side
-      // write proxy expects in the x-admin-token header (see ADMIN_API_TOKEN
-      // env var). Always readable for the live tab via sessionStorage; when
-      // "keep me signed in" is checked we also mirror it into localStorage
-      // so a reload within the 30-day window can restore it (see isAuthed).
-      sessionStorage.setItem(TOKEN_KEY, p);
-      if (rmb.checked) localStorage.setItem(TOKEN_KEY, p);
-      else localStorage.removeItem(TOKEN_KEY);
-      unlock();
-    } else {
-      errEl.textContent = 'Invalid username or password.';
+    if (!p) {
+      errEl.textContent = 'Enter your admin token.';
       errEl.style.display = 'block';
-      pIn.value = '';
-      pIn.focus();
-      // Shake
-      form.animate(
-        [{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(0)' }],
-        { duration: 320, easing: 'ease-in-out' }
-      );
+      return;
     }
+
+    // Store the entered password as the admin API token. The server verifies
+    // it on every write — if it is wrong, writes return 401. No credential
+    // comparison happens here; the client optimistically unlocks the UI.
+    const payload = JSON.stringify({ t: Date.now() });
+    (rmb.checked ? localStorage : sessionStorage).setItem(KEY, payload);
+    sessionStorage.setItem(TOKEN_KEY, p);
+    if (rmb.checked) localStorage.setItem(TOKEN_KEY, p);
+    else localStorage.removeItem(TOKEN_KEY);
+    pIn.value = '';
+    unlock();
   });
 
   // Expose signOut for sidebar footer button
