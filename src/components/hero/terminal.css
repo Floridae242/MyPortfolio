@@ -6,7 +6,8 @@
 .terminal .bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid rgba(34, 211, 238, 0.15); }
 .terminal .dot { width: 9px; height: 9px; border-radius: 50%; }
 .terminal .body { padding: 1.1rem; line-height: 1.8; font-size: 0.9rem; }
-.terminal .name { font-size: clamp(1.6rem, 1rem + 3vw, 2.4rem); color: var(--color-accent-soft); text-shadow: var(--glow-accent); margin: 0.3rem 0; }
+.terminal .name { font-family: var(--font-serif); font-weight: 600; font-optical-sizing: auto; font-size: clamp(1.8rem, 1rem + 3.4vw, 2.7rem); letter-spacing: -0.01em; color: var(--color-accent-soft); text-shadow: var(--glow-accent); margin: 0.35rem 0; }
+.terminal .name .caret { font-family: var(--font-mono); font-weight: 400; }
 .terminal .prompt { color: var(--color-accent); }
 .terminal .muted { color: var(--syntax-dim); }
 .caret { animation: blink 1s steps(1) infinite; }
