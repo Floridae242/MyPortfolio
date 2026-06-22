@@ -21,7 +21,8 @@ beforeEach(() => {
 describe('App routing', () => {
   it('renders the home hero at /', () => {
     render(<MemoryRouter initialEntries={['/']}><App /></MemoryRouter>);
-    expect(screen.getByText(/Naruephon Yotmao/)).toBeInTheDocument();
+    // Hero CTA is a <button>; nav "Projects" is an <a>, so this targets the hero.
+    expect(screen.getByRole('button', { name: /Projects/i })).toBeInTheDocument();
   });
   it('renders the admin gateway at /admin', () => {
     render(<MemoryRouter initialEntries={['/admin']}><App /></MemoryRouter>);
