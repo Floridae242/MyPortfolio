@@ -670,12 +670,14 @@ const ANON = "sb_publishable_3Vet8w3zGsdQzRmEnASQeg_AdXLvlER"; // Supabase publi
 
 // Writes no longer talk to Supabase directly — they go through the
 // same-origin /api/cms/:table proxy, which holds the service_role key
-// server-side. ADMIN_TOKEN_VALUE is the shared secret captured at login
-// (see the auth gate above) and is checked by the proxy as x-admin-token.
-const ADMIN_TOKEN_VALUE = sessionStorage.getItem('cms-admin-token') || '';
-
+// server-side. The admin token is read FRESH on every write (via WH()),
+// so a fresh login in the current tab is reflected — capturing it once at
+// script load would send a stale/empty token (logged-in state arrives later).
 const RH = { apikey: ANON, Authorization: `Bearer ${ANON}`, Accept: 'application/json' };
-const WH = { 'Content-Type': 'application/json', 'x-admin-token': ADMIN_TOKEN_VALUE };
+const WH = () => ({
+  'Content-Type': 'application/json',
+  'x-admin-token': sessionStorage.getItem('cms-admin-token') || '',
+});
 
 // ─── STATE ───
 let currentTab = 'projects';
@@ -1155,9 +1157,9 @@ async function saveItem() {
 
     let res;
     if (editingId) {
-      res = await fetch(`/api/cms/${table}?id=eq.${editingId}`, { method: 'PATCH', headers: WH, body: JSON.stringify(payload) });
+      res = await fetch(`/api/cms/${table}?id=eq.${editingId}`, { method: 'PATCH', headers: WH(), body: JSON.stringify(payload) });
     } else {
-      res = await fetch(`/api/cms/${table}`, { method: 'POST', headers: WH, body: JSON.stringify(payload) });
+      res = await fetch(`/api/cms/${table}`, { method: 'POST', headers: WH(), body: JSON.stringify(payload) });
     }
 
     if (!res.ok) {
@@ -1189,7 +1191,7 @@ function confirmDel(tab, id) {
     setDB('saving');
     try {
       const table = TABLES[TYPE_OF[tab]];
-      const res = await fetch(`/api/cms/${table}?id=eq.${id}`, { method: 'DELETE', headers: WH });
+      const res = await fetch(`/api/cms/${table}?id=eq.${id}`, { method: 'DELETE', headers: WH() });
       if (!res.ok) throw new Error(await res.text());
       toast('Item deleted.', 'ok');
       await loadAllCounts();
