@@ -36,3 +36,7 @@ docker-compose.override.yml
 
 # brainstorming visual companion
 .superpowers/
+
+# Playwright
+test-results/
+playwright-report/
