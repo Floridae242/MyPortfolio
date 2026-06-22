@@ -3,6 +3,7 @@ import { Projects } from './Projects';
 import { Awards } from './sections/Awards';
 import { Activities } from './sections/Activities';
 import { SelfDevelopment } from './sections/SelfDevelopment';
+import { Journal } from './sections/Journal';
 import { About } from './sections/About';
 import { Contact } from './sections/Contact';
 import { useSupabaseData } from '@/hooks/useSupabaseData';
@@ -24,6 +25,7 @@ export function Home() {
       <Awards awards={awards} />
       <Activities activities={activities} />
       <SelfDevelopment items={sd} />
+      <Journal />
       <About />
       <Contact />
     </main>

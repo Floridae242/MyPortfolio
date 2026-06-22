@@ -3,7 +3,7 @@ import type { Project, Award, Activity, SelfDev } from '@/data/types';
 export const SB_URL = 'https://rngeogahhatybnlhmgbz.supabase.co/rest/v1';
 // Supabase publishable key — read-only, RLS-enforced, safe for the browser.
 // (Replaces the legacy anon JWT; never put the secret/service_role key here.)
-const SB_KEY = 'sb_publishable_3Vet8w3zGsdQzRmEnASQeg_AdXLvlER';
+export const SB_KEY = 'sb_publishable_3Vet8w3zGsdQzRmEnASQeg_AdXLvlER';
 
 const headers = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Accept: 'application/json' };
 

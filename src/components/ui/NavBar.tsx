@@ -3,7 +3,7 @@ import './navbar.css';
 
 const LINKS = [
   ['Projects', '#projects'], ['Awards', '#awards'], ['Activities', '#activities'],
-  ['Growth', '#self-development'], ['About', '#about'], ['Contact', '#contact'],
+  ['Growth', '#self-development'], ['Writing', '#journal'], ['About', '#about'], ['Contact', '#contact'],
 ] as const;
 
 export function NavBar() {
