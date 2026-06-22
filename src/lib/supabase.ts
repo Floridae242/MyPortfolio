@@ -1,9 +1,9 @@
 import type { Project, Award, Activity, SelfDev } from '@/data/types';
 
 export const SB_URL = 'https://rngeogahhatybnlhmgbz.supabase.co/rest/v1';
-// anon key — read-only, already public in the prior client; never the service_role key.
-const SB_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuZ2VvZ2FoaGF0eWJubGhtZ2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2OTUxNDgsImV4cCI6MjA5MjI3MTE0OH0.Tm1lczfkcRhTE16ygRxHRz1RlgH3moy4xneZ7cB9JIs';
+// Supabase publishable key — read-only, RLS-enforced, safe for the browser.
+// (Replaces the legacy anon JWT; never put the secret/service_role key here.)
+const SB_KEY = 'sb_publishable_3Vet8w3zGsdQzRmEnASQeg_AdXLvlER';
 
 const headers = { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, Accept: 'application/json' };
 
