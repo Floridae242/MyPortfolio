@@ -1,7 +1,23 @@
-.project-card { display: flex; flex-direction: column; height: 100%; gap: 0.6rem; }
+.card-reveal { height: 100%; }
+
+.project-card {
+  display: flex; flex-direction: column; height: 100%; gap: 0.6rem;
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* tilt follow eases smoothly; glow shifts over 300ms */
+  transition: transform 0.2s var(--ease-out-expo), box-shadow var(--duration-normal), border-color var(--duration-normal);
+}
+.project-card:hover {
+  box-shadow: var(--glow-accent-strong);
+  border-color: var(--color-accent);
+}
 .project-card h3 { color: var(--color-text); font-size: 1.15rem; }
 .project-card.featured h3 { font-size: 1.6rem; color: var(--color-accent-soft); text-shadow: var(--glow-accent); }
 .project-card .desc { color: var(--color-text-dim); font-size: 0.9rem; flex: 1; }
 .project-card .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .project-card .tag { font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-accent); border: 1px solid var(--color-border); border-radius: 6px; padding: 0.15rem 0.5rem; }
 .project-card .cats { font-family: var(--font-mono); font-size: 0.7rem; color: var(--syntax-dim); }
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card { transition: box-shadow var(--duration-normal); transform: none !important; }
+}

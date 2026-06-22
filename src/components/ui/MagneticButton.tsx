@@ -11,7 +11,7 @@ export function MagneticButton({ children, onClick, variant = 'solid' }: { child
     const r = ref.current.getBoundingClientRect();
     const x = (e.clientX - (r.left + r.width / 2)) * 0.25;
     const y = (e.clientY - (r.top + r.height / 2)) * 0.25;
-    ref.current.style.transform = `translate(${x}px, ${y}px)`;
+    ref.current.style.transform = `translate(${x}px, ${y}px) scale(1.04)`;
   }
   function reset() { if (ref.current) ref.current.style.transform = ''; }
 

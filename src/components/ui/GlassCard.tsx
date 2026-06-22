@@ -1,6 +1,27 @@
-import type { ReactNode } from 'react';
+import { forwardRef, type ReactNode, type CSSProperties, type MouseEventHandler } from 'react';
 import './glass-card.css';
 
-export function GlassCard({ children, className = '', style }: { children: ReactNode; className?: string; style?: React.CSSProperties }) {
-  return <article className={`glass-card ${className}`} style={style}>{children}</article>;
+interface GlassCardProps {
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+  onMouseMove?: MouseEventHandler<HTMLElement>;
+  onMouseLeave?: MouseEventHandler<HTMLElement>;
 }
+
+export const GlassCard = forwardRef<HTMLElement, GlassCardProps>(function GlassCard(
+  { children, className = '', style, onMouseMove, onMouseLeave },
+  ref,
+) {
+  return (
+    <article
+      ref={ref}
+      className={`glass-card ${className}`}
+      style={style}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+    >
+      {children}
+    </article>
+  );
+});

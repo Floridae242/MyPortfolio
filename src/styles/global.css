@@ -22,6 +22,17 @@ a { color: inherit; text-decoration: none; }
   transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
 }
 
+/* Bento project cards cascade one-by-one as the section reveals. The stagger
+   delay lives on the .card-reveal wrapper only, so it never lags the inner
+   card's hover/tilt transform. */
+.reveal-init .bento > .card-reveal { opacity: 0; transform: translateY(26px); }
+.reveal-init.reveal-in .bento > .card-reveal {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.55s var(--ease-out-expo), transform 0.55s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

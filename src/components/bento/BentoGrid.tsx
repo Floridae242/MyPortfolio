@@ -14,7 +14,7 @@ export function BentoGrid({ projects }: { projects: Project[] }) {
     <div>
       <FilterPills categories={categories} active={active} onChange={setActive} />
       <div className="bento">
-        {visible.map((p, i) => <ProjectCard key={p.slug} project={p} featured={i === 0} />)}
+        {visible.map((p, i) => <ProjectCard key={p.slug} project={p} featured={i === 0} index={i} />)}
       </div>
     </div>
   );

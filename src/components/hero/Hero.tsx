@@ -9,13 +9,15 @@ export function Hero() {
     <section className="hero" aria-label="Introduction">
       <div className="split">
         <div>
-          <TerminalIntro />
-          <div className="ctas">
+          <div className="hero-rise" style={{ ['--d' as string]: '0ms' } as React.CSSProperties}>
+            <TerminalIntro />
+          </div>
+          <div className="ctas hero-rise" style={{ ['--d' as string]: '520ms' } as React.CSSProperties}>
             <MagneticButton onClick={go('projects')}>Projects →</MagneticButton>
             <MagneticButton variant="ghost" onClick={go('contact')}>Contact</MagneticButton>
           </div>
         </div>
-        <div className="graph-col" style={{ display: 'grid', placeItems: 'center' }}>
+        <div className="graph-col hero-rise" style={{ display: 'grid', placeItems: 'center', ['--d' as string]: '260ms' } as React.CSSProperties}>
           <BackendGraph />
         </div>
       </div>
